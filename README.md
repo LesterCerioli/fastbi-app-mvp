@@ -88,7 +88,7 @@ Build the Docker image (pass the real Stripe key via `--build-arg`):
 
 ```bash
 docker build \
-  --build-arg NEXT_PUBLIC_STRIPE_API_KEY=pk_live_...
+  --build-arg NEXT_PUBLIC_STRIPE_API_KEY=ssssssssss_...
   -t ltservices/fastapp:1.0.3 .
 ```
 
