@@ -1,0 +1,55 @@
+
+FROM node:latest
+
+
+WORKDIR /app
+
+
+COPY package.json ./
+COPY package-lock.json ./
+
+
+RUN npm install
+
+
+COPY . .
+
+
+ARG NEXT_PUBLIC_STRIPE_API_KEY
+ENV DB_HOST="" \
+    DB_PORT="" \
+    DB_USER="" \
+    DB_PASSWORD="" \
+    DB_NAME=="" \
+    DB_TIMEZONE=="" \
+    NEXT_PUBLIC_STRIPE_API_KEY=$NEXT_PUBLIC_STRIPE_API_KEY \
+    STRIPE_SECRET_API_KEY="" \
+    CLIENT_ID_1="" \
+    SECRET_1="" \
+    JWT_SECRET="" \
+    RABBITMQ_BASE_URL="" \
+    RABBITMQ_API_USERNAME="" \
+    RABBITMQ_API_PASSWORD="" \
+    RABBITMQ_VHOST="" \
+    RABBITMQ_CLOUD_URL="" \
+    SWAGGER_USER="" \
+    SWAGGER_PASSWORD="" \
+    AUTH_TOKEN_ENDPOINT="" \
+    LOGIN_API_ENDPOINT="" \
+    RESET_PASSWORD_ENDPOINT="" \
+    LOCALSTACK_ENDPOINT="" \
+    AWS_ACCESS_KEY_ID="" \
+    AWS_SECRET_ACCESS_KEY="" \
+    AWS_DEFAULT_REGION="" \
+    S3_BUCKET_NAME="" 
+    
+    
+
+
+RUN npm run build
+
+
+EXPOSE 4010
+
+
+CMD ["npm", "start"]

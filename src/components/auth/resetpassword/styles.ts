@@ -1,0 +1,89 @@
+import styled from "styled-components";
+
+export const Container = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+`;
+
+export const Background = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+`;
+
+export const Overlay = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  z-index: 2;
+`;
+
+export const Card = styled.div`
+  position: relative;
+  z-index: 3;
+  width: 420px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+`;
+
+export const Header = styled.div`
+  text-align: center;
+  margin-bottom: 25px;
+
+  h1 { font-size: 26px; font-weight: 700; color: #111827; }
+  p { font-size: 14px; color: #6b7280; margin-top: 5px; }
+`;
+
+export const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const InputGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+
+  label { font-size: 13px; margin-bottom: 5px; color: #374151; }
+
+  input {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    outline: none;
+    font-size: 14px;
+    &:focus { border-color: #22c55e; }
+  }
+`;
+
+export const Button = styled.button`
+  background: #22c55e;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover { background: #16a34a; }
+`;
+
+export const ErrorMessage = styled.div`
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-bottom: 15px;
+  text-align: center;
+`;

@@ -1,0 +1,11 @@
+process.env.DB_HOST = "localhost";
+process.env.DB_PORT = "5432";
+process.env.DB_USER = "test";
+process.env.DB_PASSWORD = "test";
+process.env.DB_NAME = "test";
+process.env.CLIENT_ID_1 = "test-client-id";
+process.env.SECRET_1 = "test-secret";
+process.env.JWT_SECRET = "a-32-char-secret-key-for-testing-purposes!";
+process.env.MASTER_ENCRYPTION_KEY = Buffer.from("a-32-byte-key-for-encryption-test!", "utf8").toString("base64");
+process.env.EMAIL_FROM = "test@example.com";
+process.env.SMTP_SERVER = "smtp.test.com";

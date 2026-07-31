@@ -1,0 +1,26 @@
+CREATE TABLE public.kpi_history (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    organization_id UUID NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
+    kpi_id UUID NOT NULL REFERENCES public.kpis(id) ON DELETE CASCADE,
+    version INTEGER NOT NULL,
+    name VARCHAR(200),
+    description TEXT,
+    target_value DECIMAL(20,4),
+    target_min DECIMAL(20,4),
+    target_max DECIMAL(20,4),
+    alert_threshold DECIMAL(20,4),
+    calculation_query TEXT,
+    calculation_schema JSONB,
+    depends_on UUID[],
+    reporting_period VARCHAR(20),
+    lookback_days INTEGER,
+    applicable_regions TEXT[],
+    applicable_departments TEXT[],
+    applicable_business_units TEXT[],
+    required_roles TEXT[],
+    view_permissions JSONB,
+    status public.kpi_status,                    -- ← this was failing
+    changed_by UUID REFERENCES public.users(id) ON DELETE SET NULL,
+    changed_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    change_reason TEXT
+);

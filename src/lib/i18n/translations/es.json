@@ -1,0 +1,205 @@
+{
+  "header": { "logoAlt": "Logo FastBI", "logoText": "FastBI", "nav": { "home": "Inicio", "features": "Características", "pricing": "Precios", "contact": "Contacto" }, "buttons": { "getStarted": "Comenzar", "login": "Iniciar sesión", "logout": "Cerrar sesión" } },
+  "footer": { "logoText": "FastBI", "nav": { "home": "Inicio", "features": "Características", "pricing": "Precios", "contact": "Contacto" }, "copyright": "© {year} Lucas Technology Service. Todos los derechos reservados." },
+  "home": {
+    "hero": { "alt": "inicio", "heading": "Business Intelligence para Pequeñas y Medianas Empresas", "subtitle": "Convierte tus datos en decisiones inteligentes", "buttons": { "startTrial": "Prueba Gratis", "viewDemo": "Ver Demo", "goToDashboard": "Ir al Dashboard" } },
+    "features": { "intuitiveDashboards": { "title": "Dashboards Intuitivos", "desc": "Visualiza tus datos de forma clara y práctica" }, "reportAutomation": { "title": "Automatización de Informes", "desc": "Informes automatizados y actualizados" }, "accurateInsights": { "title": "Información Precisa", "desc": "Obtén información valiosa para tu negocio" } },
+    "carousel": { "title": "Dashboards que evolucionan con tu negocio", "alt": "Dashboard Business Intelligence {n}", "note": "Pasa el ratón para pausar • Dashboards en rotación continua" },
+    "industries": { "title": "Útil para diferentes tipos de negocio", "subtitle": "Soluciones adaptadas para diversas industrias y modelos de negocio", "alt": "Industrias que servimos" },
+    "reports": { "title": "Útil para informes avanzados", "subtitle": "Análisis avanzados e informes para decisiones basadas en datos", "alt": "Informes Avanzados" },
+    "simplifying": { "title": "Simplificando el Análisis de Datos", "subtitle": "Soluciones de BI fáciles y efectivas para tu negocio." },
+    "details": { "alt": "Personas analizando datos", "connect": { "title": "Conéctate a tus Datos", "desc": "Integración fácil con tus fuentes de datos" }, "dashboards": { "title": "Crea Dashboards Personalizados", "desc": "Dashboards adaptados a tus necesidades." }, "decisions": { "title": "Toma Decisiones con Confianza", "desc": "Información precisa para guiar tus estrategias." } }
+  },
+  "features": { "badge": "● Plataforma de Análisis Empresarial", "title": "Transforma datos en", "titleHighlight": "ACCIÓN DECISIVA", "description": "Unifica tu inteligencia de negocio con información en tiempo real, análisis predictivos e informes automatizados que escalan con tu organización.", "buttons": { "startTrial": "Prueba Gratis →", "bookDemo": "Reservar Demo" }, "stats": { "activeUsers": "Usuarios activos", "uptimeSla": "SLA de disponibilidad", "integrations": "Integraciones" }, "imageAlt": "Vista previa del dashboard", "exploreDashboards": { "title": "Explore Intelligent Dashboards", "desc": "Visualize your data with real-time insights and predictive analytics" } },
+  "forgotpassword": {
+    "alt": "Fondo FastBI",
+    "heading": "¿Olvidaste tu contraseña?",
+    "subtitle": "Ingresa tu correo y te enviaremos una contraseña temporal.",
+    "form": {
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "tu@dominio.com"
+    },
+    "button": "Enviar correo de restablecimiento",
+    "successTitle": "¡Correo enviado!",
+    "successMessage": "Si existe una cuenta con ese correo, recibirás una contraseña temporal en breve.",
+    "backToLogin": "Volver al inicio de sesión",
+    "footer": "Volver al inicio de sesión",
+    "errors": {
+      "default": "Algo salió mal. Inténtalo de nuevo."
+    }
+  },
+  "resetpassword": {
+    "alt": "Fondo FastBI",
+    "heading": "Establecer nueva contraseña",
+    "subtitle": "Cree una nueva contraseña para su cuenta. El enlace expira en 10 minutos.",
+    "form": {
+      "newPasswordLabel": "Nueva contraseña",
+      "newPasswordPlaceholder": "********",
+      "confirmPasswordLabel": "Confirmar contraseña",
+      "confirmPasswordPlaceholder": "********"
+    },
+    "button": "Restablecer contraseña",
+    "successTitle": "¡Contraseña cambiada!",
+    "successMessage": "Su contraseña ha sido actualizada exitosamente.",
+    "backToLogin": "Volver al inicio de sesión",
+    "errors": {
+      "passwordsMismatch": "Las contraseñas no coinciden",
+      "tooShort": "La contraseña debe tener al menos 6 caracteres",
+      "default": "Algo salió mal. Por favor intente de nuevo."
+    }
+  },
+  "signup": {
+    "alt": "Fondo FastBI",
+    "heading": "Crea tu cuenta",
+    "subtitle": "Comienza a convertir tus datos en decisiones inteligentes",
+    "form": {
+      "nameLabel": "Nombre completo",
+      "namePlaceholder": "Juan Pérez",
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "tu@dominio.com",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "********",
+      "confirmPasswordLabel": "Confirmar contraseña",
+      "confirmPasswordPlaceholder": "********",
+      "passwordsMismatch": "Las contraseñas no coinciden"
+    },
+    "button": "Crear cuenta",
+    "footer": {
+      "text": "¿Ya tienes una cuenta?",
+      "link": "Iniciar sesión"
+    },
+    "errors": {
+      "default": "Algo salió mal. Inténtalo de nuevo."
+    }
+  },
+  "login": { "alt": "Fondo FastBI", "heading": "Inicia sesión en FastBI", "subtitle": "Convierte tus datos en decisiones inteligentes", "form": { "emailLabel": "Correo electrónico", "emailPlaceholder": "tu@empresa.com", "passwordLabel": "Contraseña", "passwordPlaceholder": "********", "rememberMe": "Recordarme", "forgotPassword": "¿Olvidaste tu contraseña?" }, "button": "Iniciar sesión", "footer": { "text": "¿No tienes una cuenta?", "link": "Regístrate" } },
+  "dashboards": {
+    "badge": "Análisis Predictivo", "title": "Dashboards Inteligentes", "titleHighlight": " para FastBI",
+    "description": "Predicciones en tiempo real con modelos de machine learning. Toma decisiones basadas en datos con confianza.",
+    "stats": { "modelAccuracy": "Precisión del Modelo", "revenueGrowth": "Crecimiento de Ingresos", "activeUsers": "Usuarios Activos" },
+    "controls": { "salesForecast": "Pronóstico de Ventas", "compositionAnalysis": "Análisis de Composición", "lastUpdated": "Última actualización: {time}", "refresh": "Actualizar", "exportReport": "Exportar Informe" },
+    "insights": { "title": "Información con IA", "subtitle": "Principales predicciones y recomendaciones basadas en tus datos", "revenueGrowth": { "title": "Proyección de Crecimiento", "text": "Crecimiento esperado del 18.5% en Q1 2025, impulsado por la demanda minorista.", "confidence": "Confianza: {pct}%" }, "riskAlert": { "title": "Alerta de Riesgo", "text": "Tasa de abandono prevista para aumentar 2.3% el próximo mes. Campaña de retención recomendada.", "confidence": "Confianza: {pct}%" }, "optimization": { "title": "Oportunidad de Optimización", "text": "El canal de e-commerce muestra un potencial de crecimiento del 45% con marketing dirigido.", "confidence": "Confianza: {pct}%" } }
+  },
+  "crm": { "title": "Hub de Inteligencia BI", "subtitle": "Información empresarial en tiempo real y panel de análisis de rendimiento", "stats": { "totalRevenue": "Ingresos Totales", "activeUsers": "Usuarios Activos", "growthRate": "Tasa de Crecimiento", "satisfaction": "Satisfacción" }, "errors": { "stats": "Error al cargar estadísticas", "dashboard": "Error al cargar datos del dashboard" }, "retry": "Reintentar", "refreshTitle": "Actualizar Dashboard" },
+  "pricing": {
+    "hero": { "eyebrow": "Precios", "title": "Precios que escalan", "titleHighlight": "con tus datos", "description": "Empieza gratis, crece con análisis predictivos y migra a gobierno empresarial — sin cambiar de plataforma. Por usuario, facturado como prefieras.", "monthly": "Mensual", "annual": "Anual", "saveTag": "Ahorra 20% anual" },
+    "cards": { "perUserMo": "/usuario / mes", "billedAnnually": "Facturado anualmente", "startFreeTrial": "Prueba gratis", "starter": { "name": "Inicial", "desc": "Para equipos pequeños que convierten sus primeros dashboards en decisiones.", "features": ["Hasta 5 usuarios", "10 fuentes de datos conectadas", "Dashboards ilimitados", "Actualización diaria", "Soporte por correo"] }, "professional": { "name": "Profesional", "badge": "Más popular", "desc": "Para equipos en crecimiento que necesitan pronósticos e informes automatizados.", "features": ["Todo lo de Inicial, más:", "50 fuentes de datos conectadas", "Análisis predictivos", "Informes con IA", "Actualización por hora e informes programados", "Soporte prioritario"] }, "business": { "name": "Empresarial", "desc": "Para organizaciones que necesitan gobierno, roles y escala.", "features": ["Todo lo de Profesional, más:", "Fuentes de datos ilimitadas", "Control de acceso por rol", "Actualización en tiempo real", "Registros de auditoría", "Gerente de éxito dedicado"] } },
+    "enterprise": { "title": "Enterprise", "desc": "SSO/SAML, residencia de datos personalizada, SLA 99.9% y precios por volumen para equipos que usan FastBI en toda la organización.", "stats": { "activeUsers": "Usuarios activos", "uptimeSla": "SLA de disponibilidad", "integrations": "Integraciones" }, "button": "Contactar ventas" },
+    "comparison": { "title": "Compara todos los planes", "subtitle": "El desglose completo para que los equipos elijan el nivel correcto la primera vez.", "headers": { "feature": "Característica", "starter": "Inicial", "professional": "Profesional", "business": "Empresarial", "enterprise": "Enterprise" }, "groups": { "coreAnalytics": "Análisis principales", "intelligence": "Inteligencia", "governance": "Gobierno & soporte" }, "rows": { "usersIncluded": "Usuarios incluidos", "connectedSources": "Fuentes de datos conectadas", "dashboards": "Dashboards", "refreshRate": "Frecuencia de actualización", "predictiveAnalytics": "Análisis predictivos", "aiReporting": "Informes con IA", "scheduledReports": "Informes programados", "rbac": "Control de acceso por rol", "auditLogs": "Registros de auditoría", "sso": "SSO / SAML", "uptimeSla": "SLA de disponibilidad", "support": "Soporte" }, "values": { "unlimited": "Ilimitado", "daily": "Diario", "hourly": "Por hora", "realTime": "Tiempo real", "email": "Correo", "priority": "Prioritario", "successManager": "Gerente de éxito", "dedicatedSla": "Dedicado + SLA" } },
+    "faq": { "title": "Preguntas frecuentes", "items": [
+      { "q": "¿Cómo funciona el precio por usuario?", "a": "Pagas por las personas que crean y ven informes. Añade o elimina usuarios en cualquier momento — la facturación se ajusta en tu próxima factura." },
+      { "q": "¿Puedo cambiar de plan después?", "a": "Sí. Actualiza al instante y paga solo la diferencia prorrateada. Las bajas entran en vigor al inicio de tu próximo período de facturación." },
+      { "q": "¿Qué pasa después de la prueba gratuita?", "a": "La prueba de 14 días incluye funciones Profesionales. Al finalizar, elige un plan para continuar — nada se elimina y no se te cobrará hasta que decidas continuar." },
+      { "q": "¿Ofrecen facturación anual?", "a": "La facturación anual ahorra un 20% en todos los planes. Actívala en la parte superior para ver la tasa ajustada." },
+      { "q": "¿Están seguros mis datos?", "a": "Los datos están cifrados en tránsito y en reposo. Business añade registros de auditoría; Enterprise añade SSO/SAML y residencia de datos personalizada." },
+      { "q": "¿Qué cuenta como fuente de datos?", "a": "Cualquier sistema conectado del que FastBI lea — base de datos, almacén, hoja de cálculo o una de las 150+ integraciones. Cada conexión cuenta una vez." }
+    ] },
+    "cta": { "title": "Convierte tus datos en", "titleHighlight": "acción decisiva", "description": "Crea tu primer dashboard en minutos. Sin tarjeta de crédito.", "startTrial": "Prueba gratis", "bookDemo": "Reservar demo" }
+  },
+  "accounting": {
+    "menu": {
+      "templates": "ACCOUNTING TEMPLATE",
+      "workflows": "ACCOUNTING WORKFLOWS",
+      "operations": "ACCOUNTING OPERATIONS",
+      "back": "← Back",
+      "comingSoon": "{name} — coming soon"
+    },
+    "template": {
+      "title": "Create Accounting Template",
+      "subtitle": "Fill in the fields below to generate a new accounting workflow template",
+      "success": "Template created successfully!",
+      "fields": {
+        "name": { "label": "Name", "placeholder": "e.g. Monthly Bookkeeping" },
+        "category": { "label": "Category", "placeholder": "Select category" },
+        "taxRegime": { "label": "Tax Regime", "placeholder": "Select tax regime" },
+        "fiscalPeriod": { "label": "Fiscal Period", "placeholder": "Select period" },
+        "regulatoryBody": { "label": "Regulatory Body", "placeholder": "Select body" },
+        "createdBy": { "label": "Created By", "placeholder": "e.g. John Doe" },
+        "structure": { "label": "Structure (JSON)", "placeholder": "{\"stages\": [...], \"kpis\": [...], ...}" }
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "creating": "Creating...",
+        "create": "Create Template"
+      },
+      "errors": {
+        "nameRequired": "Name is required",
+        "categoryRequired": "Category is required",
+        "invalidJson": "Structure must be valid JSON",
+        "minStages": "Structure must have at least 2 stages",
+        "minKpis": "Structure must define at least one KPI",
+        "createFailed": "Failed to create template",
+        "generic": "Something went wrong"
+      }
+    }
+  },
+  "contact": {
+    "hero": { "eyebrow": "Ponte en contacto", "title": "Construyamos algo", "titleHighlight": "grande juntos", "description": "¿Tienes una pregunta sobre FastBI, quieres una demo o estás listo para escalar tu inteligencia de negocio? Nos encantaría saber de ti." },
+    "form": { "title": "Envíanos un mensaje", "successTitle": "¡Mensaje enviado! 🎉", "successMessage": "Gracias por contactarnos. Nuestro equipo responde normalmente en 24 horas. Mientras tanto, siéntete libre de explorar nuestras funciones.", "fields": { "name": { "label": "Nombre completo", "placeholder": "María García" }, "email": { "label": "Correo electrónico", "placeholder": "maria@empresa.com" }, "subject": { "label": "Asunto", "placeholder": "¿Cómo podemos ayudar?" }, "message": { "label": "Mensaje", "placeholder": "Cuéntanos sobre tu proyecto, pregunta o idea..." } }, "submit": "Enviar mensaje" },
+    "info": { "email": { "title": "Correo", "primary": "hello@fastbi.com", "support": "support@fastbi.com" }, "phone": { "title": "Teléfono", "number": "+1 (212) 796-2141", "hours": "Lun–Vie, 9am–6pm EST" }, "office": { "title": "Oficina", "line1": "16 E 52nd St #302", "line2": "Nueva York, NY 10022", "line3": "Estados Unidos" }, "social": { "title": "Síguenos", "github": "GitHub", "linkedin": "LinkedIn", "twitter": "Twitter / X" } },
+    "cta": { "title": "Listo para transformar tus", "titleHighlight": "datos en acción", "description": "Comienza tu prueba gratuita hoy. Sin tarjeta de crédito, sin presión — solo BI potente a tu alcance.", "startTrial": "Prueba gratis", "bookDemo": "Reservar demo" }
+  },
+  "profileEditor": {
+    "title": "Profile Settings",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "avatarUploaded": "Avatar uploaded successfully!",
+    "uploadError": "Failed to upload avatar",
+    "saved": "Profile saved successfully!",
+    "saveError": "Failed to save profile",
+    "saving": "Saving...",
+    "save": "Save"
+  },
+  "roles": {
+    "admin": "Admin",
+    "manager": "Manager",
+    "analyst": "Analyst",
+    "viewer": "Viewer"
+  },
+  "dataeng": {
+    "title": "Data Engineering",
+    "subtitle": "Manage your data pipelines and transformations",
+    "upload": "Upload Data",
+    "transform": "Transform",
+    "schedule": "Schedule",
+    "history": "History"
+  },
+  "workflows": {
+    "title": "Workflows",
+    "subtitle": "Automate your business processes",
+    "create": "Create Workflow",
+    "active": "Active",
+    "draft": "Draft",
+    "completed": "Completed"
+  },
+  "businessDashboards": {
+    "title": "Business Dashboards",
+    "subtitle": "Real-time insights for your business",
+    "revenue": "Revenue",
+    "customers": "Customers",
+    "orders": "Orders",
+    "growth": "Growth"
+  },
+  "predictiveDashboard": {
+    "title": "Predictive Dashboard",
+    "subtitle": "AI-powered forecasts and predictions",
+    "accuracy": "Accuracy",
+    "trend": "Trend",
+    "forecast": "Forecast"
+  },
+  "animatedDashboard": {
+    "title": "Animated Dashboard",
+    "subtitle": "Interactive visualizations with live data",
+    "play": "Play",
+    "pause": "Pause",
+    "speed": "Speed"
+  },
+  "compositionDashboard": {
+    "title": "Composition Dashboard",
+    "subtitle": "Break down your data by category",
+    "byCategory": "By Category",
+    "byRegion": "By Region",
+    "byPeriod": "By Period"
+  }
+}
