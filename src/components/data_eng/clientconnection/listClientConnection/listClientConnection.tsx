@@ -19,9 +19,9 @@ interface Connection {
 
 interface ListClientConnectionProps {
   organizationName?: string;
-  token?: string;
   refreshKey?: number;
   onDelete?: () => void;
+  onSelect?: (connectionId: string, connectionName: string) => void;
 }
 
 const DB_LABELS: Record<string, string> = {
@@ -33,12 +33,15 @@ const DB_LABELS: Record<string, string> = {
   sqlite: "SQ",
 };
 
-function getToken() {
-  try {
-    return localStorage.getItem("auth_token") || "";
-  } catch {
-    return "";
-  }
+async function getFreshToken(): Promise<string> {
+  const res = await fetch("/api/auth/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: "{}",
+  });
+  if (!res.ok) throw new Error("Failed to obtain auth token");
+  const data = await res.json();
+  return data.token;
 }
 
 function formatDate(dateStr: string | null): string {
@@ -63,9 +66,9 @@ function formatDate(dateStr: string | null): string {
 
 export default function ListClientConnection({
   organizationName,
-  token,
   refreshKey = 0,
   onDelete,
+  onSelect,
 }: ListClientConnectionProps) {
   const [orgName, setOrgName] = useState(organizationName || "");
   const [connections, setConnections] = useState<Connection[]>([]);
@@ -73,8 +76,6 @@ export default function ListClientConnection({
   const [error, setError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [hasFetched, setHasFetched] = useState(false);
-
-  const authToken = token || getToken();
 
   const effectiveOrgName = organizationName || orgName;
 
@@ -86,12 +87,14 @@ export default function ListClientConnection({
     setHasFetched(true);
 
     try {
+      const token = await getFreshToken();
       const params = new URLSearchParams({
         organization_name: name,
-        token: authToken,
       });
 
-      const res = await fetch(`/api/dataeng/clientconn?${params}`);
+      const res = await fetch(`/api/dataeng/clientconn?${params}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = await res.json();
 
       if (!res.ok) {
@@ -105,7 +108,7 @@ export default function ListClientConnection({
     } finally {
       setIsLoading(false);
     }
-  }, [organizationName, orgName, authToken]);
+  }, [organizationName, orgName]);
 
   useEffect(() => {
     if (effectiveOrgName) {
@@ -118,13 +121,14 @@ export default function ListClientConnection({
     setError(null);
 
     try {
+      const token = await getFreshToken();
       const params = new URLSearchParams({
         connection_id: connectionId,
-        token: authToken,
       });
 
       const res = await fetch(`/api/dataeng/clientconn?${params}`, {
         method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!res.ok) {
@@ -225,7 +229,12 @@ export default function ListClientConnection({
       {connections.length > 0 && (
         <S.Grid>
           {connections.map((conn, index) => (
-            <S.Card key={conn.id} $index={index}>
+            <S.Card
+              key={conn.id}
+              $index={index}
+              $clickable={Boolean(onSelect)}
+              onClick={() => onSelect?.(conn.id, conn.connection_name)}
+            >
               <S.CardLeft>
                 <S.DbIcon $type={conn.db_type}>
                   {DB_LABELS[conn.db_type] || "DB"}
@@ -250,7 +259,10 @@ export default function ListClientConnection({
                 </S.StatusBadge>
                 <S.Actions>
                   <S.IconButton
-                    onClick={() => handleDelete(conn.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(conn.id);
+                    }}
                     disabled={deletingId === conn.id}
                     title="Delete connection"
                   >

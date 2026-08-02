@@ -170,11 +170,15 @@ export default function Login() {
 
       sessionStorage.setItem("user", JSON.stringify(data.user));
 
-      await fetch("/api/session/init", {
+      const sessionRes = await fetch("/api/session/init", {
         method: "POST",
         headers: authHeaders,
         body: JSON.stringify({ organization_id: data.user.organization_id }),
       });
+      const sessionData = await sessionRes.json().catch(() => ({}));
+      if (sessionData.organization_name) {
+        sessionStorage.setItem("organization_name", sessionData.organization_name);
+      }
 
       router.push("/dashboard");
     } catch {

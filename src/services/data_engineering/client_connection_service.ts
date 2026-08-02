@@ -11,7 +11,7 @@ interface DBDriver {
 class PostgresDriver implements DBDriver {
   getDriverName(): string { return "pg"; }
   getConnectionString(config: Record<string, unknown>): string {
-    return `postgresql://${config.username}:${config.password}@${config.host}:${config.port}/${config.database_name}?sslmode=${config.ssl_mode}`;
+    return `postgresql://${config.username}:${config.password}@${config.host}:${config.port}/${config.database_name}`;
   }
   buildQuery(query: string, params: unknown[]): { query: string; params: unknown[] } {
     return { query, params };
@@ -112,6 +112,8 @@ export class ClientConnectionService {
   }
 
   async getConnectionConfig(connectionID: string): Promise<Record<string, unknown> | null> {
+    if (!connectionID) return null;
+
     const result = await query(`
       SELECT id, organization_id, connection_name, db_type, host, port,
              database_name, username, password_encrypted, ssl_mode,
@@ -123,7 +125,12 @@ export class ClientConnectionService {
     if (!result.rows[0]) return null;
 
     const row = result.rows[0];
-    const password = this.encryption.decrypt(row.password_encrypted);
+    let password: string;
+    try {
+      password = this.encryption.decrypt(row.password_encrypted);
+    } catch {
+      return null;
+    }
     const orgName = await this.getOrganizationNameByID(row.organization_id);
 
     const config: Record<string, unknown> = {
@@ -168,6 +175,17 @@ export class ClientConnectionService {
     );
   }
 
+  private getSSLConfig(sslMode: unknown): Record<string, unknown> | undefined {
+    const mode = String(sslMode || "").toLowerCase();
+    if (["verify-ca", "verify-full"].includes(mode)) {
+      return { rejectUnauthorized: true };
+    }
+    if (["require", "prefer", "allow"].includes(mode)) {
+      return { rejectUnauthorized: false };
+    }
+    return undefined;
+  }
+
   async getOrCreatePool(connectionID: string): Promise<Pool> {
     const existing = this.connectionPools.get(connectionID);
     if (existing) return existing;
@@ -180,7 +198,13 @@ export class ClientConnectionService {
     if (!driver) throw new Error(`unsupported database type: ${dbType}`);
 
     const connStr = driver.getConnectionString(config);
-    const pool = new Pool({ connectionString: connStr, max: 5, idleTimeoutMillis: 300000 });
+    const ssl = this.getSSLConfig(config.ssl_mode);
+    const pool = new Pool({
+      connectionString: connStr,
+      max: 5,
+      idleTimeoutMillis: 300000,
+      ...(ssl ? { ssl } : {}),
+    });
 
     this.connectionPools.set(connectionID, pool);
     await this.updateLastUsed(connectionID);
@@ -199,7 +223,7 @@ export class ClientConnectionService {
     const lowerQuery = sqlQuery.trim().toLowerCase();
     const blocked = ["drop", "truncate", "delete", "update", "insert", "alter", "create", "grant", "revoke", "vacuum", "reindex", "cluster", "analyze", "explain", "execute"];
     for (const kw of blocked) {
-      if (lowerQuery.includes(kw)) {
+      if (new RegExp(`\\b${kw}\\b`).test(lowerQuery)) {
         return { success: false, error: `Query bloqueada: comando '${kw}' não é permitido`, row_count: 0, data: [], columns: [] };
       }
     }
@@ -221,9 +245,10 @@ export class ClientConnectionService {
 
     const adapted = driver.buildQuery(finalQuery, params || []);
 
-    const pool = await this.getOrCreatePool(connectionID);
-    const client = await pool.connect();
+    let client: import("pg").PoolClient | null = null;
     try {
+      const pool = await this.getOrCreatePool(connectionID);
+      client = await pool.connect();
       const result = await client.query(adapted.query, adapted.params);
       await this.updateLastUsed(connectionID);
 
@@ -242,7 +267,7 @@ export class ClientConnectionService {
     } catch (err: any) {
       return { success: false, error: `Erro na consulta: ${err.message}`, row_count: 0, data: [], columns: [] };
     } finally {
-      client.release();
+      client?.release();
     }
   }
 
@@ -255,7 +280,13 @@ export class ClientConnectionService {
     if (!driver) return { success: false, error: `Driver não suportado: ${dbType}` };
 
     const connStr = driver.getConnectionString(config);
-    const pool = new Pool({ connectionString: connStr, max: 1, connectionTimeoutMillis: 5000 });
+    const ssl = this.getSSLConfig(config.ssl_mode);
+    const pool = new Pool({
+      connectionString: connStr,
+      max: 1,
+      connectionTimeoutMillis: 5000,
+      ...(ssl ? { ssl } : {}),
+    });
 
     try {
       const client = await pool.connect();
