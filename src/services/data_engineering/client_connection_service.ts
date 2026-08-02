@@ -1,11 +1,37 @@
 import { Pool } from "pg";
+import mysql from "mysql2/promise";
+import sql from "mssql";
+import oracledb from "oracledb";
 import { query } from "../db";
 import { EncryptionService } from "./encryption_service";
+
+interface DriverResult {
+  rows: Record<string, unknown>[];
+  fields: { name: string }[];
+}
+
+interface DriverClient {
+  query(text: string, params?: unknown[]): Promise<DriverResult>;
+  release(): void;
+}
+
+interface DriverPool {
+  connect(): Promise<DriverClient>;
+  end(): Promise<void>;
+}
+
+interface PoolOptions {
+  max?: number;
+  connectionTimeoutMillis?: number;
+  idleTimeoutMillis?: number;
+}
 
 interface DBDriver {
   getDriverName(): string;
   getConnectionString(config: Record<string, unknown>): string;
   buildQuery(query: string, params: unknown[]): { query: string; params: unknown[] };
+  applyLimit(query: string, maxRows: number): { query: string; applied: boolean };
+  createPool(config: Record<string, unknown>, opts?: PoolOptions): Promise<DriverPool>;
 }
 
 class PostgresDriver implements DBDriver {
@@ -15,6 +41,43 @@ class PostgresDriver implements DBDriver {
   }
   buildQuery(query: string, params: unknown[]): { query: string; params: unknown[] } {
     return { query, params };
+  }
+  applyLimit(query: string, maxRows: number): { query: string; applied: boolean } {
+    if (/\blimit\b/i.test(query)) return { query, applied: false };
+    return { query: `${query} LIMIT ${maxRows}`, applied: true };
+  }
+  async createPool(config: Record<string, unknown>, opts: PoolOptions = {}): Promise<DriverPool> {
+    const ssl = this.getSSLConfig(config.ssl_mode);
+    const pool = new Pool({
+      connectionString: this.getConnectionString(config),
+      max: opts.max ?? 5,
+      idleTimeoutMillis: opts.idleTimeoutMillis ?? 300000,
+      connectionTimeoutMillis: opts.connectionTimeoutMillis ?? 8000,
+      ...(ssl ? { ssl } : {}),
+    });
+    return {
+      connect: async () => {
+        const client = await pool.connect();
+        return {
+          query: async (text: string, params?: unknown[]) => {
+            const result = await client.query(text, params);
+            return { rows: result.rows, fields: result.fields };
+          },
+          release: () => client.release(),
+        };
+      },
+      end: () => pool.end(),
+    };
+  }
+  private getSSLConfig(sslMode: unknown): Record<string, unknown> | undefined {
+    const mode = String(sslMode || "").toLowerCase();
+    if (["verify-ca", "verify-full"].includes(mode)) {
+      return { rejectUnauthorized: true };
+    }
+    if (["require", "prefer", "allow"].includes(mode)) {
+      return { rejectUnauthorized: false };
+    }
+    return undefined;
   }
 }
 
@@ -27,6 +90,56 @@ class MySQLDriver implements DBDriver {
     const q = query.replace(/\$(\d+)/g, "?");
     return { query: q, params };
   }
+  applyLimit(query: string, maxRows: number): { query: string; applied: boolean } {
+    if (/\blimit\b/i.test(query)) return { query, applied: false };
+    return { query: `${query} LIMIT ${maxRows}`, applied: true };
+  }
+  async createPool(config: Record<string, unknown>, opts: PoolOptions = {}): Promise<DriverPool> {
+    const ssl = this.getSSLMode(config.ssl_mode);
+    const pool = mysql.createPool({
+      host: config.host as string,
+      port: Number(config.port),
+      user: config.username as string,
+      password: config.password as string,
+      database: config.database_name as string,
+      connectionLimit: opts.max ?? 5,
+      connectTimeout: opts.connectionTimeoutMillis ?? 8000,
+      idleTimeout: opts.idleTimeoutMillis ?? 300000,
+      ...(ssl ? { ssl } : {}),
+    });
+    return {
+      connect: async () => {
+        const conn = await pool.getConnection();
+        return {
+          query: async (text: string, params?: unknown[]) => {
+            const [rows, fields] = await conn.query(text, params);
+            return {
+              rows: Array.isArray(rows)
+                ? (rows as Record<string, unknown>[])
+                : [],
+              fields: ((fields as { name: string }[] | undefined) || []).map(
+                (f) => ({ name: f.name })
+              ),
+            };
+          },
+          release: () => conn.release(),
+        };
+      },
+      end: () => pool.end(),
+    };
+  }
+  private getSSLMode(sslMode: unknown): string | undefined {
+    const mode = String(sslMode || "").toLowerCase();
+    switch (mode) {
+      case "disable": return "DISABLED";
+      case "allow": return "PREFERRED";
+      case "prefer": return "PREFERRED";
+      case "require": return "REQUIRED";
+      case "verify-ca": return "VERIFY_CA";
+      case "verify-full": return "VERIFY_IDENTITY";
+      default: return undefined;
+    }
+  }
 }
 
 class SQLServerDriver implements DBDriver {
@@ -35,7 +148,72 @@ class SQLServerDriver implements DBDriver {
     return `sqlserver://${config.username}:${config.password}@${config.host}:${config.port};database=${config.database_name}`;
   }
   buildQuery(query: string, params: unknown[]): { query: string; params: unknown[] } {
-    return { query, params };
+    const q = query.replace(/\$(\d+)/g, (_, n) => `@p${n}`);
+    return { query: q, params };
+  }
+  applyLimit(query: string, maxRows: number): { query: string; applied: boolean } {
+    if (/\b(top|offset|fetch)\b/i.test(query)) return { query, applied: false };
+    const match = query.match(/\bselect\b/i);
+    if (!match || match.index === undefined) return { query, applied: false };
+    return {
+      query: `${query.slice(0, match.index + 6)} TOP (${maxRows})${query.slice(match.index + 6)}`,
+      applied: true,
+    };
+  }
+  async createPool(config: Record<string, unknown>, opts: PoolOptions = {}): Promise<DriverPool> {
+    const sslMode = String(config.ssl_mode || "require").toLowerCase();
+    const encrypt = sslMode !== "disable";
+    const trustServerCertificate = ["require", "prefer", "allow"].includes(sslMode);
+    const pool = new sql.ConnectionPool({
+      server: config.host as string,
+      port: Number(config.port),
+      user: config.username as string,
+      password: config.password as string,
+      database: config.database_name as string,
+      connectionTimeout: opts.connectionTimeoutMillis ?? 8000,
+      requestTimeout: 60000,
+      options: {
+        encrypt,
+        trustServerCertificate,
+      },
+      pool: {
+        max: opts.max ?? 5,
+        idleTimeoutMillis: opts.idleTimeoutMillis ?? 300000,
+      },
+    });
+    try {
+      await pool.connect();
+    } catch (err) {
+      await pool.close().catch(() => undefined);
+      throw err;
+    }
+    return {
+      connect: async () => {
+        return {
+          query: async (text: string, params?: unknown[]) => {
+            const request = pool.request();
+            (params || []).forEach((value, i) => {
+              if (value === null || value === undefined) {
+                request.input(`p${i + 1}`, sql.NVarChar, null);
+              } else {
+                request.input(`p${i + 1}`, value);
+              }
+            });
+            const result = await request.query(text);
+            const fields =
+              result.recordset && result.recordset.columns
+                ? Object.keys(result.recordset.columns).map((name) => ({ name }))
+                : [];
+            return {
+              rows: (result.recordset as Record<string, unknown>[]) || [],
+              fields,
+            };
+          },
+          release: () => undefined,
+        };
+      },
+      end: () => pool.close(),
+    };
   }
 }
 
@@ -45,14 +223,76 @@ class OracleDriver implements DBDriver {
     return `${config.username}/${config.password}@${config.host}:${config.port}/${config.database_name}`;
   }
   buildQuery(query: string, params: unknown[]): { query: string; params: unknown[] } {
-    const q = query.replace(/\$(\d+)/g, "?");
+    const q = query.replace(/\$(\d+)/g, ":$1");
     return { query: q, params };
+  }
+  applyLimit(query: string, maxRows: number): { query: string; applied: boolean } {
+    if (/\b(fetch\s+first|rownum)\b/i.test(query)) return { query, applied: false };
+    return { query: `${query} FETCH FIRST ${maxRows} ROWS ONLY`, applied: true };
+  }
+  async createPool(config: Record<string, unknown>, opts: PoolOptions = {}): Promise<DriverPool> {
+    const pool = await oracledb.createPool({
+      user: config.username as string,
+      password: config.password as string,
+      connectString: `${config.host}:${config.port}/${config.database_name}`,
+      poolMax: opts.max ?? 5,
+      poolMin: 0,
+      poolIncrement: 1,
+      poolTimeout: (opts.idleTimeoutMillis ?? 300000) / 1000,
+      connectTimeout: opts.connectionTimeoutMillis ?? 8000,
+      queueTimeout: 10000,
+    });
+    return {
+      connect: async () => {
+        const connection = await pool.getConnection();
+        return {
+          query: async (text: string, params?: unknown[]) => {
+            const binds = (params || []).map((value) =>
+              value === null || value === undefined
+                ? { dir: oracledb.BIND_IN, type: oracledb.STRING, val: null }
+                : value
+            );
+            const result =
+              binds.length > 0
+                ? await connection.execute(text, binds, {
+                    outFormat: oracledb.OUT_FORMAT_OBJECT,
+                    maxRows: Number(config.max_rows_limit) || 10000,
+                  })
+                : await connection.execute(text, {
+                    outFormat: oracledb.OUT_FORMAT_OBJECT,
+                    maxRows: Number(config.max_rows_limit) || 10000,
+                  });
+            const rows = (result.rows || []) as Record<string, unknown>[];
+            for (const row of rows) {
+              for (const key of Object.keys(row)) {
+                const value = row[key];
+                if (
+                  value &&
+                  typeof value === "object" &&
+                  typeof (value as { getData?: unknown }).getData === "function"
+                ) {
+                  row[key] = await (value as { getData(): Promise<unknown> }).getData();
+                }
+              }
+            }
+            const fields = (result.metaData || []).map(
+              (m: { name: string }) => ({ name: m.name })
+            );
+            return { rows, fields };
+          },
+          release: () => {
+            connection.close().catch(() => undefined);
+          },
+        };
+      },
+      end: () => pool.close(),
+    };
   }
 }
 
 export class ClientConnectionService {
   private encryption: EncryptionService;
-  private connectionPools: Map<string, Pool>;
+  private connectionPools: Map<string, DriverPool>;
 
   constructor(encryption: EncryptionService) {
     this.encryption = encryption;
@@ -175,18 +415,7 @@ export class ClientConnectionService {
     );
   }
 
-  private getSSLConfig(sslMode: unknown): Record<string, unknown> | undefined {
-    const mode = String(sslMode || "").toLowerCase();
-    if (["verify-ca", "verify-full"].includes(mode)) {
-      return { rejectUnauthorized: true };
-    }
-    if (["require", "prefer", "allow"].includes(mode)) {
-      return { rejectUnauthorized: false };
-    }
-    return undefined;
-  }
-
-  async getOrCreatePool(connectionID: string): Promise<Pool> {
+  async getOrCreatePool(connectionID: string): Promise<DriverPool> {
     const existing = this.connectionPools.get(connectionID);
     if (existing) return existing;
 
@@ -197,13 +426,10 @@ export class ClientConnectionService {
     const driver = this.getDriver(dbType);
     if (!driver) throw new Error(`unsupported database type: ${dbType}`);
 
-    const connStr = driver.getConnectionString(config);
-    const ssl = this.getSSLConfig(config.ssl_mode);
-    const pool = new Pool({
-      connectionString: connStr,
+    const pool = await driver.createPool(config, {
       max: 5,
       idleTimeoutMillis: 300000,
-      ...(ssl ? { ssl } : {}),
+      connectionTimeoutMillis: 8000,
     });
 
     this.connectionPools.set(connectionID, pool);
@@ -240,12 +466,13 @@ export class ClientConnectionService {
 
     const maxLimit = config.max_rows_limit as number;
     let finalQuery = sqlQuery.trim().replace(/;$/, "");
-    const limitApplied = !lowerQuery.includes("limit");
-    if (limitApplied) finalQuery += ` LIMIT ${maxLimit}`;
+    const limitResult = driver.applyLimit(finalQuery, maxLimit);
+    finalQuery = limitResult.query;
+    const limitApplied = limitResult.applied;
 
     const adapted = driver.buildQuery(finalQuery, params || []);
 
-    let client: import("pg").PoolClient | null = null;
+    let client: DriverClient | null = null;
     try {
       const pool = await this.getOrCreatePool(connectionID);
       client = await pool.connect();
@@ -279,16 +506,12 @@ export class ClientConnectionService {
     const driver = this.getDriver(dbType);
     if (!driver) return { success: false, error: `Driver não suportado: ${dbType}` };
 
-    const connStr = driver.getConnectionString(config);
-    const ssl = this.getSSLConfig(config.ssl_mode);
-    const pool = new Pool({
-      connectionString: connStr,
-      max: 1,
-      connectionTimeoutMillis: 5000,
-      ...(ssl ? { ssl } : {}),
-    });
-
+    let pool: DriverPool | null = null;
     try {
+      pool = await driver.createPool(config, {
+        max: 1,
+        connectionTimeoutMillis: 5000,
+      });
       const client = await pool.connect();
       client.release();
       await this.updateLastUsed(connectionID);
@@ -303,7 +526,7 @@ export class ClientConnectionService {
     } catch (err: any) {
       return { success: false, error: err.message };
     } finally {
-      await pool.end();
+      if (pool) await pool.end();
     }
   }
 
@@ -366,5 +589,165 @@ export class ClientConnectionService {
       average_row_limit: parseFloat(row.avg_row_limit),
       average_timeout_seconds: parseFloat(row.avg_timeout),
     };
+  }
+
+  async getTableSchema(connectionID: string): Promise<Record<string, unknown>> {
+    const config = await this.getConnectionConfig(connectionID);
+    if (!config) {
+      return { success: false, error: "Connection not found or inactive", tables: [] };
+    }
+
+    const dbType = config.db_type as string;
+    const driver = this.getDriver(dbType);
+    if (!driver) {
+      return { success: false, error: `Unsupported database type: ${dbType}`, tables: [] };
+    }
+
+    const schemaQuery = this.buildSchemaQuery(dbType);
+    if (!schemaQuery) {
+      return { success: false, error: `Schema preview not supported for: ${dbType}`, tables: [] };
+    }
+
+    let client: DriverClient | null = null;
+    try {
+      const pool = await this.getOrCreatePool(connectionID);
+      client = await pool.connect();
+      const result = await client.query(schemaQuery);
+      const tablesMap = new Map<string, { name: string; columns: Record<string, unknown>[] }>();
+      for (const row of result.rows) {
+        const tableName = row.table_name as string;
+        if (!tablesMap.has(tableName)) {
+          tablesMap.set(tableName, { name: tableName, columns: [] });
+        }
+        tablesMap.get(tableName)!.columns.push({
+          name: row.column_name,
+          data_type: row.data_type,
+          max_length: row.character_maximum_length ?? row.character_max_length ?? null,
+          nullable: row.is_nullable === "YES",
+          default: row.column_default ?? row.data_default ?? null,
+          is_primary_key: Boolean(row.is_primary_key),
+          ordinal_position: row.ordinal_position,
+        });
+      }
+      const tables = Array.from(tablesMap.values()).map((t) => ({
+        ...t,
+        columns: t.columns.sort(
+          (a, b) => Number(a.ordinal_position) - Number(b.ordinal_position)
+        ),
+      }));
+      return { success: true, tables };
+    } catch (err: any) {
+      return { success: false, error: `Failed to load schema: ${err.message}`, tables: [] };
+    } finally {
+      client?.release();
+    }
+  }
+
+  private buildSchemaQuery(dbType: string): string | null {
+    const base = dbType.toLowerCase();
+    if (["postgresql", "postgres"].includes(base)) {
+      return `
+        SELECT t.table_name,
+               c.column_name,
+               c.ordinal_position,
+               c.data_type,
+               c.is_nullable,
+               c.column_default,
+               c.character_maximum_length,
+               CASE WHEN pk.column_name IS NOT NULL THEN true ELSE false END AS is_primary_key
+        FROM information_schema.tables t
+        JOIN information_schema.columns c
+          ON c.table_schema = t.table_schema AND c.table_name = t.table_name
+        LEFT JOIN (
+          SELECT kcu.table_schema, kcu.table_name, kcu.column_name
+          FROM information_schema.table_constraints tc
+          JOIN information_schema.key_column_usage kcu
+            ON tc.constraint_name = kcu.constraint_name
+           AND tc.table_schema = kcu.table_schema
+          WHERE tc.constraint_type = 'PRIMARY KEY'
+        ) pk
+          ON pk.table_schema = t.table_schema AND pk.table_name = t.table_name AND pk.column_name = c.column_name
+        WHERE t.table_schema = 'public'
+          AND t.table_type = 'BASE TABLE'
+        ORDER BY t.table_name, c.ordinal_position
+      `;
+    }
+    if (["mysql", "mariadb"].includes(base)) {
+      return `
+        SELECT t.table_name,
+               c.column_name,
+               c.ordinal_position,
+               c.data_type,
+               c.is_nullable,
+               c.column_default,
+               c.character_maximum_length,
+               CASE WHEN pk.column_name IS NOT NULL THEN true ELSE false END AS is_primary_key
+        FROM information_schema.tables t
+        JOIN information_schema.columns c
+          ON c.table_schema = t.table_schema AND c.table_name = t.table_name
+        LEFT JOIN (
+          SELECT kcu.table_schema, kcu.table_name, kcu.column_name
+          FROM information_schema.table_constraints tc
+          JOIN information_schema.key_column_usage kcu
+            ON tc.constraint_name = kcu.constraint_name
+           AND tc.table_schema = kcu.table_schema
+          WHERE tc.constraint_type = 'PRIMARY KEY'
+        ) pk
+          ON pk.table_schema = t.table_schema AND pk.table_name = t.table_name AND pk.column_name = c.column_name
+        WHERE t.table_schema = DATABASE()
+          AND t.table_type = 'BASE TABLE'
+        ORDER BY t.table_name, c.ordinal_position
+      `;
+    }
+    if (["sqlserver", "mssql"].includes(base)) {
+      return `
+        SELECT t.table_name,
+               c.column_name,
+               c.ordinal_position,
+               c.data_type,
+               c.is_nullable,
+               c.column_default,
+               c.character_maximum_length,
+               CASE WHEN pk.column_name IS NOT NULL THEN 1 ELSE 0 END AS is_primary_key
+        FROM information_schema.tables t
+        JOIN information_schema.columns c
+          ON c.table_schema = t.table_schema AND c.table_name = t.table_name
+        LEFT JOIN (
+          SELECT kcu.table_schema, kcu.table_name, kcu.column_name
+          FROM information_schema.table_constraints tc
+          JOIN information_schema.key_column_usage kcu
+            ON tc.constraint_name = kcu.constraint_name
+           AND tc.table_schema = kcu.table_schema
+          WHERE tc.constraint_type = 'PRIMARY KEY'
+        ) pk
+          ON pk.table_schema = t.table_schema AND pk.table_name = t.table_name AND pk.column_name = c.column_name
+        WHERE t.table_schema = 'dbo'
+          AND t.table_type = 'BASE TABLE'
+        ORDER BY t.table_name, c.ordinal_position
+      `;
+    }
+    if (base === "oracle") {
+      return `
+        SELECT tc.table_name AS "table_name",
+               tc.column_name AS "column_name",
+               tc.column_id AS "ordinal_position",
+               tc.data_type AS "data_type",
+               CASE WHEN tc.nullable = 'Y' THEN 'YES' ELSE 'NO' END AS "is_nullable",
+               tc.data_default AS "column_default",
+               tc.data_length AS "character_maximum_length",
+               CASE WHEN pk.column_name IS NOT NULL THEN 1 ELSE 0 END AS "is_primary_key"
+        FROM all_tab_columns tc
+        LEFT JOIN (
+          SELECT ac.table_name, acc.column_name
+          FROM all_constraints ac
+          JOIN all_cons_columns acc
+            ON ac.constraint_name = acc.constraint_name AND ac.owner = acc.owner
+          WHERE ac.constraint_type = 'P'
+        ) pk
+          ON pk.table_name = tc.table_name AND pk.column_name = tc.column_name
+        ORDER BY tc.table_name, tc.column_id
+      `;
+    }
+    return null;
   }
 }

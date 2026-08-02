@@ -49,6 +49,11 @@ export async function GET(request) {
     const organizationName = searchParams.get("organization_name");
     const action = searchParams.get("action");
 
+    if (action === "schema" && connectionId) {
+      const result = await clientConnService.getTableSchema(connectionId);
+      return NextResponse.json(result, { status: 200 });
+    }
+
     if (action === "statistics" && organizationName) {
       const result = await clientConnService.getOrganizationConnectionStatistics(organizationName);
       return NextResponse.json(result, { status: 200 });

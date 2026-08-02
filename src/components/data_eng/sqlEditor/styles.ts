@@ -61,6 +61,26 @@ export const EditorCard = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-width: 0;
+`;
+
+export const SplitLayout = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 16px;
+  align-items: start;
+
+  @media (max-width: 1150px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+export const SchemaPanel = styled.div`
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 16px;
+  min-width: 0;
 `;
 
 export const Textarea = styled.textarea`

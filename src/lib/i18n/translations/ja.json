@@ -1,205 +1,649 @@
 {
-  "header": { "logoAlt": "FastBI ロゴ", "logoText": "FastBI", "nav": { "home": "ホーム", "features": "機能", "pricing": "料金", "contact": "お問い合わせ" }, "buttons": { "getStarted": "はじめる", "login": "ログイン", "logout": "ログアウト" } },
-  "footer": { "logoText": "FastBI", "nav": { "home": "ホーム", "features": "機能", "pricing": "料金", "contact": "お問い合わせ" }, "copyright": "© {year} Lucas Technology Service. 無断転載を禁じます。" },
-  "home": {
-    "hero": { "alt": "ホーム", "heading": "中小企業のためのビジネスインテリジェンス", "subtitle": "データをインテリジェントな意思決定に変える", "buttons": { "startTrial": "無料トライアル", "viewDemo": "デモを見る", "goToDashboard": "ダッシュボードへ" } },
-    "features": { "intuitiveDashboards": { "title": "直感的なダッシュボード", "desc": "データを明確かつ実用的に可視化" }, "reportAutomation": { "title": "レポート自動化", "desc": "自動化された最新レポート" }, "accurateInsights": { "title": "正確なインサイト", "desc": "ビジネスに価値ある洞察を得る" } },
-    "carousel": { "title": "ビジネスとともに進化するダッシュボード", "alt": "ビジネスインテリジェンスダッシュボード {n}", "note": "ホバーで一時停止 • ダッシュボードは連続スクロール" },
-    "industries": { "title": "さまざまなビジネスタイプに有用", "subtitle": "さまざまな業界やビジネスモデルに合わせたソリューション", "alt": "対応業界" },
-    "reports": { "title": "高度なレポートに有用", "subtitle": "データドリブンな意思決定のための高度な分析とレポート機能", "alt": "高度なレポート" },
-    "simplifying": { "title": "データ分析をシンプルに", "subtitle": "あなたのビジネスに簡単で効果的なBIソリューション。" },
-    "details": { "alt": "データを分析する人々", "connect": { "title": "データに接続", "desc": "データソースと簡単に統合" }, "dashboards": { "title": "カスタムダッシュボードを作成", "desc": "ニーズに合わせたダッシュボード。" }, "decisions": { "title": "自信を持って意思決定", "desc": "戦略を導く正確な情報。" } }
+ "header": {
+  "logoAlt": "FastBI ロゴ",
+  "logoText": "FastBI",
+  "nav": {
+   "home": "ホーム",
+   "features": "機能",
+   "pricing": "料金",
+   "contact": "お問い合わせ"
   },
-  "features": { "badge": "● エンタープライズ分析プラットフォーム", "title": "データを", "titleHighlight": "決定的なアクションに", "description": "リアルタイムインサイト、予測分析、自動レポートでビジネスインテリジェンスを統一し、組織の成長に合わせてスケールします。", "buttons": { "startTrial": "無料トライアル →", "bookDemo": "デモ予約" }, "stats": { "activeUsers": "アクティブユーザー", "uptimeSla": "アップタイムSLA", "integrations": "連携数" }, "imageAlt": "ダッシュボードプレビュー", "exploreDashboards": { "title": "Explore Intelligent Dashboards", "desc": "Visualize your data with real-time insights and predictive analytics" } },
-  "forgotpassword": {
-    "alt": "FastBI 背景",
-    "heading": "パスワードをお忘れですか？",
-    "subtitle": "メールアドレスを入力してください。一時的なパスワードをお送りします。",
-    "form": {
-      "emailLabel": "メールアドレス",
-      "emailPlaceholder": "you@domain.com"
-    },
-    "button": "リセットメールを送信",
-    "successTitle": "メールを送信しました！",
-    "successMessage": "そのメールアドレスのアカウントが存在する場合、まもなく一時パスワードをお受け取りいただけます。",
-    "backToLogin": "ログインに戻る",
-    "footer": "ログインに戻る",
-    "errors": {
-      "default": "エラーが発生しました。もう一度お試しください。"
-    }
-  },
-  "resetpassword": {
-    "alt": "FastBI 背景",
-    "heading": "新しいパスワードを設定",
-    "subtitle": "アカウントの新しいパスワードを作成してください。リンクの有効期限は10分です。",
-    "form": {
-      "newPasswordLabel": "新しいパスワード",
-      "newPasswordPlaceholder": "********",
-      "confirmPasswordLabel": "パスワードを確認",
-      "confirmPasswordPlaceholder": "********"
-    },
-    "button": "パスワードをリセット",
-    "successTitle": "パスワード変更完了！",
-    "successMessage": "パスワードが正常に更新されました。",
-    "backToLogin": "ログインに戻る",
-    "errors": {
-      "passwordsMismatch": "パスワードが一致しません",
-      "tooShort": "パスワードは6文字以上必要です",
-      "default": "エラーが発生しました。もう一度お試しください。"
-    }
-  },
-  "signup": {
-    "alt": "FastBI 背景",
-    "heading": "アカウントを作成",
-    "subtitle": "データをインテリジェントな意思決定に変えましょう",
-    "form": {
-      "nameLabel": "氏名",
-      "namePlaceholder": "山田 太郎",
-      "emailLabel": "メールアドレス",
-      "emailPlaceholder": "you@domain.com",
-      "passwordLabel": "パスワード",
-      "passwordPlaceholder": "********",
-      "confirmPasswordLabel": "パスワードを確認",
-      "confirmPasswordPlaceholder": "********",
-      "passwordsMismatch": "パスワードが一致しません"
-    },
-    "button": "アカウント作成",
-    "footer": {
-      "text": "すでにアカウントをお持ちの方",
-      "link": "サインイン"
-    },
-    "errors": {
-      "default": "エラーが発生しました。もう一度お試しください。"
-    }
-  },
-  "login": { "alt": "FastBI 背景", "heading": "FastBI にサインイン", "subtitle": "データをインテリジェントな意思決定に変える", "form": { "emailLabel": "メールアドレス", "emailPlaceholder": "you@domain.com", "passwordLabel": "パスワード", "passwordPlaceholder": "********", "rememberMe": "ログイン状態を保持", "forgotPassword": "パスワードをお忘れですか？" }, "button": "ログイン", "footer": { "text": "アカウントをお持ちでない方", "link": "新規登録" } },
-  "dashboards": {
-    "badge": "予測分析", "title": "インテリジェントダッシュボード", "titleHighlight": " for FastBI",
-    "description": "機械学習モデルによるリアルタイム予測。データに基づいた意思決定を自信を持って行えます。",
-    "stats": { "modelAccuracy": "モデル精度", "revenueGrowth": "収益成長", "activeUsers": "アクティブユーザー" },
-    "controls": { "salesForecast": "売上予測", "compositionAnalysis": "構成分析", "lastUpdated": "最終更新: {time}", "refresh": "更新", "exportReport": "レポート出力" },
-    "insights": { "title": "AI搭載インサイト", "subtitle": "データに基づく主要な予測と推奨事項", "revenueGrowth": { "title": "収益成長予測", "text": "小売部門の需要増加により、2025年第1四半期に18.5%の成長を見込み。", "confidence": "信頼度: {pct}%" }, "riskAlert": { "title": "リスクアラート", "text": "来月のチャーンレートが2.3%増加する見込み。リテンションキャンペーンを推奨。", "confidence": "信頼度: {pct}%" }, "optimization": { "title": "最適化の機会", "text": "Eコマースチャネルは、ターゲットマーケティングにより45%の成長可能性を示しています。", "confidence": "信頼度: {pct}%" } }
-  },
-  "crm": { "title": "BI インテリジェンスハブ", "subtitle": "リアルタイムのビジネスインサイトとパフォーマンス分析ダッシュボード", "stats": { "totalRevenue": "総収益", "activeUsers": "アクティブユーザー", "growthRate": "成長率", "satisfaction": "満足度" }, "errors": { "stats": "統計情報の読み込みに失敗しました", "dashboard": "ダッシュボードデータの読み込みに失敗しました" }, "retry": "再試行", "refreshTitle": "ダッシュボードを更新" },
-  "pricing": {
-    "hero": { "eyebrow": "料金", "title": "データとともに拡張する料金", "titleHighlight": "あなたのデータとともに", "description": "無料で始め、予測分析に成長し、エンタープライズガバナンスに移行 — プラットフォームを変えずに。ユーザー単位、好きな方法で請求。", "monthly": "月次", "annual": "年次", "saveTag": "年間20%お得" },
-    "cards": { "perUserMo": "/ユーザー / 月", "billedAnnually": "年払い", "startFreeTrial": "無料トライアル", "starter": { "name": "スターター", "desc": "最初のダッシュボードを意思決定に変える小さなチーム向け。", "features": ["最大5ユーザー", "10の接続データソース", "無制限のダッシュボード", "毎日データ更新", "メールサポート"] }, "professional": { "name": "プロフェッショナル", "badge": "最も人気", "desc": "予測と自動レポートが必要な成長チーム向け。", "features": ["スターターの全機能に加え：", "50の接続データソース", "予測分析", "AI文章生成レポート", "毎時更新＆スケジュールレポート", "優先サポート"] }, "business": { "name": "ビジネス", "desc": "ガバナンス、ロール、スケールが必要な組織向け。", "features": ["プロフェッショナルの全機能に加え：", "無制限のデータソース", "ロールベースのアクセス制御", "リアルタイム更新", "監査ログとデータ系列", "専任サクセスマネージャー"] } },
-    "enterprise": { "title": "エンタープライズ", "desc": "SSO/SAML、カスタムデータ保存場所、99.9%アップタイムSLA、組織全体でFastBIを実行するチーム向けのボリューム価格。", "stats": { "activeUsers": "アクティブユーザー", "uptimeSla": "アップタイムSLA", "integrations": "連携数" }, "button": "営業に問い合わせ" },
-    "comparison": { "title": "すべてのプランを比較", "subtitle": "チームが最初に適切なティアを選択できるよう、完全な内訳を提供します。", "headers": { "feature": "機能", "starter": "スターター", "professional": "プロフェッショナル", "business": "ビジネス", "enterprise": "エンタープライズ" }, "groups": { "coreAnalytics": "コア分析", "intelligence": "インテリジェンス", "governance": "ガバナンスとサポート" }, "rows": { "usersIncluded": "含まれるユーザー数", "connectedSources": "接続データソース", "dashboards": "ダッシュボード", "refreshRate": "データ更新頻度", "predictiveAnalytics": "予測分析", "aiReporting": "AI文章生成レポート", "scheduledReports": "スケジュールレポート", "rbac": "ロールベースのアクセス制御", "auditLogs": "監査ログ", "sso": "SSO / SAML", "uptimeSla": "アップタイムSLA", "support": "サポート" }, "values": { "unlimited": "無制限", "daily": "毎日", "hourly": "毎時", "realTime": "リアルタイム", "email": "メール", "priority": "優先", "successManager": "サクセスマネージャー", "dedicatedSla": "専任 + SLA" } },
-    "faq": { "title": "よくある質問", "items": [
-      { "q": "ユーザー単位の料金はどのように機能しますか？", "a": "レポートを作成・閲覧するユーザーごとに支払います。いつでもユーザーを追加・削除でき、請求は次回の請求書で調整されます。" },
-      { "q": "後でプランを変更できますか？", "a": "はい。即座にアップグレードでき、日割り計算された差額のみをお支払いいただきます。ダウングレードは次の請求期間の開始時に有効になります。" },
-      { "q": "無料トライアル後はどうなりますか？", "a": "14日間のトライアルにはプロフェッショナル機能が含まれます。終了時にプランを選択して継続してください — データは削除されず、継続を選択するまで請求は発生しません。" },
-      { "q": "年払いはありますか？", "a": "年払いですべての有料ティアで20%割引になります。ページ上部のトグルで調整後の料金を確認できます。" },
-      { "q": "データは安全ですか？", "a": "データは転送中および保存中に暗号化されます。ビジネスプランでは監査ログを、エンタープライズではSSO/SAMLとカスタムデータ保存場所を追加できます。" },
-      { "q": "データソースとは何ですか？", "a": "FastBIが読み取る接続システム — データベース、ウェアハウス、スプレッドシート、または150以上のアプリ連携。各接続は一度だけカウントされます。" }
-    ] },
-    "cta": { "title": "あなたのデータを", "titleHighlight": "決定的なアクションに", "description": "数分で最初のダッシュボードを作成。クレジットカードは不要です。", "startTrial": "無料トライアル", "bookDemo": "デモ予約" }
-  },
-  "accounting": {
-    "menu": {
-      "templates": "ACCOUNTING TEMPLATE",
-      "workflows": "ACCOUNTING WORKFLOWS",
-      "operations": "ACCOUNTING OPERATIONS",
-      "back": "← Back",
-      "comingSoon": "{name} — coming soon"
-    },
-    "template": {
-      "title": "Create Accounting Template",
-      "subtitle": "Fill in the fields below to generate a new accounting workflow template",
-      "success": "Template created successfully!",
-      "fields": {
-        "name": { "label": "Name", "placeholder": "e.g. Monthly Bookkeeping" },
-        "category": { "label": "Category", "placeholder": "Select category" },
-        "taxRegime": { "label": "Tax Regime", "placeholder": "Select tax regime" },
-        "fiscalPeriod": { "label": "Fiscal Period", "placeholder": "Select period" },
-        "regulatoryBody": { "label": "Regulatory Body", "placeholder": "Select body" },
-        "createdBy": { "label": "Created By", "placeholder": "e.g. John Doe" },
-        "structure": { "label": "Structure (JSON)", "placeholder": "{\"stages\": [...], \"kpis\": [...], ...}" }
-      },
-      "buttons": {
-        "cancel": "Cancel",
-        "creating": "Creating...",
-        "create": "Create Template"
-      },
-      "errors": {
-        "nameRequired": "Name is required",
-        "categoryRequired": "Category is required",
-        "invalidJson": "Structure must be valid JSON",
-        "minStages": "Structure must have at least 2 stages",
-        "minKpis": "Structure must define at least one KPI",
-        "createFailed": "Failed to create template",
-        "generic": "Something went wrong"
-      }
-    }
-  },
-  "contact": {
-    "hero": { "eyebrow": "お問い合わせ", "title": "一緒に素晴らしいものを", "titleHighlight": "作りましょう", "description": "FastBIについてのご質問、デモのご希望、またはビジネスインテリジェンスの拡張準備ができましたら、ぜひお聞かせください。" },
-    "form": { "title": "メッセージを送信", "successTitle": "メッセージを送信しました！ 🎉", "successMessage": "お問い合わせいただきありがとうございます。通常24時間以内にご返信いたします。それまでの間、機能をご覧ください。", "fields": { "name": { "label": "氏名", "placeholder": "山田 太郎" }, "email": { "label": "メールアドレス", "placeholder": "taro@company.com" }, "subject": { "label": "件名", "placeholder": "どのようなご用件ですか？" }, "message": { "label": "メッセージ", "placeholder": "プロジェクト、質問、アイデアについてお聞かせください..." } }, "submit": "送信" },
-    "info": { "email": { "title": "メール", "primary": "hello@fastbi.com", "support": "support@fastbi.com" }, "phone": { "title": "電話", "number": "+1 (212) 796-2141", "hours": "月～金、午前9時～午後6時（EST）" }, "office": { "title": "オフィス", "line1": "16 E 52nd St #302", "line2": "ニューヨーク, NY 10022", "line3": "アメリカ合衆国" }, "social": { "title": "フォローする", "github": "GitHub", "linkedin": "LinkedIn", "twitter": "Twitter / X" } },
-    "cta": { "title": "あなたのデータを", "titleHighlight": "行動に変える準備はできましたか？", "description": "今すぐ無料トライアルを開始。クレジットカード不要、ノープレッシャー — 強力なBIをあなたの指先に。", "startTrial": "無料トライアル", "bookDemo": "デモ予約" }
-  },
-  "profileEditor": {
-    "title": "Profile Settings",
-    "name": "Name",
-    "email": "Email",
-    "role": "Role",
-    "avatarUploaded": "Avatar uploaded successfully!",
-    "uploadError": "Failed to upload avatar",
-    "saved": "Profile saved successfully!",
-    "saveError": "Failed to save profile",
-    "saving": "Saving...",
-    "save": "Save"
-  },
-  "roles": {
-    "admin": "Admin",
-    "manager": "Manager",
-    "analyst": "Analyst",
-    "viewer": "Viewer"
-  },
-  "dataeng": {
-    "title": "Data Engineering",
-    "subtitle": "Manage your data pipelines and transformations",
-    "upload": "Upload Data",
-    "transform": "Transform",
-    "schedule": "Schedule",
-    "history": "History"
-  },
-  "workflows": {
-    "title": "Workflows",
-    "subtitle": "Automate your business processes",
-    "create": "Create Workflow",
-    "active": "Active",
-    "draft": "Draft",
-    "completed": "Completed"
-  },
-  "businessDashboards": {
-    "title": "Business Dashboards",
-    "subtitle": "Real-time insights for your business",
-    "revenue": "Revenue",
-    "customers": "Customers",
-    "orders": "Orders",
-    "growth": "Growth"
-  },
-  "predictiveDashboard": {
-    "title": "Predictive Dashboard",
-    "subtitle": "AI-powered forecasts and predictions",
-    "accuracy": "Accuracy",
-    "trend": "Trend",
-    "forecast": "Forecast"
-  },
-  "animatedDashboard": {
-    "title": "Animated Dashboard",
-    "subtitle": "Interactive visualizations with live data",
-    "play": "Play",
-    "pause": "Pause",
-    "speed": "Speed"
-  },
-  "compositionDashboard": {
-    "title": "Composition Dashboard",
-    "subtitle": "Break down your data by category",
-    "byCategory": "By Category",
-    "byRegion": "By Region",
-    "byPeriod": "By Period"
+  "buttons": {
+   "getStarted": "はじめる",
+   "login": "ログイン",
+   "logout": "ログアウト"
   }
+ },
+ "footer": {
+  "logoText": "FastBI",
+  "nav": {
+   "home": "ホーム",
+   "features": "機能",
+   "pricing": "料金",
+   "contact": "お問い合わせ"
+  },
+  "copyright": "© {year} Lucas Technology Service. 無断転載を禁じます。"
+ },
+ "home": {
+  "hero": {
+   "alt": "ホーム",
+   "heading": "中小企業のためのビジネスインテリジェンス",
+   "subtitle": "データをインテリジェントな意思決定に変える",
+   "buttons": {
+    "startTrial": "無料トライアル",
+    "viewDemo": "デモを見る",
+    "goToDashboard": "ダッシュボードへ"
+   }
+  },
+  "features": {
+   "intuitiveDashboards": {
+    "title": "直感的なダッシュボード",
+    "desc": "データを明確かつ実用的に可視化"
+   },
+   "reportAutomation": {
+    "title": "レポート自動化",
+    "desc": "自動化された最新レポート"
+   },
+   "accurateInsights": {
+    "title": "正確なインサイト",
+    "desc": "ビジネスに価値ある洞察を得る"
+   }
+  },
+  "carousel": {
+   "title": "ビジネスとともに進化するダッシュボード",
+   "alt": "ビジネスインテリジェンスダッシュボード {n}",
+   "note": "ホバーで一時停止 • ダッシュボードは連続スクロール"
+  },
+  "industries": {
+   "title": "さまざまなビジネスタイプに有用",
+   "subtitle": "さまざまな業界やビジネスモデルに合わせたソリューション",
+   "alt": "対応業界"
+  },
+  "reports": {
+   "title": "高度なレポートに有用",
+   "subtitle": "データドリブンな意思決定のための高度な分析とレポート機能",
+   "alt": "高度なレポート"
+  },
+  "simplifying": {
+   "title": "データ分析をシンプルに",
+   "subtitle": "あなたのビジネスに簡単で効果的なBIソリューション。"
+  },
+  "details": {
+   "alt": "データを分析する人々",
+   "connect": {
+    "title": "データに接続",
+    "desc": "データソースと簡単に統合"
+   },
+   "dashboards": {
+    "title": "カスタムダッシュボードを作成",
+    "desc": "ニーズに合わせたダッシュボード。"
+   },
+   "decisions": {
+    "title": "自信を持って意思決定",
+    "desc": "戦略を導く正確な情報。"
+   }
+  }
+ },
+ "features": {
+  "badge": "● エンタープライズ分析プラットフォーム",
+  "title": "データを",
+  "titleHighlight": "決定的なアクションに",
+  "description": "リアルタイムインサイト、予測分析、自動レポートでビジネスインテリジェンスを統一し、組織の成長に合わせてスケールします。",
+  "buttons": {
+   "startTrial": "無料トライアル →",
+   "bookDemo": "デモ予約"
+  },
+  "stats": {
+   "activeUsers": "アクティブユーザー",
+   "uptimeSla": "アップタイムSLA",
+   "integrations": "連携数"
+  },
+  "imageAlt": "ダッシュボードプレビュー",
+  "exploreDashboards": {
+   "title": "Explore Intelligent Dashboards",
+   "desc": "Visualize your data with real-time insights and predictive analytics"
+  }
+ },
+ "forgotpassword": {
+  "alt": "FastBI 背景",
+  "heading": "パスワードをお忘れですか？",
+  "subtitle": "メールアドレスを入力してください。一時的なパスワードをお送りします。",
+  "form": {
+   "emailLabel": "メールアドレス",
+   "emailPlaceholder": "you@domain.com"
+  },
+  "button": "リセットメールを送信",
+  "successTitle": "メールを送信しました！",
+  "successMessage": "そのメールアドレスのアカウントが存在する場合、まもなく一時パスワードをお受け取りいただけます。",
+  "backToLogin": "ログインに戻る",
+  "footer": "ログインに戻る",
+  "errors": {
+   "default": "エラーが発生しました。もう一度お試しください。"
+  }
+ },
+ "resetpassword": {
+  "alt": "FastBI 背景",
+  "heading": "新しいパスワードを設定",
+  "subtitle": "アカウントの新しいパスワードを作成してください。リンクの有効期限は10分です。",
+  "form": {
+   "newPasswordLabel": "新しいパスワード",
+   "newPasswordPlaceholder": "********",
+   "confirmPasswordLabel": "パスワードを確認",
+   "confirmPasswordPlaceholder": "********"
+  },
+  "button": "パスワードをリセット",
+  "successTitle": "パスワード変更完了！",
+  "successMessage": "パスワードが正常に更新されました。",
+  "backToLogin": "ログインに戻る",
+  "errors": {
+   "passwordsMismatch": "パスワードが一致しません",
+   "tooShort": "パスワードは6文字以上必要です",
+   "default": "エラーが発生しました。もう一度お試しください。"
+  }
+ },
+ "signup": {
+  "alt": "FastBI 背景",
+  "heading": "アカウントを作成",
+  "subtitle": "データをインテリジェントな意思決定に変えましょう",
+  "form": {
+   "nameLabel": "氏名",
+   "namePlaceholder": "山田 太郎",
+   "emailLabel": "メールアドレス",
+   "emailPlaceholder": "you@domain.com",
+   "passwordLabel": "パスワード",
+   "passwordPlaceholder": "********",
+   "confirmPasswordLabel": "パスワードを確認",
+   "confirmPasswordPlaceholder": "********",
+   "passwordsMismatch": "パスワードが一致しません"
+  },
+  "button": "アカウント作成",
+  "footer": {
+   "text": "すでにアカウントをお持ちの方",
+   "link": "サインイン"
+  },
+  "errors": {
+   "default": "エラーが発生しました。もう一度お試しください。"
+  }
+ },
+ "login": {
+  "alt": "FastBI 背景",
+  "heading": "FastBI にサインイン",
+  "subtitle": "データをインテリジェントな意思決定に変える",
+  "form": {
+   "emailLabel": "メールアドレス",
+   "emailPlaceholder": "you@domain.com",
+   "passwordLabel": "パスワード",
+   "passwordPlaceholder": "********",
+   "rememberMe": "ログイン状態を保持",
+   "forgotPassword": "パスワードをお忘れですか？"
+  },
+  "button": "ログイン",
+  "footer": {
+   "text": "アカウントをお持ちでない方",
+   "link": "新規登録"
+  }
+ },
+ "dashboards": {
+  "badge": "予測分析",
+  "title": "インテリジェントダッシュボード",
+  "titleHighlight": " for FastBI",
+  "description": "機械学習モデルによるリアルタイム予測。データに基づいた意思決定を自信を持って行えます。",
+  "stats": {
+   "modelAccuracy": "モデル精度",
+   "revenueGrowth": "収益成長",
+   "activeUsers": "アクティブユーザー"
+  },
+  "controls": {
+   "salesForecast": "売上予測",
+   "compositionAnalysis": "構成分析",
+   "lastUpdated": "最終更新: {time}",
+   "refresh": "更新",
+   "exportReport": "レポート出力"
+  },
+  "insights": {
+   "title": "AI搭載インサイト",
+   "subtitle": "データに基づく主要な予測と推奨事項",
+   "revenueGrowth": {
+    "title": "収益成長予測",
+    "text": "小売部門の需要増加により、2025年第1四半期に18.5%の成長を見込み。",
+    "confidence": "信頼度: {pct}%"
+   },
+   "riskAlert": {
+    "title": "リスクアラート",
+    "text": "来月のチャーンレートが2.3%増加する見込み。リテンションキャンペーンを推奨。",
+    "confidence": "信頼度: {pct}%"
+   },
+   "optimization": {
+    "title": "最適化の機会",
+    "text": "Eコマースチャネルは、ターゲットマーケティングにより45%の成長可能性を示しています。",
+    "confidence": "信頼度: {pct}%"
+   }
+  }
+ },
+ "crm": {
+  "title": "BI インテリジェンスハブ",
+  "subtitle": "リアルタイムのビジネスインサイトとパフォーマンス分析ダッシュボード",
+  "stats": {
+   "totalRevenue": "総収益",
+   "activeUsers": "アクティブユーザー",
+   "growthRate": "成長率",
+   "satisfaction": "満足度"
+  },
+  "errors": {
+   "stats": "統計情報の読み込みに失敗しました",
+   "dashboard": "ダッシュボードデータの読み込みに失敗しました"
+  },
+  "retry": "再試行",
+  "refreshTitle": "ダッシュボードを更新"
+ },
+ "pricing": {
+  "hero": {
+   "eyebrow": "料金",
+   "title": "データとともに拡張する料金",
+   "titleHighlight": "あなたのデータとともに",
+   "description": "無料で始め、予測分析に成長し、エンタープライズガバナンスに移行 — プラットフォームを変えずに。ユーザー単位、好きな方法で請求。",
+   "monthly": "月次",
+   "annual": "年次",
+   "saveTag": "年間20%お得"
+  },
+  "cards": {
+   "perUserMo": "/ユーザー / 月",
+   "billedAnnually": "年払い",
+   "startFreeTrial": "無料トライアル",
+   "starter": {
+    "name": "スターター",
+    "desc": "最初のダッシュボードを意思決定に変える小さなチーム向け。",
+    "features": [
+     "最大5ユーザー",
+     "10の接続データソース",
+     "無制限のダッシュボード",
+     "毎日データ更新",
+     "メールサポート"
+    ]
+   },
+   "professional": {
+    "name": "プロフェッショナル",
+    "badge": "最も人気",
+    "desc": "予測と自動レポートが必要な成長チーム向け。",
+    "features": [
+     "スターターの全機能に加え：",
+     "50の接続データソース",
+     "予測分析",
+     "AI文章生成レポート",
+     "毎時更新＆スケジュールレポート",
+     "優先サポート"
+    ]
+   },
+   "business": {
+    "name": "ビジネス",
+    "desc": "ガバナンス、ロール、スケールが必要な組織向け。",
+    "features": [
+     "プロフェッショナルの全機能に加え：",
+     "無制限のデータソース",
+     "ロールベースのアクセス制御",
+     "リアルタイム更新",
+     "監査ログとデータ系列",
+     "専任サクセスマネージャー"
+    ]
+   }
+  },
+  "enterprise": {
+   "title": "エンタープライズ",
+   "desc": "SSO/SAML、カスタムデータ保存場所、99.9%アップタイムSLA、組織全体でFastBIを実行するチーム向けのボリューム価格。",
+   "stats": {
+    "activeUsers": "アクティブユーザー",
+    "uptimeSla": "アップタイムSLA",
+    "integrations": "連携数"
+   },
+   "button": "営業に問い合わせ"
+  },
+  "comparison": {
+   "title": "すべてのプランを比較",
+   "subtitle": "チームが最初に適切なティアを選択できるよう、完全な内訳を提供します。",
+   "headers": {
+    "feature": "機能",
+    "starter": "スターター",
+    "professional": "プロフェッショナル",
+    "business": "ビジネス",
+    "enterprise": "エンタープライズ"
+   },
+   "groups": {
+    "coreAnalytics": "コア分析",
+    "intelligence": "インテリジェンス",
+    "governance": "ガバナンスとサポート"
+   },
+   "rows": {
+    "usersIncluded": "含まれるユーザー数",
+    "connectedSources": "接続データソース",
+    "dashboards": "ダッシュボード",
+    "refreshRate": "データ更新頻度",
+    "predictiveAnalytics": "予測分析",
+    "aiReporting": "AI文章生成レポート",
+    "scheduledReports": "スケジュールレポート",
+    "rbac": "ロールベースのアクセス制御",
+    "auditLogs": "監査ログ",
+    "sso": "SSO / SAML",
+    "uptimeSla": "アップタイムSLA",
+    "support": "サポート"
+   },
+   "values": {
+    "unlimited": "無制限",
+    "daily": "毎日",
+    "hourly": "毎時",
+    "realTime": "リアルタイム",
+    "email": "メール",
+    "priority": "優先",
+    "successManager": "サクセスマネージャー",
+    "dedicatedSla": "専任 + SLA"
+   }
+  },
+  "faq": {
+   "title": "よくある質問",
+   "items": [
+    {
+     "q": "ユーザー単位の料金はどのように機能しますか？",
+     "a": "レポートを作成・閲覧するユーザーごとに支払います。いつでもユーザーを追加・削除でき、請求は次回の請求書で調整されます。"
+    },
+    {
+     "q": "後でプランを変更できますか？",
+     "a": "はい。即座にアップグレードでき、日割り計算された差額のみをお支払いいただきます。ダウングレードは次の請求期間の開始時に有効になります。"
+    },
+    {
+     "q": "無料トライアル後はどうなりますか？",
+     "a": "14日間のトライアルにはプロフェッショナル機能が含まれます。終了時にプランを選択して継続してください — データは削除されず、継続を選択するまで請求は発生しません。"
+    },
+    {
+     "q": "年払いはありますか？",
+     "a": "年払いですべての有料ティアで20%割引になります。ページ上部のトグルで調整後の料金を確認できます。"
+    },
+    {
+     "q": "データは安全ですか？",
+     "a": "データは転送中および保存中に暗号化されます。ビジネスプランでは監査ログを、エンタープライズではSSO/SAMLとカスタムデータ保存場所を追加できます。"
+    },
+    {
+     "q": "データソースとは何ですか？",
+     "a": "FastBIが読み取る接続システム — データベース、ウェアハウス、スプレッドシート、または150以上のアプリ連携。各接続は一度だけカウントされます。"
+    }
+   ]
+  },
+  "cta": {
+   "title": "あなたのデータを",
+   "titleHighlight": "決定的なアクションに",
+   "description": "数分で最初のダッシュボードを作成。クレジットカードは不要です。",
+   "startTrial": "無料トライアル",
+   "bookDemo": "デモ予約"
+  }
+ },
+ "accounting": {
+  "menu": {
+   "templates": "ACCOUNTING TEMPLATE",
+   "workflows": "ACCOUNTING WORKFLOWS",
+   "operations": "ACCOUNTING OPERATIONS",
+   "back": "← Back",
+   "comingSoon": "{name} — coming soon"
+  },
+  "template": {
+   "title": "Create Accounting Template",
+   "subtitle": "Fill in the fields below to generate a new accounting workflow template",
+   "success": "Template created successfully!",
+   "fields": {
+    "name": {
+     "label": "Name",
+     "placeholder": "e.g. Monthly Bookkeeping"
+    },
+    "category": {
+     "label": "Category",
+     "placeholder": "Select category"
+    },
+    "taxRegime": {
+     "label": "Tax Regime",
+     "placeholder": "Select tax regime"
+    },
+    "fiscalPeriod": {
+     "label": "Fiscal Period",
+     "placeholder": "Select period"
+    },
+    "regulatoryBody": {
+     "label": "Regulatory Body",
+     "placeholder": "Select body"
+    },
+    "createdBy": {
+     "label": "Created By",
+     "placeholder": "e.g. John Doe"
+    },
+    "structure": {
+     "label": "Structure (JSON)",
+     "placeholder": "{\"stages\": [...], \"kpis\": [...], ...}"
+    }
+   },
+   "buttons": {
+    "cancel": "Cancel",
+    "creating": "Creating...",
+    "create": "Create Template"
+   },
+   "errors": {
+    "nameRequired": "Name is required",
+    "categoryRequired": "Category is required",
+    "invalidJson": "Structure must be valid JSON",
+    "minStages": "Structure must have at least 2 stages",
+    "minKpis": "Structure must define at least one KPI",
+    "createFailed": "Failed to create template",
+    "generic": "Something went wrong"
+   }
+  }
+ },
+ "contact": {
+  "hero": {
+   "eyebrow": "お問い合わせ",
+   "title": "一緒に素晴らしいものを",
+   "titleHighlight": "作りましょう",
+   "description": "FastBIについてのご質問、デモのご希望、またはビジネスインテリジェンスの拡張準備ができましたら、ぜひお聞かせください。"
+  },
+  "form": {
+   "title": "メッセージを送信",
+   "successTitle": "メッセージを送信しました！ 🎉",
+   "successMessage": "お問い合わせいただきありがとうございます。通常24時間以内にご返信いたします。それまでの間、機能をご覧ください。",
+   "fields": {
+    "name": {
+     "label": "氏名",
+     "placeholder": "山田 太郎"
+    },
+    "email": {
+     "label": "メールアドレス",
+     "placeholder": "taro@company.com"
+    },
+    "subject": {
+     "label": "件名",
+     "placeholder": "どのようなご用件ですか？"
+    },
+    "message": {
+     "label": "メッセージ",
+     "placeholder": "プロジェクト、質問、アイデアについてお聞かせください..."
+    }
+   },
+   "submit": "送信"
+  },
+  "info": {
+   "email": {
+    "title": "メール",
+    "primary": "hello@fastbi.com",
+    "support": "support@fastbi.com"
+   },
+   "phone": {
+    "title": "電話",
+    "number": "+1 (212) 796-2141",
+    "hours": "月～金、午前9時～午後6時（EST）"
+   },
+   "office": {
+    "title": "オフィス",
+    "line1": "16 E 52nd St #302",
+    "line2": "ニューヨーク, NY 10022",
+    "line3": "アメリカ合衆国"
+   },
+   "social": {
+    "title": "フォローする",
+    "github": "GitHub",
+    "linkedin": "LinkedIn",
+    "twitter": "Twitter / X"
+   }
+  },
+  "cta": {
+   "title": "あなたのデータを",
+   "titleHighlight": "行動に変える準備はできましたか？",
+   "description": "今すぐ無料トライアルを開始。クレジットカード不要、ノープレッシャー — 強力なBIをあなたの指先に。",
+   "startTrial": "無料トライアル",
+   "bookDemo": "デモ予約"
+  }
+ },
+ "profileEditor": {
+  "title": "Profile Settings",
+  "name": "Name",
+  "email": "Email",
+  "role": "Role",
+  "avatarUploaded": "Avatar uploaded successfully!",
+  "uploadError": "Failed to upload avatar",
+  "saved": "Profile saved successfully!",
+  "saveError": "Failed to save profile",
+  "saving": "Saving...",
+  "save": "Save"
+ },
+ "roles": {
+  "admin": "Admin",
+  "manager": "Manager",
+  "analyst": "Analyst",
+  "viewer": "Viewer"
+ },
+ "dataeng": {
+  "title": "Data Engineering",
+  "subtitle": "Manage your data pipelines and transformations",
+  "upload": "Upload Data",
+  "transform": "Transform",
+  "schedule": "Schedule",
+  "history": "History",
+  "createConnection": {
+   "title": "新しい接続",
+   "subtitle": "組織の新しいデータベース接続を構成します",
+   "sectionOrganization": "組織",
+   "organizationName": "組織名",
+   "orgPlaceholder": "例: my-org",
+   "sectionConnection": "接続の詳細",
+   "connectionName": "接続名",
+   "connNamePlaceholder": "例: 本番データベース",
+   "dbType": "データベースの種類",
+   "sslMode": "SSL モード",
+   "host": "ホスト",
+   "hostPlaceholder": "例: localhost または db.example.com",
+   "port": "ポート",
+   "databaseName": "データベース名",
+   "dbNamePlaceholder": "例: my_database",
+   "sectionAuth": "認証",
+   "username": "ユーザー名",
+   "userPlaceholder": "データベースユーザー",
+   "password": "パスワード",
+   "passPlaceholder": "データベースのパスワード",
+   "sectionLimits": "制限",
+   "maxRows": "最大行数",
+   "maxRowsHint": "1 回のクエリで返される最大行数",
+   "queryTimeout": "クエリのタイムアウト（秒）",
+   "queryTimeoutHint": "1 回のクエリの最大実行時間",
+   "cancel": "キャンセル",
+   "testing": "テスト中",
+   "testConnection": "接続をテスト",
+   "creating": "作成中",
+   "createConnection": "接続を作成",
+   "testSuccess": "接続に成功しました！",
+   "testFailed": "接続テストに失敗しました",
+   "createSuccess": "接続が正常に作成されました！",
+   "createFailed": "接続の作成に失敗しました",
+   "serverError": "サーバーに接続できません"
+  },
+  "connections": {
+   "title": "接続",
+   "countOne": "{count} 件の接続",
+   "countMany": "{count} 件の接続",
+   "active": "アクティブ",
+   "inactive": "非アクティブ",
+   "created": "{date} に作成",
+   "never": "なし",
+   "justNow": "たった今",
+   "minutesAgo": "{count} 分前",
+   "hoursAgo": "{count} 時間前",
+   "daysAgo": "{count} 日前",
+   "empty": "この組織の接続が見つかりません",
+   "noOrg": "組織名を入力して接続を表示します",
+   "orgPlaceholder": "例: my-org",
+   "retry": "再試行",
+   "loading": "接続を読み込み中…",
+   "loadError": "接続の読み込みに失敗しました",
+   "deleteError": "接続の削除に失敗しました",
+   "deleteTitle": "接続を削除",
+   "serverError": "サーバーに接続できません"
+  },
+  "sqlEditor": {
+   "title": "SQL エディター",
+   "subtitle": "接続に対して SELECT クエリを実行",
+   "placeholder": "SELECT * FROM your_table LIMIT 100;",
+   "run": "クエリを実行",
+   "running": "実行中",
+   "back": "接続に戻る",
+   "success": "クエリが正常に実行されました",
+   "runFailed": "クエリの実行に失敗しました",
+   "queryFailed": "クエリが失敗しました",
+   "rowsOne": "{count} 行",
+   "rowsMany": "{count} 行",
+   "queryLabel": "クエリ: {query}",
+   "noColumns": "クエリが列を返しませんでした",
+   "serverError": "サーバーに接続できません"
+  },
+  "schemaPreview": {
+   "tables": "テーブル",
+   "tablesOne": "{count} 個のテーブル",
+   "tablesMany": "{count} 個のテーブル",
+   "filterPlaceholder": "テーブルまたは列をフィルター…",
+   "loading": "スキーマを読み込み中…",
+   "timedOut": "リクエストがタイムアウトしました。もう一度お試しください",
+   "retry": "再試行",
+   "noTables": "テーブルが見つかりません",
+   "noMatch": "\"{filter}\" に一致するテーブルはありません",
+   "failedToLoad": "スキーマの読み込みに失敗しました",
+   "serverError": "サーバーに接続できません"
+  }
+ },
+ "workflows": {
+  "title": "Workflows",
+  "subtitle": "Automate your business processes",
+  "create": "Create Workflow",
+  "active": "Active",
+  "draft": "Draft",
+  "completed": "Completed"
+ },
+ "businessDashboards": {
+  "title": "Business Dashboards",
+  "subtitle": "Real-time insights for your business",
+  "revenue": "Revenue",
+  "customers": "Customers",
+  "orders": "Orders",
+  "growth": "Growth"
+ },
+ "predictiveDashboard": {
+  "title": "Predictive Dashboard",
+  "subtitle": "AI-powered forecasts and predictions",
+  "accuracy": "Accuracy",
+  "trend": "Trend",
+  "forecast": "Forecast"
+ },
+ "animatedDashboard": {
+  "title": "Animated Dashboard",
+  "subtitle": "Interactive visualizations with live data",
+  "play": "Play",
+  "pause": "Pause",
+  "speed": "Speed"
+ },
+ "compositionDashboard": {
+  "title": "Composition Dashboard",
+  "subtitle": "Break down your data by category",
+  "byCategory": "By Category",
+  "byRegion": "By Region",
+  "byPeriod": "By Period"
+ }
 }
