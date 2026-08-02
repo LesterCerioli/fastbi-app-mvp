@@ -145,6 +145,7 @@ export default function SignUpPage() {
           const loginData = await loginRes.json();
           if (loginData.user) {
             sessionStorage.setItem("user", JSON.stringify(loginData.user));
+            sessionStorage.setItem("organization_name", orgData.organizationName);
           }
         }
       }

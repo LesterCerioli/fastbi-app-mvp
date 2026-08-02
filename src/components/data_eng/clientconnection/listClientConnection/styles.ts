@@ -44,7 +44,7 @@ export const Grid = styled.div`
   gap: 12px;
 `;
 
-export const Card = styled.div<{ $index: number }>`
+export const Card = styled.div<{ $index: number; $clickable?: boolean }>`
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
@@ -54,6 +54,7 @@ export const Card = styled.div<{ $index: number }>`
   justify-content: space-between;
   gap: 16px;
   transition: border-color 0.2s, background 0.2s;
+  cursor: ${({ $clickable }) => ($clickable ? "pointer" : "default")};
   animation: ${fadeInUp} 0.4s ease-out backwards;
   animation-delay: ${({ $index }) => $index * 0.05}s;
 

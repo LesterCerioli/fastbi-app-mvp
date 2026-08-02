@@ -5,7 +5,6 @@ import * as S from "./styles";
 
 interface CreateClientConnectionProps {
   organizationName?: string;
-  token?: string;
   onSuccess?: () => void;
   onCancel?: () => void;
 }
@@ -30,7 +29,6 @@ const SSL_MODES = [
 
 export default function CreateClientConnection({
   organizationName = "",
-  token,
   onSuccess,
   onCancel,
 }: CreateClientConnectionProps) {
@@ -60,14 +58,15 @@ export default function CreateClientConnection({
     setMessage(null);
   };
 
-  const getToken = () => {
-    if (token) return token;
-    try {
-      const stored = localStorage.getItem("auth_token");
-      return stored || "";
-    } catch {
-      return "";
-    }
+  const getToken = async () => {
+    const res = await fetch("/api/auth/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: "{}",
+    });
+    if (!res.ok) throw new Error("Failed to obtain auth token");
+    const data = await res.json();
+    return data.token;
   };
 
   const handleTestConnection = async () => {
@@ -75,11 +74,14 @@ export default function CreateClientConnection({
     setMessage(null);
 
     try {
+      const token = await getToken();
       const res = await fetch("/api/dataeng/clientconn", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
-          token: getToken(),
           action: "test",
           connection_id: "",
           organization_name: form.organization_name,
@@ -113,11 +115,14 @@ export default function CreateClientConnection({
     setMessage(null);
 
     try {
+      const token = await getToken();
       const res = await fetch("/api/dataeng/clientconn", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
-          token: getToken(),
           organization_name: form.organization_name,
           connection_name: form.connection_name,
           host: form.host,
