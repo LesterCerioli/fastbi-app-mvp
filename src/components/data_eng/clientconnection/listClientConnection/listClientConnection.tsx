@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import * as S from "./styles";
+import { prefetchSchema } from "../../sqlEditor/schemaPreview";
+import { useTranslations } from "@/lib/i18n/useTranslations";
 
 interface Connection {
   id: string;
@@ -44,8 +46,11 @@ async function getFreshToken(): Promise<string> {
   return data.token;
 }
 
-function formatDate(dateStr: string | null): string {
-  if (!dateStr) return "Never";
+function formatDate(
+  dateStr: string | null,
+  t: ReturnType<typeof useTranslations>["t"]
+): string {
+  if (!dateStr) return t("dataeng.connections.never");
   const date = new Date(dateStr);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
@@ -53,10 +58,13 @@ function formatDate(dateStr: string | null): string {
   const diffHours = Math.floor(diffMs / 3600000);
   const diffDays = Math.floor(diffMs / 86400000);
 
-  if (diffMins < 1) return "Just now";
-  if (diffMins < 60) return `${diffMins}m ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
-  if (diffDays < 7) return `${diffDays}d ago`;
+  if (diffMins < 1) return t("dataeng.connections.justNow");
+  if (diffMins < 60)
+    return t("dataeng.connections.minutesAgo", { count: diffMins });
+  if (diffHours < 24)
+    return t("dataeng.connections.hoursAgo", { count: diffHours });
+  if (diffDays < 7)
+    return t("dataeng.connections.daysAgo", { count: diffDays });
   return date.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
@@ -76,6 +84,8 @@ export default function ListClientConnection({
   const [error, setError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [hasFetched, setHasFetched] = useState(false);
+
+  const { t } = useTranslations();
 
   const effectiveOrgName = organizationName || orgName;
 
@@ -98,17 +108,17 @@ export default function ListClientConnection({
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Failed to load connections");
+        setError(data.error || t("dataeng.connections.loadError"));
         return;
       }
 
       setConnections(Array.isArray(data) ? data : []);
     } catch {
-      setError("Unable to reach the server");
+      setError(t("dataeng.connections.serverError"));
     } finally {
       setIsLoading(false);
     }
-  }, [organizationName, orgName]);
+  }, [organizationName, orgName, t]);
 
   useEffect(() => {
     if (effectiveOrgName) {
@@ -133,7 +143,7 @@ export default function ListClientConnection({
 
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error || "Failed to delete connection");
+        setError(data.error || t("dataeng.connections.deleteError"));
         return;
       }
 
@@ -142,7 +152,7 @@ export default function ListClientConnection({
       );
       onDelete?.();
     } catch {
-      setError("Unable to delete connection");
+      setError(t("dataeng.connections.serverError"));
     } finally {
       setDeletingId(null);
     }
@@ -179,11 +189,15 @@ export default function ListClientConnection({
   return (
     <S.Wrapper>
       <S.Header>
-        <S.Title>Connections</S.Title>
+        <S.Title>{t("dataeng.connections.title")}</S.Title>
         {effectiveOrgName && (
           <S.ConnectionsCount>
-            {connections.length}{" "}
-            {connections.length === 1 ? "connection" : "connections"}
+            {t(
+              connections.length === 1
+                ? "dataeng.connections.countOne"
+                : "dataeng.connections.countMany",
+              { count: connections.length }
+            )}
           </S.ConnectionsCount>
         )}
       </S.Header>
@@ -192,11 +206,11 @@ export default function ListClientConnection({
         <S.Empty>
           <S.EmptyIcon>&#128225;</S.EmptyIcon>
           <S.EmptyText>
-            Enter an organization name to view its connections
+            {t("dataeng.connections.noOrg")}
           </S.EmptyText>
           <S.OrgInputInline
             type="text"
-            placeholder="e.g. my-org"
+            placeholder={t("dataeng.connections.orgPlaceholder")}
             value={orgName}
             onChange={(e) => setOrgName(e.target.value)}
           />
@@ -206,14 +220,16 @@ export default function ListClientConnection({
       {error && (
         <S.ErrorMessage>
           {error}
-          <S.RetryButton onClick={fetchConnections}>Retry</S.RetryButton>
+          <S.RetryButton onClick={fetchConnections}>
+            {t("dataeng.connections.retry")}
+          </S.RetryButton>
         </S.ErrorMessage>
       )}
 
       {!error && effectiveOrgName && !hasFetched && (
         <S.LoadingWrapper>
           <S.Spinner />
-          <S.LoadingText>Loading connections...</S.LoadingText>
+          <S.LoadingText>{t("dataeng.connections.loading")}</S.LoadingText>
         </S.LoadingWrapper>
       )}
 
@@ -221,7 +237,7 @@ export default function ListClientConnection({
         <S.Empty>
           <S.EmptyIcon>&#128225;</S.EmptyIcon>
           <S.EmptyText>
-            No connections found for this organization
+            {t("dataeng.connections.empty")}
           </S.EmptyText>
         </S.Empty>
       )}
@@ -234,6 +250,7 @@ export default function ListClientConnection({
               $index={index}
               $clickable={Boolean(onSelect)}
               onClick={() => onSelect?.(conn.id, conn.connection_name)}
+              onMouseEnter={() => prefetchSchema(conn.id)}
             >
               <S.CardLeft>
                 <S.DbIcon $type={conn.db_type}>
@@ -248,14 +265,20 @@ export default function ListClientConnection({
                     </S.MetaTag>
                     <S.MetaTag>{conn.database_name}</S.MetaTag>
                     <S.MetaTag>
-                      Created {formatDate(conn.created_at)}
+                      {t("dataeng.connections.created", {
+                        date: formatDate(conn.created_at, t),
+                      })}
                     </S.MetaTag>
                   </S.ConnectionMeta>
                 </S.CardInfo>
               </S.CardLeft>
               <S.CardRight>
                 <S.StatusBadge $active={conn.is_active}>
-                  {conn.is_active ? "Active" : "Inactive"}
+                  {t(
+                    conn.is_active
+                      ? "dataeng.connections.active"
+                      : "dataeng.connections.inactive"
+                  )}
                 </S.StatusBadge>
                 <S.Actions>
                   <S.IconButton
@@ -264,7 +287,7 @@ export default function ListClientConnection({
                       handleDelete(conn.id);
                     }}
                     disabled={deletingId === conn.id}
-                    title="Delete connection"
+                    title={t("dataeng.connections.deleteTitle")}
                   >
                     {deletingId === conn.id ? "\u23F3" : "\u2716"}
                   </S.IconButton>

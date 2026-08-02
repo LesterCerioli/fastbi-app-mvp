@@ -2,6 +2,8 @@
 
 import { useState, FormEvent } from "react";
 import * as S from "./styles";
+import SchemaPreview from "./schemaPreview";
+import { useTranslations } from "@/lib/i18n/useTranslations";
 
 interface QueryResult {
   success: boolean;
@@ -44,6 +46,8 @@ export default function SqlEditor({
     text: string;
   } | null>(null);
 
+  const { t } = useTranslations();
+
   const handleRun = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -70,19 +74,25 @@ export default function SqlEditor({
       const data: QueryResult = await res.json();
 
       if (!res.ok) {
-        setMessage({ type: "error", text: data.error || "Failed to run query" });
+        setMessage({
+          type: "error",
+          text: data.error || t("dataeng.sqlEditor.runFailed"),
+        });
         return;
       }
 
       if (!data.success) {
-        setMessage({ type: "error", text: data.error || "Query failed" });
+        setMessage({
+          type: "error",
+          text: data.error || t("dataeng.sqlEditor.queryFailed"),
+        });
         return;
       }
 
       setResult(data);
-      setMessage({ type: "success", text: "Query executed successfully" });
+      setMessage({ type: "success", text: t("dataeng.sqlEditor.success") });
     } catch {
-      setMessage({ type: "error", text: "Unable to reach the server" });
+      setMessage({ type: "error", text: t("dataeng.sqlEditor.serverError") });
     } finally {
       setIsLoading(false);
     }
@@ -92,89 +102,102 @@ export default function SqlEditor({
     <S.Wrapper>
       <S.Header>
         <S.HeaderInfo>
-          <S.Title>SQL Editor</S.Title>
-          <S.Subtitle>
-            Run SELECT queries against your connection
-          </S.Subtitle>
+          <S.Title>{t("dataeng.sqlEditor.title")}</S.Title>
+          <S.Subtitle>{t("dataeng.sqlEditor.subtitle")}</S.Subtitle>
         </S.HeaderInfo>
         {onBack && (
           <S.BackButton type="button" onClick={onBack}>
-            {"\u2190"} Back to connections
+            {"\u2190"} {t("dataeng.sqlEditor.back")}
           </S.BackButton>
         )}
       </S.Header>
 
-      <S.EditorCard onSubmit={handleRun} as="form">
-        {connectionName && <S.ConnectionTag>{connectionName}</S.ConnectionTag>}
+      <S.SplitLayout>
+        <S.EditorCard onSubmit={handleRun} as="form">
+          {connectionName && <S.ConnectionTag>{connectionName}</S.ConnectionTag>}
 
-        <S.Textarea
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="SELECT * FROM your_table LIMIT 100;"
-          spellCheck={false}
-          disabled={isLoading}
-        />
+          <S.Textarea
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={t("dataeng.sqlEditor.placeholder")}
+            spellCheck={false}
+            disabled={isLoading}
+          />
 
-        <S.Toolbar>
-          <S.RunButton type="submit" disabled={isLoading || !query.trim()}>
-            {isLoading ? (
-              <>
-                <S.Spinner /> Running
-              </>
-            ) : (
-              "Run Query"
-            )}
-          </S.RunButton>
-        </S.Toolbar>
-
-        {message && (
-          <S.ErrorBox>
-            {message.type === "success" ? "\u2713" : "\u2717"} {message.text}
-          </S.ErrorBox>
-        )}
-
-        {result && result.success && (
-          <>
-            <S.ResultMeta>
-              <span>
-                {result.row_count} row{result.row_count === 1 ? "" : "s"}
-              </span>
-              {result.query_executed && (
-                <span>query: {result.query_executed}</span>
+          <S.Toolbar>
+            <S.RunButton type="submit" disabled={isLoading || !query.trim()}>
+              {isLoading ? (
+                <>
+                  <S.Spinner /> {t("dataeng.sqlEditor.running")}
+                </>
+              ) : (
+                t("dataeng.sqlEditor.run")
               )}
-            </S.ResultMeta>
+            </S.RunButton>
+          </S.Toolbar>
 
-            {result.columns && result.columns.length > 0 ? (
-              <S.TableWrapper>
-                <S.Table>
-                  <S.THead>
-                    <tr>
-                      {result.columns.map((col) => (
-                        <th key={col}>{col}</th>
-                      ))}
-                    </tr>
-                  </S.THead>
-                  <S.TBody>
-                    {(result.data || []).map((row, i) => (
-                      <tr key={i}>
-                        {result.columns!.map((col) => (
-                          <td key={col}>
-                            {row[col] !== null && row[col] !== undefined
-                              ? String(row[col])
-                              : "NULL"}
-                          </td>
+          {message && (
+            <S.ErrorBox>
+              {message.type === "success" ? "\u2713" : "\u2717"} {message.text}
+            </S.ErrorBox>
+          )}
+
+          {result && result.success && (
+            <>
+              <S.ResultMeta>
+                <span>
+                  {t(
+                    result.row_count === 1
+                      ? "dataeng.sqlEditor.rowsOne"
+                      : "dataeng.sqlEditor.rowsMany",
+                    { count: result.row_count ?? 0 }
+                  )}
+                </span>
+                {result.query_executed && (
+                  <span>
+                    {t("dataeng.sqlEditor.queryLabel", {
+                      query: result.query_executed,
+                    })}
+                  </span>
+                )}
+              </S.ResultMeta>
+
+              {result.columns && result.columns.length > 0 ? (
+                <S.TableWrapper>
+                  <S.Table>
+                    <S.THead>
+                      <tr>
+                        {result.columns.map((col) => (
+                          <th key={col}>{col}</th>
                         ))}
                       </tr>
-                    ))}
-                  </S.TBody>
-                </S.Table>
-              </S.TableWrapper>
-            ) : (
-              <S.EmptyResult>Query returned no columns</S.EmptyResult>
-            )}
-          </>
-        )}
-      </S.EditorCard>
+                    </S.THead>
+                    <S.TBody>
+                      {(result.data || []).map((row, i) => (
+                        <tr key={i}>
+                          {result.columns!.map((col) => (
+                            <td key={col}>
+                              {row[col] !== null && row[col] !== undefined
+                                ? String(row[col])
+                                : "NULL"}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </S.TBody>
+                  </S.Table>
+                </S.TableWrapper>
+              ) : (
+                <S.EmptyResult>{t("dataeng.sqlEditor.noColumns")}</S.EmptyResult>
+              )}
+            </>
+          )}
+        </S.EditorCard>
+
+        <S.SchemaPanel>
+          <SchemaPreview connectionId={connectionId} />
+        </S.SchemaPanel>
+      </S.SplitLayout>
     </S.Wrapper>
   );
 }
