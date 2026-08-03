@@ -1,776 +1,821 @@
 {
- "header": {
-  "logoAlt": "Logo FastBI",
-  "logoText": "FastBI",
-  "nav": {
-   "home": "Início",
-   "features": "Recursos",
-   "pricing": "Preços",
-   "contact": "Contato"
+  "header": {
+    "logoAlt": "Logo FastBI",
+    "logoText": "FastBI",
+    "nav": {
+      "home": "Início",
+      "features": "Recursos",
+      "pricing": "Preços",
+      "contact": "Contato"
+    },
+    "buttons": {
+      "getStarted": "Começar",
+      "login": "Entrar",
+      "logout": "Sair"
+    }
   },
-  "buttons": {
-   "getStarted": "Começar",
-   "login": "Entrar",
-   "logout": "Sair"
-  }
- },
- "footer": {
-  "logoText": "FastBI",
-  "nav": {
-   "home": "Início",
-   "features": "Recursos",
-   "pricing": "Preços",
-   "contact": "Contato"
+  "footer": {
+    "logoText": "FastBI",
+    "nav": {
+      "home": "Início",
+      "features": "Recursos",
+      "pricing": "Preços",
+      "contact": "Contato"
+    },
+    "copyright": "© {year} Lucas Technology Service. Todos os direitos reservados."
   },
-  "copyright": "© {year} Lucas Technology Service. Todos os direitos reservados."
- },
- "home": {
-  "hero": {
-   "alt": "início",
-   "heading": "Business Intelligence para Pequenas e Médias Empresas",
-   "subtitle": "Transforme seus dados em decisões inteligentes",
-   "buttons": {
-    "startTrial": "Teste Grátis",
-    "viewDemo": "Ver Demonstração",
-    "goToDashboard": "Ir para o Dashboard"
-   }
+  "home": {
+    "hero": {
+      "alt": "início",
+      "heading": "Business Intelligence para Pequenas e Médias Empresas",
+      "subtitle": "Transforme seus dados em decisões inteligentes",
+      "buttons": {
+        "startTrial": "Teste Grátis",
+        "viewDemo": "Ver Demonstração",
+        "goToDashboard": "Ir para o Dashboard"
+      }
+    },
+    "features": {
+      "intuitiveDashboards": {
+        "title": "Dashboards Intuitivos",
+        "desc": "Visualize seus dados de forma clara e prática"
+      },
+      "reportAutomation": {
+        "title": "Automação de Relatórios",
+        "desc": "Relatórios automatizados e atualizados"
+      },
+      "accurateInsights": {
+        "title": "Insights Precisos",
+        "desc": "Obtenha insights valiosos para seu negócio"
+      }
+    },
+    "carousel": {
+      "title": "Dashboards que evoluem com seu negócio",
+      "alt": "Dashboard Business Intelligence {n}",
+      "note": "Passe o mouse para pausar • Dashboards em rotação contínua"
+    },
+    "industries": {
+      "title": "Útil para diferentes tipos de negócio",
+      "subtitle": "Soluções adaptadas para diversos setores e modelos de negócio",
+      "alt": "Setores que atendemos"
+    },
+    "reports": {
+      "title": "Útil para relatórios avançados",
+      "subtitle": "Análises avançadas e relatórios para decisões baseadas em dados",
+      "alt": "Relatórios Avançados"
+    },
+    "simplifying": {
+      "title": "Simplificando a Análise de Dados",
+      "subtitle": "Soluções de BI fáceis e eficazes para seu negócio."
+    },
+    "details": {
+      "alt": "Pessoas analisando dados",
+      "connect": {
+        "title": "Conecte-se aos seus Dados",
+        "desc": "Integração fácil com suas fontes de dados"
+      },
+      "dashboards": {
+        "title": "Crie Dashboards Personalizados",
+        "desc": "Dashboards adaptados às suas necessidades."
+      },
+      "decisions": {
+        "title": "Tome Decisões Confiantes",
+        "desc": "Informações precisas para guiar suas estratégias."
+      }
+    }
   },
   "features": {
-   "intuitiveDashboards": {
-    "title": "Dashboards Intuitivos",
-    "desc": "Visualize seus dados de forma clara e prática"
-   },
-   "reportAutomation": {
-    "title": "Automação de Relatórios",
-    "desc": "Relatórios automatizados e atualizados"
-   },
-   "accurateInsights": {
-    "title": "Insights Precisos",
-    "desc": "Obtenha insights valiosos para seu negócio"
-   }
+    "badge": "● Plataforma de Análise Empresarial",
+    "title": "Transforme dados em",
+    "titleHighlight": "AÇÃO DECISIVA",
+    "description": "Unifique sua inteligência de negócios com insights em tempo real, análises preditivas e relatórios automatizados que escalam com sua organização.",
+    "buttons": {
+      "startTrial": "Teste Grátis →",
+      "bookDemo": "Agendar Demo"
+    },
+    "stats": {
+      "activeUsers": "Usuários ativos",
+      "uptimeSla": "SLA de disponibilidade",
+      "integrations": "Integrações"
+    },
+    "imageAlt": "Prévia do dashboard",
+    "exploreDashboards": {
+      "title": "Explore Dashboards Inteligentes",
+      "desc": "Visualize seus dados com insights em tempo real e análises preditivas"
+    }
   },
-  "carousel": {
-   "title": "Dashboards que evoluem com seu negócio",
-   "alt": "Dashboard Business Intelligence {n}",
-   "note": "Passe o mouse para pausar • Dashboards em rotação contínua"
+  "forgotpassword": {
+    "alt": "Fundo FastBI",
+    "heading": "Esqueceu sua senha?",
+    "subtitle": "Digite seu email e enviaremos uma senha temporária.",
+    "form": {
+      "emailLabel": "Email",
+      "emailPlaceholder": "voce@empresa.com"
+    },
+    "button": "Enviar email de recuperação",
+    "successTitle": "Email enviado!",
+    "successMessage": "Se existir uma conta com esse email, você receberá uma senha temporária em breve.",
+    "backToLogin": "Voltar ao login",
+    "footer": "Voltar ao login",
+    "errors": {
+      "default": "Algo deu errado. Tente novamente."
+    }
   },
-  "industries": {
-   "title": "Útil para diferentes tipos de negócio",
-   "subtitle": "Soluções adaptadas para diversos setores e modelos de negócio",
-   "alt": "Setores que atendemos"
+  "resetpassword": {
+    "alt": "Fundo FastBI",
+    "heading": "Definir nova senha",
+    "subtitle": "Crie uma nova senha para sua conta. O link expira em 10 minutos.",
+    "form": {
+      "newPasswordLabel": "Nova senha",
+      "newPasswordPlaceholder": "********",
+      "confirmPasswordLabel": "Confirmar senha",
+      "confirmPasswordPlaceholder": "********"
+    },
+    "button": "Redefinir senha",
+    "successTitle": "Senha alterada!",
+    "successMessage": "Sua senha foi atualizada com sucesso.",
+    "backToLogin": "Voltar ao login",
+    "errors": {
+      "passwordsMismatch": "As senhas não conferem",
+      "tooShort": "A senha deve ter pelo menos 6 caracteres",
+      "default": "Algo deu errado. Tente novamente."
+    }
   },
-  "reports": {
-   "title": "Útil para relatórios avançados",
-   "subtitle": "Análises avançadas e relatórios para decisões baseadas em dados",
-   "alt": "Relatórios Avançados"
+  "signup": {
+    "alt": "Fundo FastBI",
+    "heading": "Crie sua conta",
+    "subtitle": "Comece a transformar seus dados em decisões inteligentes",
+    "form": {
+      "nameLabel": "Nome completo",
+      "namePlaceholder": "João Silva",
+      "emailLabel": "Email",
+      "emailPlaceholder": "voce@empresa.com",
+      "passwordLabel": "Senha",
+      "passwordPlaceholder": "********",
+      "confirmPasswordLabel": "Confirmar senha",
+      "confirmPasswordPlaceholder": "********",
+      "passwordsMismatch": "As senhas não conferem"
+    },
+    "button": "Criar conta",
+    "footer": {
+      "text": "Já tem uma conta?",
+      "link": "Entrar"
+    },
+    "errors": {
+      "default": "Algo deu errado. Tente novamente."
+    }
   },
-  "simplifying": {
-   "title": "Simplificando a Análise de Dados",
-   "subtitle": "Soluções de BI fáceis e eficazes para seu negócio."
+  "login": {
+    "alt": "Fundo FastBI",
+    "heading": "Entre no FastBI",
+    "subtitle": "Transforme seus dados em decisões inteligentes",
+    "form": {
+      "emailLabel": "Email",
+      "emailPlaceholder": "voce@empresa.com",
+      "passwordLabel": "Senha",
+      "passwordPlaceholder": "********",
+      "roleLabel": "Função",
+      "rolePlaceholder": "Selecione sua função",
+      "rememberMe": "Lembrar de mim",
+      "forgotPassword": "Esqueceu a senha?"
+    },
+    "button": "Entrar",
+    "errors": {
+      "tokenFailed": "Falha ao obter token de autenticação",
+      "invalidCredentials": "Email, senha ou função inválidos",
+      "default": "Algo deu errado. Tente novamente."
+    }
   },
-  "details": {
-   "alt": "Pessoas analisando dados",
-   "connect": {
-    "title": "Conecte-se aos seus Dados",
-    "desc": "Integração fácil com suas fontes de dados"
-   },
-   "dashboards": {
-    "title": "Crie Dashboards Personalizados",
-    "desc": "Dashboards adaptados às suas necessidades."
-   },
-   "decisions": {
-    "title": "Tome Decisões Confiantes",
-    "desc": "Informações precisas para guiar suas estratégias."
-   }
-  }
- },
- "features": {
-  "badge": "● Plataforma de Análise Empresarial",
-  "title": "Transforme dados em",
-  "titleHighlight": "AÇÃO DECISIVA",
-  "description": "Unifique sua inteligência de negócios com insights em tempo real, análises preditivas e relatórios automatizados que escalam com sua organização.",
-  "buttons": {
-   "startTrial": "Teste Grátis →",
-   "bookDemo": "Agendar Demo"
+  "dashboards": {
+    "badge": "Análise Preditiva",
+    "title": "Dashboards Inteligentes",
+    "titleHighlight": " para FastBI",
+    "description": "Previsões em tempo real com modelos de machine learning. Tome decisões baseadas em dados com confiança.",
+    "stats": {
+      "modelAccuracy": "Precisão do Modelo",
+      "revenueGrowth": "Crescimento de Receita",
+      "activeUsers": "Usuários Ativos"
+    },
+    "controls": {
+      "salesForecast": "Previsão de Vendas",
+      "compositionAnalysis": "Análise de Composição",
+      "lastUpdated": "Última atualização: {time}",
+      "refresh": "Atualizar",
+      "exportReport": "Exportar Relatório"
+    },
+    "insights": {
+      "title": "Insights de IA",
+      "subtitle": "Principais previsões e recomendações baseadas em seus dados",
+      "revenueGrowth": {
+        "title": "Projeção de Crescimento",
+        "text": "Crescimento esperado de 18,5% no Q1 2025, impulsionado pela demanda no varejo.",
+        "confidence": "Confiança: {pct}%"
+      },
+      "riskAlert": {
+        "title": "Alerta de Risco",
+        "text": "Taxa de churn prevista para aumentar 2,3% no próximo mês. Campanha de retenção recomendada.",
+        "confidence": "Confiança: {pct}%"
+      },
+      "optimization": {
+        "title": "Oportunidade de Otimização",
+        "text": "Canal de e-commerce mostra potencial de crescimento de 45% com marketing direcionado.",
+        "confidence": "Confiança: {pct}%"
+      }
+    }
   },
-  "stats": {
-   "activeUsers": "Usuários ativos",
-   "uptimeSla": "SLA de disponibilidade",
-   "integrations": "Integrações"
+  "crm": {
+    "title": "Hub de Inteligência BI",
+    "subtitle": "Insights de negócios em tempo real e painel de análise de desempenho",
+    "stats": {
+      "totalRevenue": "Receita Total",
+      "activeUsers": "Usuários Ativos",
+      "growthRate": "Taxa de Crescimento",
+      "satisfaction": "Satisfação"
+    },
+    "errors": {
+      "stats": "Falha ao carregar estatísticas",
+      "dashboard": "Falha ao carregar dados do dashboard"
+    },
+    "retry": "Tentar novamente",
+    "refreshTitle": "Atualizar Dashboard"
   },
-  "imageAlt": "Prévia do dashboard",
-  "exploreDashboards": {
-   "title": "Explore Dashboards Inteligentes",
-   "desc": "Visualize seus dados com insights em tempo real e análises preditivas"
-  }
- },
- "forgotpassword": {
-  "alt": "Fundo FastBI",
-  "heading": "Esqueceu sua senha?",
-  "subtitle": "Digite seu email e enviaremos uma senha temporária.",
-  "form": {
-   "emailLabel": "Email",
-   "emailPlaceholder": "voce@empresa.com"
+  "pricing": {
+    "hero": {
+      "eyebrow": "Preços",
+      "title": "Preços que escalam",
+      "titleHighlight": "com seus dados",
+      "description": "Comece grátis, evolua para análises preditivas e migre para governança empresarial — sem mudar de plataforma. Por usuário, cobrado como preferir.",
+      "monthly": "Mensal",
+      "annual": "Anual",
+      "saveTag": "Economize 20% ao ano"
+    },
+    "cards": {
+      "perUserMo": "/usuário / mês",
+      "billedAnnually": "Cobrado anualmente",
+      "startFreeTrial": "Teste grátis",
+      "starter": {
+        "name": "Iniciante",
+        "desc": "Para pequenas equipes transformando seus primeiros dashboards em decisões.",
+        "features": [
+          "Até 5 usuários",
+          "10 fontes de dados conectadas",
+          "Dashboards ilimitados",
+          "Atualização diária",
+          "Suporte por email"
+        ]
+      },
+      "professional": {
+        "name": "Profissional",
+        "badge": "Mais popular",
+        "desc": "Para equipes em crescimento que precisam de previsões e relatórios automatizados.",
+        "features": [
+          "Tudo do Iniciante, mais:",
+          "50 fontes de dados conectadas",
+          "Análises preditivas",
+          "Relatórios com IA",
+          "Atualização horária e relatórios agendados",
+          "Suporte prioritário"
+        ]
+      },
+      "business": {
+        "name": "Empresarial",
+        "desc": "Para organizações que precisam de governança, papéis e escala.",
+        "features": [
+          "Tudo do Profissional, mais:",
+          "Fontes de dados ilimitadas",
+          "Controle de acesso por função",
+          "Atualização em tempo real",
+          "Logs de auditoria e linhagem de dados",
+          "Gerente de sucesso dedicado"
+        ]
+      }
+    },
+    "enterprise": {
+      "title": "Enterprise",
+      "desc": "SSO/SAML, residência de dados personalizada, SLA de 99,9% e preços por volume para equipes que usam FastBI em toda a organização.",
+      "stats": {
+        "activeUsers": "Usuários ativos",
+        "uptimeSla": "SLA de disponibilidade",
+        "integrations": "Integrações"
+      },
+      "button": "Falar com vendas"
+    },
+    "comparison": {
+      "title": "Compare todos os planos",
+      "subtitle": "A comparação completa para equipes escolherem o plano certo na primeira vez.",
+      "headers": {
+        "feature": "Recurso",
+        "starter": "Iniciante",
+        "professional": "Profissional",
+        "business": "Empresarial",
+        "enterprise": "Enterprise"
+      },
+      "groups": {
+        "coreAnalytics": "Análises principais",
+        "intelligence": "Inteligência",
+        "governance": "Governança & suporte"
+      },
+      "rows": {
+        "usersIncluded": "Usuários incluídos",
+        "connectedSources": "Fontes de dados conectadas",
+        "dashboards": "Dashboards",
+        "refreshRate": "Frequência de atualização",
+        "predictiveAnalytics": "Análises preditivas",
+        "aiReporting": "Relatórios com IA",
+        "scheduledReports": "Relatórios agendados",
+        "rbac": "Controle de acesso por função",
+        "auditLogs": "Logs de auditoria",
+        "sso": "SSO / SAML",
+        "uptimeSla": "SLA de disponibilidade",
+        "support": "Suporte"
+      },
+      "values": {
+        "unlimited": "Ilimitado",
+        "daily": "Diário",
+        "hourly": "Por hora",
+        "realTime": "Tempo real",
+        "email": "Email",
+        "priority": "Prioritário",
+        "successManager": "Gerente de sucesso",
+        "dedicatedSla": "Dedicado + SLA"
+      }
+    },
+    "faq": {
+      "title": "Perguntas frequentes",
+      "items": [
+        {
+          "q": "Como funciona o preço por usuário?",
+          "a": "Você paga pelas pessoas que criam e visualizam relatórios. Adicione ou remova usuários a qualquer momento — o faturamento é ajustado na próxima fatura, sem mínimo em planos anuais."
+        },
+        {
+          "q": "Posso mudar de plano depois?",
+          "a": "Sim. Faça upgrade instantaneamente e pague apenas a diferença proporcional. Downgrades entram em vigor no início do próximo ciclo de faturamento."
+        },
+        {
+          "q": "O que acontece após o teste grátis?",
+          "a": "O teste de 14 dias inclui recursos Profissionais. Ao finalizar, escolha um plano para continuar — nada é deletado e você só será cobrado ao escolher continuar."
+        },
+        {
+          "q": "Vocês oferecem faturamento anual?",
+          "a": "O faturamento anual economiza 20% em todos os planos pagos. Alterne no topo da página para ver o valor ajustado."
+        },
+        {
+          "q": "Meus dados estão seguros?",
+          "a": "Os dados são criptografados em trânsito e em repouso. O plano Business adiciona logs de auditoria; o Enterprise adiciona SSO/SAML e residência de dados personalizada."
+        },
+        {
+          "q": "O que conta como fonte de dados?",
+          "a": "Qualquer sistema conectado que o FastBI leia — banco de dados, data warehouse, planilha ou uma das 150+ integrações. Cada conexão conta uma vez."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Transforme seus dados em",
+      "titleHighlight": "ação decisiva",
+      "description": "Crie seu primeiro dashboard em minutos. Sem cartão de crédito.",
+      "startTrial": "Teste grátis",
+      "bookDemo": "Agendar demo"
+    }
   },
-  "button": "Enviar email de recuperação",
-  "successTitle": "Email enviado!",
-  "successMessage": "Se existir uma conta com esse email, você receberá uma senha temporária em breve.",
-  "backToLogin": "Voltar ao login",
-  "footer": "Voltar ao login",
-  "errors": {
-   "default": "Algo deu errado. Tente novamente."
-  }
- },
- "resetpassword": {
-  "alt": "Fundo FastBI",
-  "heading": "Definir nova senha",
-  "subtitle": "Crie uma nova senha para sua conta. O link expira em 10 minutos.",
-  "form": {
-   "newPasswordLabel": "Nova senha",
-   "newPasswordPlaceholder": "********",
-   "confirmPasswordLabel": "Confirmar senha",
-   "confirmPasswordPlaceholder": "********"
+  "accounting": {
+    "menu": {
+      "templates": "MODELO CONTÁBIL",
+      "workflows": "WORKFLOWS CONTÁBEIS",
+      "operations": "OPERAÇÕES CONTÁBEIS",
+      "back": "← Voltar",
+      "comingSoon": "{name} — em breve"
+    },
+    "template": {
+      "title": "Criar Modelo Contábil",
+      "subtitle": "Preencha os campos abaixo para gerar um novo modelo de workflow contábil",
+      "success": "Modelo criado com sucesso!",
+      "fields": {
+        "name": {
+          "label": "Nome",
+          "placeholder": "ex. Contabilidade Mensal"
+        },
+        "category": {
+          "label": "Categoria",
+          "placeholder": "Selecione a categoria"
+        },
+        "taxRegime": {
+          "label": "Regime Tributário",
+          "placeholder": "Selecione o regime"
+        },
+        "fiscalPeriod": {
+          "label": "Período Fiscal",
+          "placeholder": "Selecione o período"
+        },
+        "regulatoryBody": {
+          "label": "Órgão Regulador",
+          "placeholder": "Selecione o órgão"
+        },
+        "createdBy": {
+          "label": "Criado por",
+          "placeholder": "ex. João Silva"
+        },
+        "structure": {
+          "label": "Estrutura (JSON)",
+          "placeholder": "{\"stages\": [...], \"kpis\": [...], ...}"
+        }
+      },
+      "buttons": {
+        "cancel": "Cancelar",
+        "creating": "Criando...",
+        "create": "Criar Modelo"
+      },
+      "structure": {
+        "stages": "Estágios",
+        "suggestPlaceholder": "+ Sugerir do modelo",
+        "suggestAdd": "Adicionar",
+        "addCustom": "Adicionar Estágio Personalizado",
+        "emptyStages": "Nenhum estágio ainda. Adicione um acima.",
+        "stageNamePlaceholder": "Nome do estágio",
+        "probability": "Probabilidade: {value}%",
+        "documentRequired": "Documento Obrigatório",
+        "approvalRequired": "Aprovação Obrigatória",
+        "kpis": "KPIs",
+        "kpisPlaceholder": "ex. completion_rate",
+        "complianceChecks": "Verificações de Conformidade",
+        "compliancePlaceholder": "ex. document_validation",
+        "auditRequirements": "Requisitos de Auditoria",
+        "auditPlaceholder": "ex. audit_trail",
+        "deadlines": "Prazos",
+        "hasStatutoryDeadline": "Tem Prazo Legal",
+        "fiscalPeriods": {
+          "monthly": "Mensal",
+          "quarterly": "Trimestral",
+          "semester": "Semestral",
+          "annual": "Anual",
+          "custom": "Personalizado"
+        }
+      },
+      "errors": {
+        "nameRequired": "Nome é obrigatório",
+        "categoryRequired": "Categoria é obrigatória",
+        "invalidJson": "Estrutura deve ser um JSON válido",
+        "minStages": "Estrutura deve ter pelo menos 2 estágios",
+        "minKpis": "Estrutura deve definir pelo menos um KPI",
+        "createFailed": "Falha ao criar modelo",
+        "generic": "Algo deu errado"
+      }
+    }
   },
-  "button": "Redefinir senha",
-  "successTitle": "Senha alterada!",
-  "successMessage": "Sua senha foi atualizada com sucesso.",
-  "backToLogin": "Voltar ao login",
-  "errors": {
-   "passwordsMismatch": "As senhas não conferem",
-   "tooShort": "A senha deve ter pelo menos 6 caracteres",
-   "default": "Algo deu errado. Tente novamente."
-  }
- },
- "signup": {
-  "alt": "Fundo FastBI",
-  "heading": "Crie sua conta",
-  "subtitle": "Comece a transformar seus dados em decisões inteligentes",
-  "form": {
-   "nameLabel": "Nome completo",
-   "namePlaceholder": "João Silva",
-   "emailLabel": "Email",
-   "emailPlaceholder": "voce@empresa.com",
-   "passwordLabel": "Senha",
-   "passwordPlaceholder": "********",
-   "confirmPasswordLabel": "Confirmar senha",
-   "confirmPasswordPlaceholder": "********",
-   "passwordsMismatch": "As senhas não conferem"
+  "subscriptions": {
+    "signUp": {
+      "steps": {
+        "organization": "Organização",
+        "admin": "Administrador",
+        "subscription": "Assinatura",
+        "payment": "Pagamento"
+      },
+      "organization": {
+        "title": "Criar sua Organização",
+        "subtitle": "Insira os dados da sua organização para começar",
+        "fields": {
+          "name": "Nome da Organização",
+          "taxId": "CNPJ",
+          "address": "Endereço da Organização"
+        },
+        "placeholders": {
+          "name": "Ex: Minha Empresa Ltda",
+          "taxId": "XX.XXX.XXX/XXXX-XX",
+          "address": "Rua Exemplo, 123, Bairro, Cidade - UF"
+        },
+        "continue": "Continuar",
+        "errors": {
+          "nameRequired": "O nome da organização é obrigatório",
+          "taxIdRequired": "O CNPJ é obrigatório",
+          "addressRequired": "O endereço da organização é obrigatório"
+        }
+      },
+      "admin": {
+        "title": "Criar sua Conta de Administrador",
+        "subtitle": "Configure o administrador principal da sua organização",
+        "fields": {
+          "fullName": "Nome Completo",
+          "email": "Endereço de Email",
+          "password": "Senha",
+          "confirmPassword": "Confirmar Senha"
+        },
+        "placeholders": {
+          "fullName": "João Silva",
+          "email": "joao@empresa.com",
+          "password": "••••••••",
+          "confirmPassword": "••••••••"
+        },
+        "continue": "Continuar",
+        "errors": {
+          "nameRequired": "O nome completo é obrigatório",
+          "emailRequired": "O endereço de email é obrigatório",
+          "passwordRequired": "A senha é obrigatória",
+          "passwordMinLength": "A senha deve ter pelo menos 8 caracteres",
+          "passwordsMismatch": "As senhas não conferem"
+        }
+      },
+      "subscription": {
+        "title": "Escolha sua Assinatura",
+        "subtitle": "Selecione o plano ideal para suas necessidades",
+        "billingCycle": "Ciclo de Cobrança",
+        "monthly": "Mensal",
+        "annual": "Anual",
+        "planSummary": "Resumo do Plano",
+        "selectedPlan": "Plano Selecionado",
+        "totalAmount": "Valor Total",
+        "continue": "Continuar para Pagamento",
+        "processing": "Criando assinatura...",
+        "errors": {
+          "createFailed": "Falha ao criar assinatura",
+          "generic": "Ocorreu um erro. Tente novamente."
+        }
+      },
+      "payment": {
+        "title": "Finalizar Pagamento",
+        "subtitle": "Insira os dados do seu cartão para ativar sua assinatura",
+        "cardDetails": "Dados do Cartão",
+        "fields": {
+          "cardholderName": "Nome no Cartão",
+          "cardNumber": "Número do Cartão",
+          "expirationDate": "Data de Validade",
+          "securityCode": "Código de Segurança"
+        },
+        "placeholders": {
+          "cardholderName": "João Silva"
+        },
+        "stripePlaceholder": "Campo seguro — Stripe Elements será exibido aqui",
+        "summary": "Resumo",
+        "selectedPlan": "Plano Selecionado",
+        "billingCycle": "Ciclo de Cobrança",
+        "totalAmount": "Valor Total",
+        "monthly": "Mensal",
+        "annual": "Anual",
+        "buyNow": "Comprar Agora",
+        "processing": "Processando...",
+        "errors": {
+          "cardholderNameRequired": "O nome no cartão é obrigatório",
+          "paymentFailed": "Falha no pagamento. Tente novamente.",
+          "generic": "Ocorreu um erro. Tente novamente."
+        }
+      }
+    }
   },
-  "button": "Criar conta",
-  "footer": {
-   "text": "Já tem uma conta?",
-   "link": "Entrar"
+  "contact": {
+    "hero": {
+      "eyebrow": "Entre em contato",
+      "title": "Vamos construir algo",
+      "titleHighlight": "grande juntos",
+      "description": "Tem uma pergunta sobre o FastBI, quer uma demonstração ou está pronto para escalar sua inteligência de negócios? Adoraríamos ouvir você."
+    },
+    "form": {
+      "title": "Envie uma mensagem",
+      "successTitle": "Mensagem enviada! 🎉",
+      "successMessage": "Obrigado por entrar em contato. Nossa equipe geralmente responde em até 24 horas. Enquanto isso, sinta-se à vontade para explorar nossos recursos.",
+      "fields": {
+        "name": {
+          "label": "Nome completo",
+          "placeholder": "Maria Silva"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "maria@empresa.com"
+        },
+        "subject": {
+          "label": "Assunto",
+          "placeholder": "Como podemos ajudar?"
+        },
+        "message": {
+          "label": "Mensagem",
+          "placeholder": "Conte-nos sobre seu projeto, pergunta ou ideia..."
+        }
+      },
+      "submit": "Enviar mensagem"
+    },
+    "info": {
+      "email": {
+        "title": "Email",
+        "primary": "hello@fastbi.com",
+        "support": "support@fastbi.com"
+      },
+      "phone": {
+        "title": "Telefone",
+        "number": "+1 (212) 796-2141",
+        "hours": "Seg–Sex, 9h–18h EST"
+      },
+      "office": {
+        "title": "Escritório",
+        "line1": "16 E 52nd St #302",
+        "line2": "Nova York, NY 10022",
+        "line3": "Estados Unidos"
+      },
+      "social": {
+        "title": "Siga-nos",
+        "github": "GitHub",
+        "linkedin": "LinkedIn",
+        "twitter": "Twitter / X"
+      }
+    },
+    "cta": {
+      "title": "Pronto para transformar seus",
+      "titleHighlight": "dados em ação",
+      "description": "Comece seu teste grátis hoje. Sem cartão de crédito, sem pressão — apenas BI poderoso ao seu alcance.",
+      "startTrial": "Teste grátis",
+      "bookDemo": "Agendar demo"
+    }
   },
-  "errors": {
-   "default": "Algo deu errado. Tente novamente."
-  }
- },
- "login": {
-  "alt": "Fundo FastBI",
-  "heading": "Entre no FastBI",
-  "subtitle": "Transforme seus dados em decisões inteligentes",
-  "form": {
-   "emailLabel": "Email",
-   "emailPlaceholder": "voce@empresa.com",
-   "passwordLabel": "Senha",
-   "passwordPlaceholder": "********",
-   "roleLabel": "Função",
-   "rolePlaceholder": "Selecione sua função",
-   "rememberMe": "Lembrar de mim",
-   "forgotPassword": "Esqueceu a senha?"
-  },
-  "button": "Entrar",
-  "errors": {
-   "tokenFailed": "Falha ao obter token de autenticação",
-   "invalidCredentials": "Email, senha ou função inválidos",
-   "default": "Algo deu errado. Tente novamente."
-  }
- },
- "dashboards": {
-  "badge": "Análise Preditiva",
-  "title": "Dashboards Inteligentes",
-  "titleHighlight": " para FastBI",
-  "description": "Previsões em tempo real com modelos de machine learning. Tome decisões baseadas em dados com confiança.",
-  "stats": {
-   "modelAccuracy": "Precisão do Modelo",
-   "revenueGrowth": "Crescimento de Receita",
-   "activeUsers": "Usuários Ativos"
-  },
-  "controls": {
-   "salesForecast": "Previsão de Vendas",
-   "compositionAnalysis": "Análise de Composição",
-   "lastUpdated": "Última atualização: {time}",
-   "refresh": "Atualizar",
-   "exportReport": "Exportar Relatório"
-  },
-  "insights": {
-   "title": "Insights de IA",
-   "subtitle": "Principais previsões e recomendações baseadas em seus dados",
-   "revenueGrowth": {
-    "title": "Projeção de Crescimento",
-    "text": "Crescimento esperado de 18,5% no Q1 2025, impulsionado pela demanda no varejo.",
-    "confidence": "Confiança: {pct}%"
-   },
-   "riskAlert": {
-    "title": "Alerta de Risco",
-    "text": "Taxa de churn prevista para aumentar 2,3% no próximo mês. Campanha de retenção recomendada.",
-    "confidence": "Confiança: {pct}%"
-   },
-   "optimization": {
-    "title": "Oportunidade de Otimização",
-    "text": "Canal de e-commerce mostra potencial de crescimento de 45% com marketing direcionado.",
-    "confidence": "Confiança: {pct}%"
-   }
-  }
- },
- "crm": {
-  "title": "Hub de Inteligência BI",
-  "subtitle": "Insights de negócios em tempo real e painel de análise de desempenho",
-  "stats": {
-   "totalRevenue": "Receita Total",
-   "activeUsers": "Usuários Ativos",
-   "growthRate": "Taxa de Crescimento",
-   "satisfaction": "Satisfação"
-  },
-  "errors": {
-   "stats": "Falha ao carregar estatísticas",
-   "dashboard": "Falha ao carregar dados do dashboard"
-  },
-  "retry": "Tentar novamente",
-  "refreshTitle": "Atualizar Dashboard"
- },
- "pricing": {
-  "hero": {
-   "eyebrow": "Preços",
-   "title": "Preços que escalam",
-   "titleHighlight": "com seus dados",
-   "description": "Comece grátis, evolua para análises preditivas e migre para governança empresarial — sem mudar de plataforma. Por usuário, cobrado como preferir.",
-   "monthly": "Mensal",
-   "annual": "Anual",
-   "saveTag": "Economize 20% ao ano"
-  },
-  "cards": {
-   "perUserMo": "/usuário / mês",
-   "billedAnnually": "Cobrado anualmente",
-   "startFreeTrial": "Teste grátis",
-   "starter": {
-    "name": "Iniciante",
-    "desc": "Para pequenas equipes transformando seus primeiros dashboards em decisões.",
-    "features": [
-     "Até 5 usuários",
-     "10 fontes de dados conectadas",
-     "Dashboards ilimitados",
-     "Atualização diária",
-     "Suporte por email"
-    ]
-   },
-   "professional": {
-    "name": "Profissional",
-    "badge": "Mais popular",
-    "desc": "Para equipes em crescimento que precisam de previsões e relatórios automatizados.",
-    "features": [
-     "Tudo do Iniciante, mais:",
-     "50 fontes de dados conectadas",
-     "Análises preditivas",
-     "Relatórios com IA",
-     "Atualização horária e relatórios agendados",
-     "Suporte prioritário"
-    ]
-   },
-   "business": {
-    "name": "Empresarial",
-    "desc": "Para organizações que precisam de governança, papéis e escala.",
-    "features": [
-     "Tudo do Profissional, mais:",
-     "Fontes de dados ilimitadas",
-     "Controle de acesso por função",
-     "Atualização em tempo real",
-     "Logs de auditoria e linhagem de dados",
-     "Gerente de sucesso dedicado"
-    ]
-   }
-  },
-  "enterprise": {
-   "title": "Enterprise",
-   "desc": "SSO/SAML, residência de dados personalizada, SLA de 99,9% e preços por volume para equipes que usam FastBI em toda a organização.",
-   "stats": {
-    "activeUsers": "Usuários ativos",
-    "uptimeSla": "SLA de disponibilidade",
-    "integrations": "Integrações"
-   },
-   "button": "Falar com vendas"
-  },
-  "comparison": {
-   "title": "Compare todos os planos",
-   "subtitle": "A comparação completa para equipes escolherem o plano certo na primeira vez.",
-   "headers": {
-    "feature": "Recurso",
-    "starter": "Iniciante",
-    "professional": "Profissional",
-    "business": "Empresarial",
-    "enterprise": "Enterprise"
-   },
-   "groups": {
-    "coreAnalytics": "Análises principais",
-    "intelligence": "Inteligência",
-    "governance": "Governança & suporte"
-   },
-   "rows": {
-    "usersIncluded": "Usuários incluídos",
-    "connectedSources": "Fontes de dados conectadas",
-    "dashboards": "Dashboards",
-    "refreshRate": "Frequência de atualização",
-    "predictiveAnalytics": "Análises preditivas",
-    "aiReporting": "Relatórios com IA",
-    "scheduledReports": "Relatórios agendados",
-    "rbac": "Controle de acesso por função",
-    "auditLogs": "Logs de auditoria",
-    "sso": "SSO / SAML",
-    "uptimeSla": "SLA de disponibilidade",
-    "support": "Suporte"
-   },
-   "values": {
-    "unlimited": "Ilimitado",
-    "daily": "Diário",
-    "hourly": "Por hora",
-    "realTime": "Tempo real",
+  "profileEditor": {
+    "title": "Configurações do Perfil",
+    "name": "Nome",
     "email": "Email",
-    "priority": "Prioritário",
-    "successManager": "Gerente de sucesso",
-    "dedicatedSla": "Dedicado + SLA"
-   }
+    "role": "Função",
+    "avatarUploaded": "Avatar enviado com sucesso!",
+    "uploadError": "Falha ao enviar avatar",
+    "saved": "Perfil salvo com sucesso!",
+    "saveError": "Falha ao salvar perfil",
+    "saving": "Salvando...",
+    "save": "Salvar"
   },
-  "faq": {
-   "title": "Perguntas frequentes",
-   "items": [
-    {
-     "q": "Como funciona o preço por usuário?",
-     "a": "Você paga pelas pessoas que criam e visualizam relatórios. Adicione ou remova usuários a qualquer momento — o faturamento é ajustado na próxima fatura, sem mínimo em planos anuais."
-    },
-    {
-     "q": "Posso mudar de plano depois?",
-     "a": "Sim. Faça upgrade instantaneamente e pague apenas a diferença proporcional. Downgrades entram em vigor no início do próximo ciclo de faturamento."
-    },
-    {
-     "q": "O que acontece após o teste grátis?",
-     "a": "O teste de 14 dias inclui recursos Profissionais. Ao finalizar, escolha um plano para continuar — nada é deletado e você só será cobrado ao escolher continuar."
-    },
-    {
-     "q": "Vocês oferecem faturamento anual?",
-     "a": "O faturamento anual economiza 20% em todos os planos pagos. Alterne no topo da página para ver o valor ajustado."
-    },
-    {
-     "q": "Meus dados estão seguros?",
-     "a": "Os dados são criptografados em trânsito e em repouso. O plano Business adiciona logs de auditoria; o Enterprise adiciona SSO/SAML e residência de dados personalizada."
-    },
-    {
-     "q": "O que conta como fonte de dados?",
-     "a": "Qualquer sistema conectado que o FastBI leia — banco de dados, data warehouse, planilha ou uma das 150+ integrações. Cada conexão conta uma vez."
-    }
-   ]
-  },
-  "cta": {
-   "title": "Transforme seus dados em",
-   "titleHighlight": "ação decisiva",
-   "description": "Crie seu primeiro dashboard em minutos. Sem cartão de crédito.",
-   "startTrial": "Teste grátis",
-   "bookDemo": "Agendar demo"
-  }
- },
- "accounting": {
-  "menu": {
-   "templates": "MODELO CONTÁBIL",
-   "workflows": "WORKFLOWS CONTÁBEIS",
-   "operations": "OPERAÇÕES CONTÁBEIS",
-   "back": "← Voltar",
-   "comingSoon": "{name} — em breve"
-  },
-  "template": {
-   "title": "Criar Modelo Contábil",
-   "subtitle": "Preencha os campos abaixo para gerar um novo modelo de workflow contábil",
-   "success": "Modelo criado com sucesso!",
-   "fields": {
-    "name": {
-     "label": "Nome",
-     "placeholder": "ex. Contabilidade Mensal"
-    },
-    "category": {
-     "label": "Categoria",
-     "placeholder": "Selecione a categoria"
-    },
-    "taxRegime": {
-     "label": "Regime Tributário",
-     "placeholder": "Selecione o regime"
-    },
-    "fiscalPeriod": {
-     "label": "Período Fiscal",
-     "placeholder": "Selecione o período"
-    },
-    "regulatoryBody": {
-     "label": "Órgão Regulador",
-     "placeholder": "Selecione o órgão"
-    },
-    "createdBy": {
-     "label": "Criado por",
-     "placeholder": "ex. João Silva"
-    },
-    "structure": {
-     "label": "Estrutura (JSON)",
-     "placeholder": "{\"stages\": [...], \"kpis\": [...], ...}"
-    }
-   },
-   "buttons": {
-    "cancel": "Cancelar",
-    "creating": "Criando...",
-    "create": "Criar Modelo"
-   },
-   "structure": {
-    "stages": "Estágios",
-    "suggestPlaceholder": "+ Sugerir do modelo",
-    "suggestAdd": "Adicionar",
-    "addCustom": "Adicionar Estágio Personalizado",
-    "emptyStages": "Nenhum estágio ainda. Adicione um acima.",
-    "stageNamePlaceholder": "Nome do estágio",
-    "probability": "Probabilidade: {value}%",
-    "documentRequired": "Documento Obrigatório",
-    "approvalRequired": "Aprovação Obrigatória",
-    "kpis": "KPIs",
-    "kpisPlaceholder": "ex. completion_rate",
-    "complianceChecks": "Verificações de Conformidade",
-    "compliancePlaceholder": "ex. document_validation",
-    "auditRequirements": "Requisitos de Auditoria",
-    "auditPlaceholder": "ex. audit_trail",
-    "deadlines": "Prazos",
-    "hasStatutoryDeadline": "Tem Prazo Legal",
-    "fiscalPeriods": {
-     "monthly": "Mensal",
-     "quarterly": "Trimestral",
-     "semester": "Semestral",
-     "annual": "Anual",
-     "custom": "Personalizado"
-    }
-   },
-   "errors": {
-    "nameRequired": "Nome é obrigatório",
-    "categoryRequired": "Categoria é obrigatória",
-    "invalidJson": "Estrutura deve ser um JSON válido",
-    "minStages": "Estrutura deve ter pelo menos 2 estágios",
-    "minKpis": "Estrutura deve definir pelo menos um KPI",
-    "createFailed": "Falha ao criar modelo",
-    "generic": "Algo deu errado"
-   }
-  }
- },
- "subscriptions": {
-  "signUp": {
-   "steps": {
-    "organization": "Organização",
+  "roles": {
     "admin": "Administrador",
-    "subscription": "Assinatura",
-    "payment": "Pagamento"
-   },
-   "organization": {
-    "title": "Criar sua Organização",
-    "subtitle": "Insira os dados da sua organização para começar",
-    "fields": {
-     "name": "Nome da Organização",
-     "taxId": "CNPJ",
-     "address": "Endereço da Organização"
+    "manager": "Gerente",
+    "analyst": "Analista",
+    "viewer": "Visualizador"
+  },
+  "dataeng": {
+    "title": "Engenharia de Dados",
+    "subtitle": "Gerencie seus pipelines e transformações de dados",
+    "upload": "Upload de Dados",
+    "transform": "Transformar",
+    "schedule": "Agendar",
+    "history": "Histórico",
+    "dataImporting": {
+      "title": "Importação de Dados",
+      "hint": "Envie planilhas e documentos de texto para o seu armazenamento de dados",
+      "success": "Arquivo enviado com sucesso",
+      "uploadError": "Falha ao enviar o arquivo",
+      "serverError": "Não foi possível acessar o servidor"
     },
-    "placeholders": {
-     "name": "Ex: Minha Empresa Ltda",
-     "taxId": "XX.XXX.XXX/XXXX-XX",
-     "address": "Rua Exemplo, 123, Bairro, Cidade - UF"
+    "createConnection": {
+      "title": "Nova Conexão",
+      "subtitle": "Configure uma nova conexão de banco de dados para sua organização",
+      "sectionOrganization": "Organização",
+      "organizationName": "Nome da Organização",
+      "orgPlaceholder": "ex.: minha-org",
+      "sectionConnection": "Detalhes da Conexão",
+      "connectionName": "Nome da Conexão",
+      "connNamePlaceholder": "ex.: Banco de Produção",
+      "dbType": "Tipo de Banco de Dados",
+      "sslMode": "Modo SSL",
+      "host": "Host",
+      "hostPlaceholder": "ex.: localhost ou db.exemplo.com",
+      "port": "Porta",
+      "databaseName": "Nome do Banco de Dados",
+      "dbNamePlaceholder": "ex.: meu_banco",
+      "sectionAuth": "Autenticação",
+      "username": "Nome de Usuário",
+      "userPlaceholder": "Usuário do banco",
+      "password": "Senha",
+      "passPlaceholder": "Senha do banco",
+      "sectionLimits": "Limites",
+      "maxRows": "Limite Máximo de Linhas",
+      "maxRowsHint": "Número máximo de linhas retornadas por consulta",
+      "queryTimeout": "Tempo Limite da Consulta (segundos)",
+      "queryTimeoutHint": "Tempo máximo de execução por consulta",
+      "cancel": "Cancelar",
+      "testing": "Testando",
+      "testConnection": "Testar Conexão",
+      "creating": "Criando",
+      "createConnection": "Criar Conexão",
+      "testSuccess": "Conexão bem-sucedida!",
+      "testFailed": "Falha no teste de conexão",
+      "createSuccess": "Conexão criada com sucesso!",
+      "createFailed": "Falha ao criar conexão",
+      "serverError": "Não foi possível acessar o servidor"
     },
-    "continue": "Continuar",
-    "errors": {
-     "nameRequired": "O nome da organização é obrigatório",
-     "taxIdRequired": "O CNPJ é obrigatório",
-     "addressRequired": "O endereço da organização é obrigatório"
+    "connections": {
+      "title": "Conexões",
+      "countOne": "{count} conexão",
+      "countMany": "{count} conexões",
+      "active": "Ativa",
+      "inactive": "Inativa",
+      "created": "Criada em {date}",
+      "never": "Nunca",
+      "justNow": "Agora mesmo",
+      "minutesAgo": "há {count} min",
+      "hoursAgo": "há {count} h",
+      "daysAgo": "há {count} dias",
+      "empty": "Nenhuma conexão encontrada para esta organização",
+      "noOrg": "Digite um nome de organização para ver suas conexões",
+      "orgPlaceholder": "ex.: minha-org",
+      "retry": "Tentar novamente",
+      "loading": "Carregando conexões…",
+      "loadError": "Falha ao carregar conexões",
+      "deleteError": "Falha ao excluir conexão",
+      "deleteTitle": "Excluir conexão",
+      "serverError": "Não foi possível acessar o servidor"
+    },
+    "sqlEditor": {
+      "title": "Editor SQL",
+      "subtitle": "Execute consultas SELECT na sua conexão",
+      "placeholder": "SELECT * FROM sua_tabela LIMIT 100;",
+      "run": "Executar Consulta",
+      "running": "Executando",
+      "back": "Voltar para conexões",
+      "success": "Consulta executada com sucesso",
+      "runFailed": "Falha ao executar consulta",
+      "queryFailed": "A consulta falhou",
+      "rowsOne": "{count} linha",
+      "rowsMany": "{count} linhas",
+      "queryLabel": "consulta: {query}",
+      "noColumns": "A consulta não retornou colunas",
+      "serverError": "Não foi possível acessar o servidor"
+    },
+    "schemaPreview": {
+      "tables": "Tabelas",
+      "tablesOne": "{count} tabela",
+      "tablesMany": "{count} tabelas",
+      "filterPlaceholder": "Filtrar tabelas ou colunas…",
+      "loading": "Carregando schema…",
+      "timedOut": "A solicitação expirou. Tente novamente",
+      "retry": "Tentar novamente",
+      "noTables": "Nenhuma tabela encontrada",
+      "noMatch": "Nenhuma tabela corresponde a \"{filter}\"",
+      "failedToLoad": "Falha ao carregar schema",
+      "serverError": "Não foi possível acessar o servidor"
+    },
+    "generalFiles": {
+      "title": "Arquivos Armazenados",
+      "countOne": "{count} arquivo",
+      "countMany": "{count} arquivos",
+      "rowsOne": "{count} linha",
+      "rowsMany": "{count} linhas",
+      "columns": "colunas",
+      "created": "Enviado {date}",
+      "never": "Nunca",
+      "justNow": "Agora mesmo",
+      "minutesAgo": "há {count} min",
+      "hoursAgo": "há {count} h",
+      "daysAgo": "há {count} d",
+      "statusProcessed": "Processado",
+      "statusUnsupported": "Não suportado",
+      "statusUnknown": "Desconhecido",
+      "truncated": "truncado",
+      "empty": "Nenhum arquivo armazenado para esta organização ainda",
+      "noOrg": "Informe o nome da organização para ver seus arquivos",
+      "orgPlaceholder": "ex.: minha-org",
+      "retry": "Tentar novamente",
+      "refresh": "Atualizar",
+      "loading": "Carregando arquivos…",
+      "loadError": "Falha ao carregar arquivos",
+      "serverError": "Não foi possível acessar o servidor",
+      "close": "Fechar",
+      "showingRows": "Linhas {start}-{end} de {count}",
+      "prev": "Anterior",
+      "next": "Próxima",
+      "noData": "Este arquivo não possui linhas de dados para exibir",
+      "loadingDetail": "Carregando dados…",
+      "loadDetailError": "Falha ao carregar os dados do arquivo",
+      "truncatedNote": "Dados truncados (limite de tamanho)",
+      "searchPlaceholder": "Buscar em todas as colunas deste arquivo…",
+      "clearSearch": "Limpar busca",
+      "searchResults": "{count} resultado(s)",
+      "searchNoResults": "Nenhuma linha corresponde a \"{query}\""
     }
-   },
-   "admin": {
-    "title": "Criar sua Conta de Administrador",
-    "subtitle": "Configure o administrador principal da sua organização",
-    "fields": {
-     "fullName": "Nome Completo",
-     "email": "Endereço de Email",
-     "password": "Senha",
-     "confirmPassword": "Confirmar Senha"
-    },
-    "placeholders": {
-     "fullName": "João Silva",
-     "email": "joao@empresa.com",
-     "password": "••••••••",
-     "confirmPassword": "••••••••"
-    },
-    "continue": "Continuar",
-    "errors": {
-     "nameRequired": "O nome completo é obrigatório",
-     "emailRequired": "O endereço de email é obrigatório",
-     "passwordRequired": "A senha é obrigatória",
-     "passwordMinLength": "A senha deve ter pelo menos 8 caracteres",
-     "passwordsMismatch": "As senhas não conferem"
-    }
-   },
-   "subscription": {
-    "title": "Escolha sua Assinatura",
-    "subtitle": "Selecione o plano ideal para suas necessidades",
-    "billingCycle": "Ciclo de Cobrança",
-    "monthly": "Mensal",
-    "annual": "Anual",
-    "planSummary": "Resumo do Plano",
-    "selectedPlan": "Plano Selecionado",
-    "totalAmount": "Valor Total",
-    "continue": "Continuar para Pagamento",
-    "processing": "Criando assinatura...",
-    "errors": {
-     "createFailed": "Falha ao criar assinatura",
-     "generic": "Ocorreu um erro. Tente novamente."
-    }
-   },
-   "payment": {
-    "title": "Finalizar Pagamento",
-    "subtitle": "Insira os dados do seu cartão para ativar sua assinatura",
-    "cardDetails": "Dados do Cartão",
-    "fields": {
-     "cardholderName": "Nome no Cartão",
-     "cardNumber": "Número do Cartão",
-     "expirationDate": "Data de Validade",
-     "securityCode": "Código de Segurança"
-    },
-    "placeholders": {
-     "cardholderName": "João Silva"
-    },
-    "stripePlaceholder": "Campo seguro — Stripe Elements será exibido aqui",
-    "summary": "Resumo",
-    "selectedPlan": "Plano Selecionado",
-    "billingCycle": "Ciclo de Cobrança",
-    "totalAmount": "Valor Total",
-    "monthly": "Mensal",
-    "annual": "Anual",
-    "buyNow": "Comprar Agora",
-    "processing": "Processando...",
-    "errors": {
-     "cardholderNameRequired": "O nome no cartão é obrigatório",
-     "paymentFailed": "Falha no pagamento. Tente novamente.",
-     "generic": "Ocorreu um erro. Tente novamente."
-    }
-   }
+  },
+  "workflows": {
+    "title": "Workflows",
+    "subtitle": "Automatize seus processos de negócio",
+    "create": "Criar Workflow",
+    "active": "Ativo",
+    "draft": "Rascunho",
+    "completed": "Concluído"
+  },
+  "businessDashboards": {
+    "title": "Dashboards de Negócio",
+    "subtitle": "Insights em tempo real para seu negócio",
+    "revenue": "Receita",
+    "customers": "Clientes",
+    "orders": "Pedidos",
+    "growth": "Crescimento"
+  },
+  "predictiveDashboard": {
+    "title": "Dashboard Preditivo",
+    "subtitle": "Previsões com IA",
+    "accuracy": "Precisão",
+    "trend": "Tendência",
+    "forecast": "Previsão"
+  },
+  "animatedDashboard": {
+    "title": "Dashboard Animado",
+    "subtitle": "Visualizações interativas com dados ao vivo",
+    "play": "Play",
+    "pause": "Pausar",
+    "speed": "Velocidade"
+  },
+  "compositionDashboard": {
+    "title": "Dashboard de Composição",
+    "subtitle": "Divida seus dados por categoria",
+    "byCategory": "Por Categoria",
+    "byRegion": "Por Região",
+    "byPeriod": "Por Período"
   }
- },
- "contact": {
-  "hero": {
-   "eyebrow": "Entre em contato",
-   "title": "Vamos construir algo",
-   "titleHighlight": "grande juntos",
-   "description": "Tem uma pergunta sobre o FastBI, quer uma demonstração ou está pronto para escalar sua inteligência de negócios? Adoraríamos ouvir você."
-  },
-  "form": {
-   "title": "Envie uma mensagem",
-   "successTitle": "Mensagem enviada! 🎉",
-   "successMessage": "Obrigado por entrar em contato. Nossa equipe geralmente responde em até 24 horas. Enquanto isso, sinta-se à vontade para explorar nossos recursos.",
-   "fields": {
-    "name": {
-     "label": "Nome completo",
-     "placeholder": "Maria Silva"
-    },
-    "email": {
-     "label": "Email",
-     "placeholder": "maria@empresa.com"
-    },
-    "subject": {
-     "label": "Assunto",
-     "placeholder": "Como podemos ajudar?"
-    },
-    "message": {
-     "label": "Mensagem",
-     "placeholder": "Conte-nos sobre seu projeto, pergunta ou ideia..."
-    }
-   },
-   "submit": "Enviar mensagem"
-  },
-  "info": {
-   "email": {
-    "title": "Email",
-    "primary": "hello@fastbi.com",
-    "support": "support@fastbi.com"
-   },
-   "phone": {
-    "title": "Telefone",
-    "number": "+1 (212) 796-2141",
-    "hours": "Seg–Sex, 9h–18h EST"
-   },
-   "office": {
-    "title": "Escritório",
-    "line1": "16 E 52nd St #302",
-    "line2": "Nova York, NY 10022",
-    "line3": "Estados Unidos"
-   },
-   "social": {
-    "title": "Siga-nos",
-    "github": "GitHub",
-    "linkedin": "LinkedIn",
-    "twitter": "Twitter / X"
-   }
-  },
-  "cta": {
-   "title": "Pronto para transformar seus",
-   "titleHighlight": "dados em ação",
-   "description": "Comece seu teste grátis hoje. Sem cartão de crédito, sem pressão — apenas BI poderoso ao seu alcance.",
-   "startTrial": "Teste grátis",
-   "bookDemo": "Agendar demo"
-  }
- },
- "profileEditor": {
-  "title": "Configurações do Perfil",
-  "name": "Nome",
-  "email": "Email",
-  "role": "Função",
-  "avatarUploaded": "Avatar enviado com sucesso!",
-  "uploadError": "Falha ao enviar avatar",
-  "saved": "Perfil salvo com sucesso!",
-  "saveError": "Falha ao salvar perfil",
-  "saving": "Salvando...",
-  "save": "Salvar"
- },
- "roles": {
-  "admin": "Administrador",
-  "manager": "Gerente",
-  "analyst": "Analista",
-  "viewer": "Visualizador"
- },
- "dataeng": {
-  "title": "Engenharia de Dados",
-  "subtitle": "Gerencie seus pipelines e transformações de dados",
-  "upload": "Upload de Dados",
-  "transform": "Transformar",
-  "schedule": "Agendar",
-  "history": "Histórico",
-  "createConnection": {
-   "title": "Nova Conexão",
-   "subtitle": "Configure uma nova conexão de banco de dados para sua organização",
-   "sectionOrganization": "Organização",
-   "organizationName": "Nome da Organização",
-   "orgPlaceholder": "ex.: minha-org",
-   "sectionConnection": "Detalhes da Conexão",
-   "connectionName": "Nome da Conexão",
-   "connNamePlaceholder": "ex.: Banco de Produção",
-   "dbType": "Tipo de Banco de Dados",
-   "sslMode": "Modo SSL",
-   "host": "Host",
-   "hostPlaceholder": "ex.: localhost ou db.exemplo.com",
-   "port": "Porta",
-   "databaseName": "Nome do Banco de Dados",
-   "dbNamePlaceholder": "ex.: meu_banco",
-   "sectionAuth": "Autenticação",
-   "username": "Nome de Usuário",
-   "userPlaceholder": "Usuário do banco",
-   "password": "Senha",
-   "passPlaceholder": "Senha do banco",
-   "sectionLimits": "Limites",
-   "maxRows": "Limite Máximo de Linhas",
-   "maxRowsHint": "Número máximo de linhas retornadas por consulta",
-   "queryTimeout": "Tempo Limite da Consulta (segundos)",
-   "queryTimeoutHint": "Tempo máximo de execução por consulta",
-   "cancel": "Cancelar",
-   "testing": "Testando",
-   "testConnection": "Testar Conexão",
-   "creating": "Criando",
-   "createConnection": "Criar Conexão",
-   "testSuccess": "Conexão bem-sucedida!",
-   "testFailed": "Falha no teste de conexão",
-   "createSuccess": "Conexão criada com sucesso!",
-   "createFailed": "Falha ao criar conexão",
-   "serverError": "Não foi possível acessar o servidor"
-  },
-  "connections": {
-   "title": "Conexões",
-   "countOne": "{count} conexão",
-   "countMany": "{count} conexões",
-   "active": "Ativa",
-   "inactive": "Inativa",
-   "created": "Criada em {date}",
-   "never": "Nunca",
-   "justNow": "Agora mesmo",
-   "minutesAgo": "há {count} min",
-   "hoursAgo": "há {count} h",
-   "daysAgo": "há {count} dias",
-   "empty": "Nenhuma conexão encontrada para esta organização",
-   "noOrg": "Digite um nome de organização para ver suas conexões",
-   "orgPlaceholder": "ex.: minha-org",
-   "retry": "Tentar novamente",
-   "loading": "Carregando conexões…",
-   "loadError": "Falha ao carregar conexões",
-   "deleteError": "Falha ao excluir conexão",
-   "deleteTitle": "Excluir conexão",
-   "serverError": "Não foi possível acessar o servidor"
-  },
-  "sqlEditor": {
-   "title": "Editor SQL",
-   "subtitle": "Execute consultas SELECT na sua conexão",
-   "placeholder": "SELECT * FROM sua_tabela LIMIT 100;",
-   "run": "Executar Consulta",
-   "running": "Executando",
-   "back": "Voltar para conexões",
-   "success": "Consulta executada com sucesso",
-   "runFailed": "Falha ao executar consulta",
-   "queryFailed": "A consulta falhou",
-   "rowsOne": "{count} linha",
-   "rowsMany": "{count} linhas",
-   "queryLabel": "consulta: {query}",
-   "noColumns": "A consulta não retornou colunas",
-   "serverError": "Não foi possível acessar o servidor"
-  },
-  "schemaPreview": {
-   "tables": "Tabelas",
-   "tablesOne": "{count} tabela",
-   "tablesMany": "{count} tabelas",
-   "filterPlaceholder": "Filtrar tabelas ou colunas…",
-   "loading": "Carregando schema…",
-   "timedOut": "A solicitação expirou. Tente novamente",
-   "retry": "Tentar novamente",
-   "noTables": "Nenhuma tabela encontrada",
-   "noMatch": "Nenhuma tabela corresponde a \"{filter}\"",
-   "failedToLoad": "Falha ao carregar schema",
-   "serverError": "Não foi possível acessar o servidor"
-  }
- },
- "workflows": {
-  "title": "Workflows",
-  "subtitle": "Automatize seus processos de negócio",
-  "create": "Criar Workflow",
-  "active": "Ativo",
-  "draft": "Rascunho",
-  "completed": "Concluído"
- },
- "businessDashboards": {
-  "title": "Dashboards de Negócio",
-  "subtitle": "Insights em tempo real para seu negócio",
-  "revenue": "Receita",
-  "customers": "Clientes",
-  "orders": "Pedidos",
-  "growth": "Crescimento"
- },
- "predictiveDashboard": {
-  "title": "Dashboard Preditivo",
-  "subtitle": "Previsões com IA",
-  "accuracy": "Precisão",
-  "trend": "Tendência",
-  "forecast": "Previsão"
- },
- "animatedDashboard": {
-  "title": "Dashboard Animado",
-  "subtitle": "Visualizações interativas com dados ao vivo",
-  "play": "Play",
-  "pause": "Pausar",
-  "speed": "Velocidade"
- },
- "compositionDashboard": {
-  "title": "Dashboard de Composição",
-  "subtitle": "Divida seus dados por categoria",
-  "byCategory": "Por Categoria",
-  "byRegion": "Por Região",
-  "byPeriod": "Por Período"
- }
 }
