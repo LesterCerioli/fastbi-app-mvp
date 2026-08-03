@@ -1,649 +1,690 @@
 {
- "header": {
-  "logoAlt": "FastBI 标志",
-  "logoText": "FastBI",
-  "nav": {
-   "home": "首页",
-   "features": "功能",
-   "pricing": "价格",
-   "contact": "联系我们"
+  "header": {
+    "logoAlt": "FastBI 标志",
+    "logoText": "FastBI",
+    "nav": {
+      "home": "首页",
+      "features": "功能",
+      "pricing": "价格",
+      "contact": "联系我们"
+    },
+    "buttons": {
+      "getStarted": "开始使用",
+      "login": "登录",
+      "logout": "退出登录"
+    }
   },
-  "buttons": {
-   "getStarted": "开始使用",
-   "login": "登录",
-   "logout": "退出登录"
-  }
- },
- "footer": {
-  "logoText": "FastBI",
-  "nav": {
-   "home": "首页",
-   "features": "功能",
-   "pricing": "价格",
-   "contact": "联系我们"
+  "footer": {
+    "logoText": "FastBI",
+    "nav": {
+      "home": "首页",
+      "features": "功能",
+      "pricing": "价格",
+      "contact": "联系我们"
+    },
+    "copyright": "© {year} Lucas Technology Service. 保留所有权利。"
   },
-  "copyright": "© {year} Lucas Technology Service. 保留所有权利。"
- },
- "home": {
-  "hero": {
-   "alt": "首页",
-   "heading": "面向中小企业的商业智能",
-   "subtitle": "将您的数据转化为智能决策",
-   "buttons": {
-    "startTrial": "免费试用",
-    "viewDemo": "查看演示",
-    "goToDashboard": "前往仪表板"
-   }
+  "home": {
+    "hero": {
+      "alt": "首页",
+      "heading": "面向中小企业的商业智能",
+      "subtitle": "将您的数据转化为智能决策",
+      "buttons": {
+        "startTrial": "免费试用",
+        "viewDemo": "查看演示",
+        "goToDashboard": "前往仪表板"
+      }
+    },
+    "features": {
+      "intuitiveDashboards": {
+        "title": "直观仪表板",
+        "desc": "以清晰实用的方式可视化您的数据"
+      },
+      "reportAutomation": {
+        "title": "报表自动化",
+        "desc": "自动生成和更新报表"
+      },
+      "accurateInsights": {
+        "title": "精准洞察",
+        "desc": "为您的业务获取有价值的见解"
+      }
+    },
+    "carousel": {
+      "title": "与您的业务一同发展的仪表板",
+      "alt": "商业智能仪表板 {n}",
+      "note": "悬停暂停 • 仪表板连续滚动"
+    },
+    "industries": {
+      "title": "适用于不同类型的业务",
+      "subtitle": "为各行业和业务模型量身定制的解决方案",
+      "alt": "我们服务的行业"
+    },
+    "reports": {
+      "title": "适用于高级报表",
+      "subtitle": "面向数据驱动决策的高级分析和报表功能",
+      "alt": "高级报表"
+    },
+    "simplifying": {
+      "title": "简化数据分析",
+      "subtitle": "为您的业务提供简单有效的BI解决方案。"
+    },
+    "details": {
+      "alt": "正在分析数据的人员",
+      "connect": {
+        "title": "连接到您的数据",
+        "desc": "轻松集成您的数据源"
+      },
+      "dashboards": {
+        "title": "创建自定义仪表板",
+        "desc": "根据您的需求量身定制的仪表板。"
+      },
+      "decisions": {
+        "title": "做出自信的决策",
+        "desc": "准确的信息指导您的战略。"
+      }
+    }
   },
   "features": {
-   "intuitiveDashboards": {
-    "title": "直观仪表板",
-    "desc": "以清晰实用的方式可视化您的数据"
-   },
-   "reportAutomation": {
-    "title": "报表自动化",
-    "desc": "自动生成和更新报表"
-   },
-   "accurateInsights": {
-    "title": "精准洞察",
-    "desc": "为您的业务获取有价值的见解"
-   }
-  },
-  "carousel": {
-   "title": "与您的业务一同发展的仪表板",
-   "alt": "商业智能仪表板 {n}",
-   "note": "悬停暂停 • 仪表板连续滚动"
-  },
-  "industries": {
-   "title": "适用于不同类型的业务",
-   "subtitle": "为各行业和业务模型量身定制的解决方案",
-   "alt": "我们服务的行业"
-  },
-  "reports": {
-   "title": "适用于高级报表",
-   "subtitle": "面向数据驱动决策的高级分析和报表功能",
-   "alt": "高级报表"
-  },
-  "simplifying": {
-   "title": "简化数据分析",
-   "subtitle": "为您的业务提供简单有效的BI解决方案。"
-  },
-  "details": {
-   "alt": "正在分析数据的人员",
-   "connect": {
-    "title": "连接到您的数据",
-    "desc": "轻松集成您的数据源"
-   },
-   "dashboards": {
-    "title": "创建自定义仪表板",
-    "desc": "根据您的需求量身定制的仪表板。"
-   },
-   "decisions": {
-    "title": "做出自信的决策",
-    "desc": "准确的信息指导您的战略。"
-   }
-  }
- },
- "features": {
-  "badge": "● 企业分析平台",
-  "title": "将数据转化为",
-  "titleHighlight": "决定性行动",
-  "description": "通过实时洞察、预测分析和自动报表，统一您的商业智能，随组织发展而扩展。",
-  "buttons": {
-   "startTrial": "免费试用 →",
-   "bookDemo": "预约演示"
-  },
-  "stats": {
-   "activeUsers": "活跃用户",
-   "uptimeSla": "正常运行时间SLA",
-   "integrations": "集成"
-  },
-  "imageAlt": "仪表板预览",
-  "exploreDashboards": {
-   "title": "Explore Intelligent Dashboards",
-   "desc": "Visualize your data with real-time insights and predictive analytics"
-  }
- },
- "forgotpassword": {
-  "alt": "FastBI 背景",
-  "heading": "忘记密码？",
-  "subtitle": "输入您的电子邮件，我们将向您发送一个临时密码。",
-  "form": {
-   "emailLabel": "电子邮件地址",
-   "emailPlaceholder": "you@domain.com"
-  },
-  "button": "发送重置邮件",
-  "successTitle": "邮件已发送！",
-  "successMessage": "如果该邮箱存在账户，您将很快收到一个临时密码。",
-  "backToLogin": "返回登录",
-  "footer": "返回登录",
-  "errors": {
-   "default": "出了点问题。请重试。"
-  }
- },
- "resetpassword": {
-  "alt": "FastBI 背景",
-  "heading": "设置新密码",
-  "subtitle": "为您的账户创建新密码。链接10分钟后过期。",
-  "form": {
-   "newPasswordLabel": "新密码",
-   "newPasswordPlaceholder": "********",
-   "confirmPasswordLabel": "确认密码",
-   "confirmPasswordPlaceholder": "********"
-  },
-  "button": "重置密码",
-  "successTitle": "密码已更改！",
-  "successMessage": "您的密码已成功更新。",
-  "backToLogin": "返回登录",
-  "errors": {
-   "passwordsMismatch": "密码不匹配",
-   "tooShort": "密码至少需要6个字符",
-   "default": "出了点问题。请重试。"
-  }
- },
- "signup": {
-  "alt": "FastBI 背景",
-  "heading": "创建您的账户",
-  "subtitle": "开始将您的数据转化为智能决策",
-  "form": {
-   "nameLabel": "姓名",
-   "namePlaceholder": "张三",
-   "emailLabel": "电子邮件",
-   "emailPlaceholder": "you@domain.com",
-   "passwordLabel": "密码",
-   "passwordPlaceholder": "********",
-   "confirmPasswordLabel": "确认密码",
-   "confirmPasswordPlaceholder": "********",
-   "passwordsMismatch": "密码不匹配"
-  },
-  "button": "创建账户",
-  "footer": {
-   "text": "已有账户？",
-   "link": "登录"
-  },
-  "errors": {
-   "default": "出了点问题。请重试。"
-  }
- },
- "login": {
-  "alt": "FastBI 背景",
-  "heading": "登录 FastBI",
-  "subtitle": "将您的数据转化为智能决策",
-  "form": {
-   "emailLabel": "电子邮件",
-   "emailPlaceholder": "you@domain.com",
-   "passwordLabel": "密码",
-   "passwordPlaceholder": "********",
-   "rememberMe": "记住我",
-   "forgotPassword": "忘记密码？"
-  },
-  "button": "登录",
-  "footer": {
-   "text": "还没有账号？",
-   "link": "注册"
-  }
- },
- "dashboards": {
-  "badge": "预测分析",
-  "title": "智能仪表板",
-  "titleHighlight": " for FastBI",
-  "description": "由机器学习模型驱动的实时预测。自信地做出数据驱动决策。",
-  "stats": {
-   "modelAccuracy": "模型准确率",
-   "revenueGrowth": "收入增长",
-   "activeUsers": "活跃用户"
-  },
-  "controls": {
-   "salesForecast": "销售预测",
-   "compositionAnalysis": "组成分析",
-   "lastUpdated": "最后更新：{time}",
-   "refresh": "刷新",
-   "exportReport": "导出报表"
-  },
-  "insights": {
-   "title": "AI 驱动的洞察",
-   "subtitle": "基于您的数据的关键预测和建议",
-   "revenueGrowth": {
-    "title": "收入增长预测",
-    "text": "预计2025年Q1增长18.5%，由零售部门需求增长驱动。",
-    "confidence": "置信度：{pct}%"
-   },
-   "riskAlert": {
-    "title": "风险警报",
-    "text": "预计下月客户流失率将增加2.3%。建议开展留存活动。",
-    "confidence": "置信度：{pct}%"
-   },
-   "optimization": {
-    "title": "优化机会",
-    "text": "电子商务渠道通过定向营销显示45%的增长潜力。",
-    "confidence": "置信度：{pct}%"
-   }
-  }
- },
- "crm": {
-  "title": "BI 智能中心",
-  "subtitle": "实时业务洞察和绩效分析仪表板",
-  "stats": {
-   "totalRevenue": "总收入",
-   "activeUsers": "活跃用户",
-   "growthRate": "增长率",
-   "satisfaction": "满意度"
-  },
-  "errors": {
-   "stats": "加载统计数据失败",
-   "dashboard": "加载仪表板数据失败"
-  },
-  "retry": "重试",
-  "refreshTitle": "刷新仪表板"
- },
- "pricing": {
-  "hero": {
-   "eyebrow": "价格",
-   "title": "随数据扩展的价格",
-   "titleHighlight": "与您的数据",
-   "description": "免费开始，逐步使用预测分析，迁移到企业治理——无需更换平台。按用户计费，按您喜欢的方式支付。",
-   "monthly": "月度",
-   "annual": "年度",
-   "saveTag": "每年节省20%"
-  },
-  "cards": {
-   "perUserMo": "/用户 / 月",
-   "billedAnnually": "按年计费",
-   "startFreeTrial": "免费试用",
-   "starter": {
-    "name": "入门版",
-    "desc": "适合将第一个仪表板转化为决策的小团队。",
-    "features": [
-     "最多5个用户",
-     "10个连接的数据源",
-     "无限仪表板",
-     "每日数据刷新",
-     "邮件支持"
-    ]
-   },
-   "professional": {
-    "name": "专业版",
-    "badge": "最受欢迎",
-    "desc": "适合需要预测和自动报表的发展中团队。",
-    "features": [
-     "包含入门版所有功能，另加：",
-     "50个连接的数据源",
-     "预测分析",
-     "AI叙事报表",
-     "每小时刷新和定时报表",
-     "优先支持"
-    ]
-   },
-   "business": {
-    "name": "商业版",
-    "desc": "适合需要治理、角色和规模的组织。",
-    "features": [
-     "包含专业版所有功能，另加：",
-     "无限数据源",
-     "基于角色的访问控制",
-     "实时刷新",
-     "审计日志和数据血缘",
-     "专属客户成功经理"
-    ]
-   }
-  },
-  "enterprise": {
-   "title": "企业版",
-   "desc": "SSO/SAML、自定义数据驻留、99.9%正常运行时间SLA以及为整个组织使用FastBI的团队提供的批量定价。",
-   "stats": {
-    "activeUsers": "活跃用户",
-    "uptimeSla": "正常运行时间SLA",
-    "integrations": "集成"
-   },
-   "button": "联系销售"
-  },
-  "comparison": {
-   "title": "比较所有方案",
-   "subtitle": "完整对比，让团队第一次就选对层级。",
-   "headers": {
-    "feature": "功能",
-    "starter": "入门版",
-    "professional": "专业版",
-    "business": "商业版",
-    "enterprise": "企业版"
-   },
-   "groups": {
-    "coreAnalytics": "核心分析",
-    "intelligence": "智能",
-    "governance": "治理与支持"
-   },
-   "rows": {
-    "usersIncluded": "包含用户",
-    "connectedSources": "连接数据源",
-    "dashboards": "仪表板",
-    "refreshRate": "数据刷新频率",
-    "predictiveAnalytics": "预测分析",
-    "aiReporting": "AI叙事报表",
-    "scheduledReports": "定时报表",
-    "rbac": "基于角色的访问控制",
-    "auditLogs": "审计日志",
-    "sso": "SSO / SAML",
-    "uptimeSla": "正常运行时间SLA",
-    "support": "支持"
-   },
-   "values": {
-    "unlimited": "无限",
-    "daily": "每日",
-    "hourly": "每小时",
-    "realTime": "实时",
-    "email": "邮件",
-    "priority": "优先",
-    "successManager": "成功经理",
-    "dedicatedSla": "专属 + SLA"
-   }
-  },
-  "faq": {
-   "title": "常见问题解答",
-   "items": [
-    {
-     "q": "按用户定价如何工作？",
-     "a": "您为创建和查看报表的人员付费。可随时添加或移除用户——账单将在下次发票时调整，年度计划无最低限制。"
+    "badge": "● 企业分析平台",
+    "title": "将数据转化为",
+    "titleHighlight": "决定性行动",
+    "description": "通过实时洞察、预测分析和自动报表，统一您的商业智能，随组织发展而扩展。",
+    "buttons": {
+      "startTrial": "免费试用 →",
+      "bookDemo": "预约演示"
     },
-    {
-     "q": "之后可以切换方案吗？",
-     "a": "可以。立即升级，仅支付按比例计算的差价。降级将在下一个计费周期开始时生效。"
+    "stats": {
+      "activeUsers": "活跃用户",
+      "uptimeSla": "正常运行时间SLA",
+      "integrations": "集成"
     },
-    {
-     "q": "免费试用后会发生什么？",
-     "a": "14天试用包含专业版功能。结束后选择方案即可继续——不会删除任何数据，只有在您选择继续时才会收费。"
-    },
-    {
-     "q": "你们提供年度计费吗？",
-     "a": "年度计费在所有付费层级上节省20%。切换页面顶部的开关可查看调整后的价格。"
-    },
-    {
-     "q": "我的数据安全吗？",
-     "a": "数据在传输和存储时均加密。商业版添加审计日志；企业版添加SSO/SAML和自定义数据驻留。"
-    },
-    {
-     "q": "什么算作数据源？",
-     "a": "FastBI读取的任何连接系统——数据库、数据仓库、电子表格或150多个应用集成之一。每个连接只计一次。"
+    "imageAlt": "仪表板预览",
+    "exploreDashboards": {
+      "title": "Explore Intelligent Dashboards",
+      "desc": "Visualize your data with real-time insights and predictive analytics"
     }
-   ]
   },
-  "cta": {
-   "title": "将您的数据转化为",
-   "titleHighlight": "决定性行动",
-   "description": "几分钟内创建您的第一个仪表板。无需信用卡。",
-   "startTrial": "免费试用",
-   "bookDemo": "预约演示"
-  }
- },
- "accounting": {
-  "menu": {
-   "templates": "ACCOUNTING TEMPLATE",
-   "workflows": "ACCOUNTING WORKFLOWS",
-   "operations": "ACCOUNTING OPERATIONS",
-   "back": "← Back",
-   "comingSoon": "{name} — coming soon"
-  },
-  "template": {
-   "title": "Create Accounting Template",
-   "subtitle": "Fill in the fields below to generate a new accounting workflow template",
-   "success": "Template created successfully!",
-   "fields": {
-    "name": {
-     "label": "Name",
-     "placeholder": "e.g. Monthly Bookkeeping"
+  "forgotpassword": {
+    "alt": "FastBI 背景",
+    "heading": "忘记密码？",
+    "subtitle": "输入您的电子邮件，我们将向您发送一个临时密码。",
+    "form": {
+      "emailLabel": "电子邮件地址",
+      "emailPlaceholder": "you@domain.com"
     },
-    "category": {
-     "label": "Category",
-     "placeholder": "Select category"
-    },
-    "taxRegime": {
-     "label": "Tax Regime",
-     "placeholder": "Select tax regime"
-    },
-    "fiscalPeriod": {
-     "label": "Fiscal Period",
-     "placeholder": "Select period"
-    },
-    "regulatoryBody": {
-     "label": "Regulatory Body",
-     "placeholder": "Select body"
-    },
-    "createdBy": {
-     "label": "Created By",
-     "placeholder": "e.g. John Doe"
-    },
-    "structure": {
-     "label": "Structure (JSON)",
-     "placeholder": "{\"stages\": [...], \"kpis\": [...], ...}"
+    "button": "发送重置邮件",
+    "successTitle": "邮件已发送！",
+    "successMessage": "如果该邮箱存在账户，您将很快收到一个临时密码。",
+    "backToLogin": "返回登录",
+    "footer": "返回登录",
+    "errors": {
+      "default": "出了点问题。请重试。"
     }
-   },
-   "buttons": {
-    "cancel": "Cancel",
-    "creating": "Creating...",
-    "create": "Create Template"
-   },
-   "errors": {
-    "nameRequired": "Name is required",
-    "categoryRequired": "Category is required",
-    "invalidJson": "Structure must be valid JSON",
-    "minStages": "Structure must have at least 2 stages",
-    "minKpis": "Structure must define at least one KPI",
-    "createFailed": "Failed to create template",
-    "generic": "Something went wrong"
-   }
-  }
- },
- "contact": {
-  "hero": {
-   "eyebrow": "联系我们",
-   "title": "让我们一起构建",
-   "titleHighlight": "伟大的事物",
-   "description": "对FastBI有疑问、想要演示或准备扩展您的商业智能？我们很乐意倾听。"
   },
-  "form": {
-   "title": "给我们留言",
-   "successTitle": "消息已发送！🎉",
-   "successMessage": "感谢您联系我们。我们的团队通常在24小时内回复。同时，请随意探索我们的功能。",
-   "fields": {
-    "name": {
-     "label": "姓名",
-     "placeholder": "张三"
+  "resetpassword": {
+    "alt": "FastBI 背景",
+    "heading": "设置新密码",
+    "subtitle": "为您的账户创建新密码。链接10分钟后过期。",
+    "form": {
+      "newPasswordLabel": "新密码",
+      "newPasswordPlaceholder": "********",
+      "confirmPasswordLabel": "确认密码",
+      "confirmPasswordPlaceholder": "********"
     },
-    "email": {
-     "label": "电子邮件",
-     "placeholder": "zhangsan@company.com"
-    },
-    "subject": {
-     "label": "主题",
-     "placeholder": "我们如何帮助您？"
-    },
-    "message": {
-     "label": "消息",
-     "placeholder": "告诉我们您的项目、问题或想法..."
+    "button": "重置密码",
+    "successTitle": "密码已更改！",
+    "successMessage": "您的密码已成功更新。",
+    "backToLogin": "返回登录",
+    "errors": {
+      "passwordsMismatch": "密码不匹配",
+      "tooShort": "密码至少需要6个字符",
+      "default": "出了点问题。请重试。"
     }
-   },
-   "submit": "发送消息"
   },
-  "info": {
-   "email": {
-    "title": "电子邮件",
-    "primary": "hello@fastbi.com",
-    "support": "support@fastbi.com"
-   },
-   "phone": {
-    "title": "电话",
-    "number": "+1 (212) 796-2141",
-    "hours": "周一至周五，上午9点至下午6点（美国东部时间）"
-   },
-   "office": {
-    "title": "办公室",
-    "line1": "16 E 52nd St #302",
-    "line2": "纽约, NY 10022",
-    "line3": "美国"
-   },
-   "social": {
-    "title": "关注我们",
-    "github": "GitHub",
-    "linkedin": "LinkedIn",
-    "twitter": "Twitter / X"
-   }
+  "signup": {
+    "alt": "FastBI 背景",
+    "heading": "创建您的账户",
+    "subtitle": "开始将您的数据转化为智能决策",
+    "form": {
+      "nameLabel": "姓名",
+      "namePlaceholder": "张三",
+      "emailLabel": "电子邮件",
+      "emailPlaceholder": "you@domain.com",
+      "passwordLabel": "密码",
+      "passwordPlaceholder": "********",
+      "confirmPasswordLabel": "确认密码",
+      "confirmPasswordPlaceholder": "********",
+      "passwordsMismatch": "密码不匹配"
+    },
+    "button": "创建账户",
+    "footer": {
+      "text": "已有账户？",
+      "link": "登录"
+    },
+    "errors": {
+      "default": "出了点问题。请重试。"
+    }
   },
-  "cta": {
-   "title": "准备好将您的",
-   "titleHighlight": "数据转化为行动",
-   "description": "立即开始免费试用。无需信用卡，无压力——强大的BI尽在指尖。",
-   "startTrial": "免费试用",
-   "bookDemo": "预约演示"
+  "login": {
+    "alt": "FastBI 背景",
+    "heading": "登录 FastBI",
+    "subtitle": "将您的数据转化为智能决策",
+    "form": {
+      "emailLabel": "电子邮件",
+      "emailPlaceholder": "you@domain.com",
+      "passwordLabel": "密码",
+      "passwordPlaceholder": "********",
+      "rememberMe": "记住我",
+      "forgotPassword": "忘记密码？"
+    },
+    "button": "登录",
+    "footer": {
+      "text": "还没有账号？",
+      "link": "注册"
+    }
+  },
+  "dashboards": {
+    "badge": "预测分析",
+    "title": "智能仪表板",
+    "titleHighlight": " for FastBI",
+    "description": "由机器学习模型驱动的实时预测。自信地做出数据驱动决策。",
+    "stats": {
+      "modelAccuracy": "模型准确率",
+      "revenueGrowth": "收入增长",
+      "activeUsers": "活跃用户"
+    },
+    "controls": {
+      "salesForecast": "销售预测",
+      "compositionAnalysis": "组成分析",
+      "lastUpdated": "最后更新：{time}",
+      "refresh": "刷新",
+      "exportReport": "导出报表"
+    },
+    "insights": {
+      "title": "AI 驱动的洞察",
+      "subtitle": "基于您的数据的关键预测和建议",
+      "revenueGrowth": {
+        "title": "收入增长预测",
+        "text": "预计2025年Q1增长18.5%，由零售部门需求增长驱动。",
+        "confidence": "置信度：{pct}%"
+      },
+      "riskAlert": {
+        "title": "风险警报",
+        "text": "预计下月客户流失率将增加2.3%。建议开展留存活动。",
+        "confidence": "置信度：{pct}%"
+      },
+      "optimization": {
+        "title": "优化机会",
+        "text": "电子商务渠道通过定向营销显示45%的增长潜力。",
+        "confidence": "置信度：{pct}%"
+      }
+    }
+  },
+  "crm": {
+    "title": "BI 智能中心",
+    "subtitle": "实时业务洞察和绩效分析仪表板",
+    "stats": {
+      "totalRevenue": "总收入",
+      "activeUsers": "活跃用户",
+      "growthRate": "增长率",
+      "satisfaction": "满意度"
+    },
+    "errors": {
+      "stats": "加载统计数据失败",
+      "dashboard": "加载仪表板数据失败"
+    },
+    "retry": "重试",
+    "refreshTitle": "刷新仪表板"
+  },
+  "pricing": {
+    "hero": {
+      "eyebrow": "价格",
+      "title": "随数据扩展的价格",
+      "titleHighlight": "与您的数据",
+      "description": "免费开始，逐步使用预测分析，迁移到企业治理——无需更换平台。按用户计费，按您喜欢的方式支付。",
+      "monthly": "月度",
+      "annual": "年度",
+      "saveTag": "每年节省20%"
+    },
+    "cards": {
+      "perUserMo": "/用户 / 月",
+      "billedAnnually": "按年计费",
+      "startFreeTrial": "免费试用",
+      "starter": {
+        "name": "入门版",
+        "desc": "适合将第一个仪表板转化为决策的小团队。",
+        "features": [
+          "最多5个用户",
+          "10个连接的数据源",
+          "无限仪表板",
+          "每日数据刷新",
+          "邮件支持"
+        ]
+      },
+      "professional": {
+        "name": "专业版",
+        "badge": "最受欢迎",
+        "desc": "适合需要预测和自动报表的发展中团队。",
+        "features": [
+          "包含入门版所有功能，另加：",
+          "50个连接的数据源",
+          "预测分析",
+          "AI叙事报表",
+          "每小时刷新和定时报表",
+          "优先支持"
+        ]
+      },
+      "business": {
+        "name": "商业版",
+        "desc": "适合需要治理、角色和规模的组织。",
+        "features": [
+          "包含专业版所有功能，另加：",
+          "无限数据源",
+          "基于角色的访问控制",
+          "实时刷新",
+          "审计日志和数据血缘",
+          "专属客户成功经理"
+        ]
+      }
+    },
+    "enterprise": {
+      "title": "企业版",
+      "desc": "SSO/SAML、自定义数据驻留、99.9%正常运行时间SLA以及为整个组织使用FastBI的团队提供的批量定价。",
+      "stats": {
+        "activeUsers": "活跃用户",
+        "uptimeSla": "正常运行时间SLA",
+        "integrations": "集成"
+      },
+      "button": "联系销售"
+    },
+    "comparison": {
+      "title": "比较所有方案",
+      "subtitle": "完整对比，让团队第一次就选对层级。",
+      "headers": {
+        "feature": "功能",
+        "starter": "入门版",
+        "professional": "专业版",
+        "business": "商业版",
+        "enterprise": "企业版"
+      },
+      "groups": {
+        "coreAnalytics": "核心分析",
+        "intelligence": "智能",
+        "governance": "治理与支持"
+      },
+      "rows": {
+        "usersIncluded": "包含用户",
+        "connectedSources": "连接数据源",
+        "dashboards": "仪表板",
+        "refreshRate": "数据刷新频率",
+        "predictiveAnalytics": "预测分析",
+        "aiReporting": "AI叙事报表",
+        "scheduledReports": "定时报表",
+        "rbac": "基于角色的访问控制",
+        "auditLogs": "审计日志",
+        "sso": "SSO / SAML",
+        "uptimeSla": "正常运行时间SLA",
+        "support": "支持"
+      },
+      "values": {
+        "unlimited": "无限",
+        "daily": "每日",
+        "hourly": "每小时",
+        "realTime": "实时",
+        "email": "邮件",
+        "priority": "优先",
+        "successManager": "成功经理",
+        "dedicatedSla": "专属 + SLA"
+      }
+    },
+    "faq": {
+      "title": "常见问题解答",
+      "items": [
+        {
+          "q": "按用户定价如何工作？",
+          "a": "您为创建和查看报表的人员付费。可随时添加或移除用户——账单将在下次发票时调整，年度计划无最低限制。"
+        },
+        {
+          "q": "之后可以切换方案吗？",
+          "a": "可以。立即升级，仅支付按比例计算的差价。降级将在下一个计费周期开始时生效。"
+        },
+        {
+          "q": "免费试用后会发生什么？",
+          "a": "14天试用包含专业版功能。结束后选择方案即可继续——不会删除任何数据，只有在您选择继续时才会收费。"
+        },
+        {
+          "q": "你们提供年度计费吗？",
+          "a": "年度计费在所有付费层级上节省20%。切换页面顶部的开关可查看调整后的价格。"
+        },
+        {
+          "q": "我的数据安全吗？",
+          "a": "数据在传输和存储时均加密。商业版添加审计日志；企业版添加SSO/SAML和自定义数据驻留。"
+        },
+        {
+          "q": "什么算作数据源？",
+          "a": "FastBI读取的任何连接系统——数据库、数据仓库、电子表格或150多个应用集成之一。每个连接只计一次。"
+        }
+      ]
+    },
+    "cta": {
+      "title": "将您的数据转化为",
+      "titleHighlight": "决定性行动",
+      "description": "几分钟内创建您的第一个仪表板。无需信用卡。",
+      "startTrial": "免费试用",
+      "bookDemo": "预约演示"
+    }
+  },
+  "accounting": {
+    "menu": {
+      "templates": "ACCOUNTING TEMPLATE",
+      "workflows": "ACCOUNTING WORKFLOWS",
+      "operations": "ACCOUNTING OPERATIONS",
+      "back": "← Back",
+      "comingSoon": "{name} — coming soon"
+    },
+    "template": {
+      "title": "Create Accounting Template",
+      "subtitle": "Fill in the fields below to generate a new accounting workflow template",
+      "success": "Template created successfully!",
+      "fields": {
+        "name": {
+          "label": "Name",
+          "placeholder": "e.g. Monthly Bookkeeping"
+        },
+        "category": {
+          "label": "Category",
+          "placeholder": "Select category"
+        },
+        "taxRegime": {
+          "label": "Tax Regime",
+          "placeholder": "Select tax regime"
+        },
+        "fiscalPeriod": {
+          "label": "Fiscal Period",
+          "placeholder": "Select period"
+        },
+        "regulatoryBody": {
+          "label": "Regulatory Body",
+          "placeholder": "Select body"
+        },
+        "createdBy": {
+          "label": "Created By",
+          "placeholder": "e.g. John Doe"
+        },
+        "structure": {
+          "label": "Structure (JSON)",
+          "placeholder": "{\"stages\": [...], \"kpis\": [...], ...}"
+        }
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "creating": "Creating...",
+        "create": "Create Template"
+      },
+      "errors": {
+        "nameRequired": "Name is required",
+        "categoryRequired": "Category is required",
+        "invalidJson": "Structure must be valid JSON",
+        "minStages": "Structure must have at least 2 stages",
+        "minKpis": "Structure must define at least one KPI",
+        "createFailed": "Failed to create template",
+        "generic": "Something went wrong"
+      }
+    }
+  },
+  "contact": {
+    "hero": {
+      "eyebrow": "联系我们",
+      "title": "让我们一起构建",
+      "titleHighlight": "伟大的事物",
+      "description": "对FastBI有疑问、想要演示或准备扩展您的商业智能？我们很乐意倾听。"
+    },
+    "form": {
+      "title": "给我们留言",
+      "successTitle": "消息已发送！🎉",
+      "successMessage": "感谢您联系我们。我们的团队通常在24小时内回复。同时，请随意探索我们的功能。",
+      "fields": {
+        "name": {
+          "label": "姓名",
+          "placeholder": "张三"
+        },
+        "email": {
+          "label": "电子邮件",
+          "placeholder": "zhangsan@company.com"
+        },
+        "subject": {
+          "label": "主题",
+          "placeholder": "我们如何帮助您？"
+        },
+        "message": {
+          "label": "消息",
+          "placeholder": "告诉我们您的项目、问题或想法..."
+        }
+      },
+      "submit": "发送消息"
+    },
+    "info": {
+      "email": {
+        "title": "电子邮件",
+        "primary": "hello@fastbi.com",
+        "support": "support@fastbi.com"
+      },
+      "phone": {
+        "title": "电话",
+        "number": "+1 (212) 796-2141",
+        "hours": "周一至周五，上午9点至下午6点（美国东部时间）"
+      },
+      "office": {
+        "title": "办公室",
+        "line1": "16 E 52nd St #302",
+        "line2": "纽约, NY 10022",
+        "line3": "美国"
+      },
+      "social": {
+        "title": "关注我们",
+        "github": "GitHub",
+        "linkedin": "LinkedIn",
+        "twitter": "Twitter / X"
+      }
+    },
+    "cta": {
+      "title": "准备好将您的",
+      "titleHighlight": "数据转化为行动",
+      "description": "立即开始免费试用。无需信用卡，无压力——强大的BI尽在指尖。",
+      "startTrial": "免费试用",
+      "bookDemo": "预约演示"
+    }
+  },
+  "profileEditor": {
+    "title": "Profile Settings",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "avatarUploaded": "Avatar uploaded successfully!",
+    "uploadError": "Failed to upload avatar",
+    "saved": "Profile saved successfully!",
+    "saveError": "Failed to save profile",
+    "saving": "Saving...",
+    "save": "Save"
+  },
+  "roles": {
+    "admin": "Admin",
+    "manager": "Manager",
+    "analyst": "Analyst",
+    "viewer": "Viewer"
+  },
+  "dataeng": {
+    "title": "Data Engineering",
+    "subtitle": "Manage your data pipelines and transformations",
+    "upload": "Upload Data",
+    "transform": "Transform",
+    "schedule": "Schedule",
+    "history": "History",
+    "dataImporting": {
+      "title": "数据导入",
+      "hint": "将电子表格和文本文档上传到您的数据存储",
+      "success": "文件上传成功",
+      "uploadError": "文件上传失败",
+      "serverError": "无法访问服务器"
+    },
+    "createConnection": {
+      "title": "新建连接",
+      "subtitle": "为你的组织配置新的数据库连接",
+      "sectionOrganization": "组织",
+      "organizationName": "组织名称",
+      "orgPlaceholder": "例如：my-org",
+      "sectionConnection": "连接详情",
+      "connectionName": "连接名称",
+      "connNamePlaceholder": "例如：生产数据库",
+      "dbType": "数据库类型",
+      "sslMode": "SSL 模式",
+      "host": "主机",
+      "hostPlaceholder": "例如：localhost 或 db.example.com",
+      "port": "端口",
+      "databaseName": "数据库名称",
+      "dbNamePlaceholder": "例如：my_database",
+      "sectionAuth": "身份验证",
+      "username": "用户名",
+      "userPlaceholder": "数据库用户",
+      "password": "密码",
+      "passPlaceholder": "数据库密码",
+      "sectionLimits": "限制",
+      "maxRows": "最大行数限制",
+      "maxRowsHint": "每次查询返回的最大行数",
+      "queryTimeout": "查询超时（秒）",
+      "queryTimeoutHint": "每次查询的最大执行时间",
+      "cancel": "取消",
+      "testing": "测试中",
+      "testConnection": "测试连接",
+      "creating": "创建中",
+      "createConnection": "创建连接",
+      "testSuccess": "连接成功！",
+      "testFailed": "连接测试失败",
+      "createSuccess": "连接创建成功！",
+      "createFailed": "创建连接失败",
+      "serverError": "无法访问服务器"
+    },
+    "connections": {
+      "title": "连接",
+      "countOne": "{count} 个连接",
+      "countMany": "{count} 个连接",
+      "active": "活跃",
+      "inactive": "不活跃",
+      "created": "创建于 {date}",
+      "never": "从未",
+      "justNow": "刚刚",
+      "minutesAgo": "{count} 分钟前",
+      "hoursAgo": "{count} 小时前",
+      "daysAgo": "{count} 天前",
+      "empty": "未找到此组织的连接",
+      "noOrg": "输入组织名称以查看其连接",
+      "orgPlaceholder": "例如：my-org",
+      "retry": "重试",
+      "loading": "正在加载连接…",
+      "loadError": "加载连接失败",
+      "deleteError": "删除连接失败",
+      "deleteTitle": "删除连接",
+      "serverError": "无法访问服务器"
+    },
+    "sqlEditor": {
+      "title": "SQL 编辑器",
+      "subtitle": "针对你的连接运行 SELECT 查询",
+      "placeholder": "SELECT * FROM your_table LIMIT 100;",
+      "run": "运行查询",
+      "running": "运行中",
+      "back": "返回连接",
+      "success": "查询执行成功",
+      "runFailed": "运行查询失败",
+      "queryFailed": "查询失败",
+      "rowsOne": "{count} 行",
+      "rowsMany": "{count} 行",
+      "queryLabel": "查询：{query}",
+      "noColumns": "查询未返回列",
+      "serverError": "无法访问服务器"
+    },
+    "schemaPreview": {
+      "tables": "表",
+      "tablesOne": "{count} 个表",
+      "tablesMany": "{count} 个表",
+      "filterPlaceholder": "筛选表或列…",
+      "loading": "正在加载架构…",
+      "timedOut": "请求超时，请重试",
+      "retry": "重试",
+      "noTables": "未找到表",
+      "noMatch": "没有与 \"{filter}\" 匹配的表",
+      "failedToLoad": "加载架构失败",
+      "serverError": "无法访问服务器"
+    },
+    "generalFiles": {
+      "title": "已存储文件",
+      "countOne": "{count} 个文件",
+      "countMany": "{count} 个文件",
+      "rowsOne": "{count} 行",
+      "rowsMany": "{count} 行",
+      "columns": "列",
+      "created": "上传于 {date}",
+      "never": "从未",
+      "justNow": "刚刚",
+      "minutesAgo": "{count} 分钟前",
+      "hoursAgo": "{count} 小时前",
+      "daysAgo": "{count} 天前",
+      "statusProcessed": "已处理",
+      "statusUnsupported": "不支持",
+      "statusUnknown": "未知",
+      "truncated": "已截断",
+      "empty": "该组织尚无已存储的文件",
+      "noOrg": "输入组织名称以查看其文件",
+      "orgPlaceholder": "例如 my-org",
+      "retry": "重试",
+      "refresh": "刷新",
+      "loading": "正在加载文件…",
+      "loadError": "加载文件失败",
+      "serverError": "无法访问服务器",
+      "close": "关闭",
+      "showingRows": "第 {start}-{end} 行，共 {count} 行",
+      "prev": "上一页",
+      "next": "下一页",
+      "noData": "此文件没有可显示的数据行",
+      "loadingDetail": "正在加载数据…",
+      "loadDetailError": "加载文件数据失败",
+      "truncatedNote": "数据已截断（大小限制）"
+    }
+  },
+  "workflows": {
+    "title": "Workflows",
+    "subtitle": "Automate your business processes",
+    "create": "Create Workflow",
+    "active": "Active",
+    "draft": "Draft",
+    "completed": "Completed"
+  },
+  "businessDashboards": {
+    "title": "Business Dashboards",
+    "subtitle": "Real-time insights for your business",
+    "revenue": "Revenue",
+    "customers": "Customers",
+    "orders": "Orders",
+    "growth": "Growth"
+  },
+  "predictiveDashboard": {
+    "title": "Predictive Dashboard",
+    "subtitle": "AI-powered forecasts and predictions",
+    "accuracy": "Accuracy",
+    "trend": "Trend",
+    "forecast": "Forecast"
+  },
+  "animatedDashboard": {
+    "title": "Animated Dashboard",
+    "subtitle": "Interactive visualizations with live data",
+    "play": "Play",
+    "pause": "Pause",
+    "speed": "Speed"
+  },
+  "compositionDashboard": {
+    "title": "Composition Dashboard",
+    "subtitle": "Break down your data by category",
+    "byCategory": "By Category",
+    "byRegion": "By Region",
+    "byPeriod": "By Period"
   }
- },
- "profileEditor": {
-  "title": "Profile Settings",
-  "name": "Name",
-  "email": "Email",
-  "role": "Role",
-  "avatarUploaded": "Avatar uploaded successfully!",
-  "uploadError": "Failed to upload avatar",
-  "saved": "Profile saved successfully!",
-  "saveError": "Failed to save profile",
-  "saving": "Saving...",
-  "save": "Save"
- },
- "roles": {
-  "admin": "Admin",
-  "manager": "Manager",
-  "analyst": "Analyst",
-  "viewer": "Viewer"
- },
- "dataeng": {
-  "title": "Data Engineering",
-  "subtitle": "Manage your data pipelines and transformations",
-  "upload": "Upload Data",
-  "transform": "Transform",
-  "schedule": "Schedule",
-  "history": "History",
-  "createConnection": {
-   "title": "新建连接",
-   "subtitle": "为你的组织配置新的数据库连接",
-   "sectionOrganization": "组织",
-   "organizationName": "组织名称",
-   "orgPlaceholder": "例如：my-org",
-   "sectionConnection": "连接详情",
-   "connectionName": "连接名称",
-   "connNamePlaceholder": "例如：生产数据库",
-   "dbType": "数据库类型",
-   "sslMode": "SSL 模式",
-   "host": "主机",
-   "hostPlaceholder": "例如：localhost 或 db.example.com",
-   "port": "端口",
-   "databaseName": "数据库名称",
-   "dbNamePlaceholder": "例如：my_database",
-   "sectionAuth": "身份验证",
-   "username": "用户名",
-   "userPlaceholder": "数据库用户",
-   "password": "密码",
-   "passPlaceholder": "数据库密码",
-   "sectionLimits": "限制",
-   "maxRows": "最大行数限制",
-   "maxRowsHint": "每次查询返回的最大行数",
-   "queryTimeout": "查询超时（秒）",
-   "queryTimeoutHint": "每次查询的最大执行时间",
-   "cancel": "取消",
-   "testing": "测试中",
-   "testConnection": "测试连接",
-   "creating": "创建中",
-   "createConnection": "创建连接",
-   "testSuccess": "连接成功！",
-   "testFailed": "连接测试失败",
-   "createSuccess": "连接创建成功！",
-   "createFailed": "创建连接失败",
-   "serverError": "无法访问服务器"
-  },
-  "connections": {
-   "title": "连接",
-   "countOne": "{count} 个连接",
-   "countMany": "{count} 个连接",
-   "active": "活跃",
-   "inactive": "不活跃",
-   "created": "创建于 {date}",
-   "never": "从未",
-   "justNow": "刚刚",
-   "minutesAgo": "{count} 分钟前",
-   "hoursAgo": "{count} 小时前",
-   "daysAgo": "{count} 天前",
-   "empty": "未找到此组织的连接",
-   "noOrg": "输入组织名称以查看其连接",
-   "orgPlaceholder": "例如：my-org",
-   "retry": "重试",
-   "loading": "正在加载连接…",
-   "loadError": "加载连接失败",
-   "deleteError": "删除连接失败",
-   "deleteTitle": "删除连接",
-   "serverError": "无法访问服务器"
-  },
-  "sqlEditor": {
-   "title": "SQL 编辑器",
-   "subtitle": "针对你的连接运行 SELECT 查询",
-   "placeholder": "SELECT * FROM your_table LIMIT 100;",
-   "run": "运行查询",
-   "running": "运行中",
-   "back": "返回连接",
-   "success": "查询执行成功",
-   "runFailed": "运行查询失败",
-   "queryFailed": "查询失败",
-   "rowsOne": "{count} 行",
-   "rowsMany": "{count} 行",
-   "queryLabel": "查询：{query}",
-   "noColumns": "查询未返回列",
-   "serverError": "无法访问服务器"
-  },
-  "schemaPreview": {
-   "tables": "表",
-   "tablesOne": "{count} 个表",
-   "tablesMany": "{count} 个表",
-   "filterPlaceholder": "筛选表或列…",
-   "loading": "正在加载架构…",
-   "timedOut": "请求超时，请重试",
-   "retry": "重试",
-   "noTables": "未找到表",
-   "noMatch": "没有与 \"{filter}\" 匹配的表",
-   "failedToLoad": "加载架构失败",
-   "serverError": "无法访问服务器"
-  }
- },
- "workflows": {
-  "title": "Workflows",
-  "subtitle": "Automate your business processes",
-  "create": "Create Workflow",
-  "active": "Active",
-  "draft": "Draft",
-  "completed": "Completed"
- },
- "businessDashboards": {
-  "title": "Business Dashboards",
-  "subtitle": "Real-time insights for your business",
-  "revenue": "Revenue",
-  "customers": "Customers",
-  "orders": "Orders",
-  "growth": "Growth"
- },
- "predictiveDashboard": {
-  "title": "Predictive Dashboard",
-  "subtitle": "AI-powered forecasts and predictions",
-  "accuracy": "Accuracy",
-  "trend": "Trend",
-  "forecast": "Forecast"
- },
- "animatedDashboard": {
-  "title": "Animated Dashboard",
-  "subtitle": "Interactive visualizations with live data",
-  "play": "Play",
-  "pause": "Pause",
-  "speed": "Speed"
- },
- "compositionDashboard": {
-  "title": "Composition Dashboard",
-  "subtitle": "Break down your data by category",
-  "byCategory": "By Category",
-  "byRegion": "By Region",
-  "byPeriod": "By Period"
- }
 }
