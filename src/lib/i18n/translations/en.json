@@ -774,7 +774,11 @@
       "noData": "This file has no data rows to display",
       "loadingDetail": "Loading data…",
       "loadDetailError": "Failed to load file data",
-      "truncatedNote": "Data truncated (size limit)"
+      "truncatedNote": "Data truncated (size limit)",
+      "searchPlaceholder": "Search in all columns of this file…",
+      "clearSearch": "Clear search",
+      "searchResults": "{count} result(s)",
+      "searchNoResults": "No rows match \"{query}\""
     }
   },
   "workflows": {

@@ -647,7 +647,11 @@
       "noData": "表示できるデータ行がありません",
       "loadingDetail": "データを読み込み中…",
       "loadDetailError": "ファイルデータの読み込みに失敗しました",
-      "truncatedNote": "データはサイズ制限で切り詰められています"
+      "truncatedNote": "データはサイズ制限で切り詰められています",
+      "searchPlaceholder": "このファイルの全列を検索…",
+      "clearSearch": "検索をクリア",
+      "searchResults": "{count} 件の結果",
+      "searchNoResults": "\"{query}\" に一致する行がありません"
     }
   },
   "workflows": {

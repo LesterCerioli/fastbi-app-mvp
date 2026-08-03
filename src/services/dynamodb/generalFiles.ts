@@ -63,10 +63,12 @@ export class GeneralFileDetailNotFoundError extends Error {
   }
 }
 
-async function getOrganizationIdByName(
+async function getOrganizationIdsByName(
   organizationName: string
-): Promise<string> {
+): Promise<string[]> {
   const target = organizationName.trim().toLowerCase();
+  const matchedIds: string[] = [];
+  const legacyIds: string[] = [];
   let lastEvaluatedKey: Record<string, unknown> | undefined;
   do {
     const result = await docClient.send(
@@ -79,12 +81,11 @@ async function getOrganizationIdByName(
     );
 
     for (const item of result.Items || []) {
-      if (
-        typeof item.id === "string" &&
-        typeof item.name === "string" &&
-        item.name.trim().toLowerCase() === target
-      ) {
-        return item.id;
+      if (typeof item.id !== "string") continue;
+      if (typeof item.name === "string" && item.name.trim().toLowerCase() === target) {
+        matchedIds.push(item.id);
+      } else if (item.id.startsWith("org-")) {
+        legacyIds.push(item.id);
       }
     }
     lastEvaluatedKey = result.LastEvaluatedKey as
@@ -92,13 +93,25 @@ async function getOrganizationIdByName(
       | undefined;
   } while (lastEvaluatedKey);
 
-  throw new GeneralFileNotFoundError(organizationName);
+  const allIds = [...matchedIds, ...legacyIds];
+  if (allIds.length === 0) {
+    throw new GeneralFileNotFoundError(organizationName);
+  }
+  return allIds;
 }
 
 export async function getGeneralFilesByOrganization(
   organizationName: string
 ): Promise<GeneralFile[]> {
-  const organizationId = await getOrganizationIdByName(organizationName);
+  const organizationIds = await getOrganizationIdsByName(organizationName);
+
+  const filterExpression =
+    "organization_id IN (" +
+    organizationIds.map((_, index) => `:orgId${index}`).join(", ") +
+    ")";
+  const expressionAttributeValues = Object.fromEntries(
+    organizationIds.map((id, index) => [`:orgId${index}`, id])
+  );
 
   const items: Record<string, unknown>[] = [];
   let lastEvaluatedKey: Record<string, unknown> | undefined;
@@ -106,9 +119,9 @@ export async function getGeneralFilesByOrganization(
     const result = await docClient.send(
       new ScanCommand({
         TableName: GENERAL_FILES_TABLE,
-        FilterExpression: "organization_id = :orgId",
+        FilterExpression: filterExpression,
         ExpressionAttributeNames: FILE_EXPRESSION_ATTRIBUTE_NAMES,
-        ExpressionAttributeValues: { ":orgId": organizationId },
+        ExpressionAttributeValues: expressionAttributeValues,
         ProjectionExpression: FILE_PROJECTION,
         ExclusiveStartKey: lastEvaluatedKey,
       })

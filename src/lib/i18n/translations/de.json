@@ -647,7 +647,11 @@
       "noData": "Diese Datei enthält keine anzeigbaren Datenzeilen",
       "loadingDetail": "Daten werden geladen…",
       "loadDetailError": "Dateidaten konnten nicht geladen werden",
-      "truncatedNote": "Daten gekürzt (Größenlimit)"
+      "truncatedNote": "Daten gekürzt (Größenlimit)",
+      "searchPlaceholder": "In allen Spalten dieser Datei suchen…",
+      "clearSearch": "Suche löschen",
+      "searchResults": "{count} Ergebnis(se)",
+      "searchNoResults": "Keine Zeilen entsprechen \"{query}\""
     }
   },
   "workflows": {

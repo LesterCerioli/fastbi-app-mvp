@@ -537,6 +537,95 @@ export const ModalBody = styled.div`
   gap: 16px;
 `;
 
+export const SearchToolbar = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+`;
+
+export const SearchBox = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+
+  @media (max-width: 768px) {
+    max-width: none;
+  }
+`;
+
+export const SearchIcon = styled.span`
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  color: #6b8388;
+  pointer-events: none;
+`;
+
+export const SearchInput = styled.input`
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 10px;
+  padding: 10px 36px 10px 38px;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 13px;
+  color: #ffffff;
+  outline: none;
+  transition: border-color 0.2s;
+
+  &::placeholder {
+    color: #6b8388;
+  }
+
+  &:focus {
+    border-color: #38bdf8;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #38bdf8;
+    outline-offset: 1px;
+  }
+`;
+
+export const ClearSearchButton = styled.button`
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  color: #6b8388;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fca5a5;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #38bdf8;
+    outline-offset: 1px;
+  }
+`;
+
+export const SearchResultHint = styled.span`
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 12px;
+  color: #8ba3a8;
+  font-variant-numeric: tabular-nums;
+`;
+
 export const TableWrap = styled.div`
   overflow: auto;
   border: 1px solid rgba(255, 255, 255, 0.08);

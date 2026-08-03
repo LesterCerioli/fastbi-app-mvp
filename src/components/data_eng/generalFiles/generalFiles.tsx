@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
-import { RefreshCw, ChevronRight, X } from "lucide-react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { RefreshCw, ChevronRight, X, Search } from "lucide-react";
 import * as S from "./styles";
 import { useTranslations } from "@/lib/i18n/useTranslations";
 
@@ -32,6 +32,7 @@ interface GeneralFilesListProps {
 }
 
 const PAGE_SIZE = 100;
+const CARD_PAGE_SIZE = 20;
 
 async function getFreshToken(): Promise<string> {
   const res = await fetch("/api/auth/token", {
@@ -55,9 +56,69 @@ function formatBytes(bytes: number): string {
   return `${value.toFixed(value >= 100 || index === 0 ? 0 : 1)} ${units[index]}`;
 }
 
+function parseDateValue(value: string): Date | null {
+  const s = value.trim();
+  let m = s.match(
+    /^(\d{4})-(\d{1,2})-(\d{1,2})(?:[T ](\d{1,2}):(\d{2})(?::(\d{2})(?:\.\d+)?)?)?$/
+  );
+  if (m) {
+    const year = Number(m[1]);
+    const month = Number(m[2]);
+    const day = Number(m[3]);
+    if (month < 1 || month > 12 || day < 1 || day > 31 || year < 1000) return null;
+    return new Date(
+      year,
+      month - 1,
+      day,
+      m[4] ? Number(m[4]) : 0,
+      m[5] ? Number(m[5]) : 0,
+      m[6] ? Number(m[6]) : 0
+    );
+  }
+  m = s.match(
+    /^(\d{1,2})\/(\d{1,2})\/(\d{4})(?: (\d{1,2}):(\d{2})(?::(\d{2}))?)?$/
+  );
+  if (m) {
+    const day = Number(m[1]);
+    const month = Number(m[2]);
+    const year = Number(m[3]);
+    if (month < 1 || month > 12 || day < 1 || day > 31 || year < 1000) return null;
+    return new Date(
+      year,
+      month - 1,
+      day,
+      m[4] ? Number(m[4]) : 0,
+      m[5] ? Number(m[5]) : 0,
+      m[6] ? Number(m[6]) : 0
+    );
+  }
+  return null;
+}
+
+function formatDateValue(value: string, locale: string): string | null {
+  const date = parseDateValue(value);
+  if (!date) return null;
+  const hasTime = /[T ]\d{1,2}:\d{2}/.test(value.trim());
+  if (hasTime) {
+    return date.toLocaleString(locale, {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  }
+  return date.toLocaleDateString(locale, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
 function formatDate(
   dateStr: string,
-  t: ReturnType<typeof useTranslations>["t"]
+  t: ReturnType<typeof useTranslations>["t"],
+  locale: string
 ): string {
   if (!dateStr) return t("dataeng.generalFiles.never");
   const date = new Date(dateStr);
@@ -74,20 +135,23 @@ function formatDate(
     return t("dataeng.generalFiles.hoursAgo", { count: diffHours });
   if (diffDays < 7)
     return t("dataeng.generalFiles.daysAgo", { count: diffDays });
-  return date.toLocaleDateString("en-US", {
+  return date.toLocaleDateString(locale, {
     month: "short",
     day: "numeric",
     year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined,
   });
 }
 
-function formatCell(value: unknown): string {
+function formatCell(value: unknown, locale: string): string {
   if (value === null || value === undefined) return "";
-  if (typeof value === "string") return value;
+  if (typeof value === "string") {
+    const formatted = formatDateValue(value, locale);
+    return formatted !== null ? formatted : value;
+  }
   if (typeof value === "number") {
     return Number.isInteger(value)
-      ? value.toLocaleString("en-US")
-      : value.toLocaleString("en-US", { maximumFractionDigits: 4 });
+      ? value.toLocaleString(locale)
+      : value.toLocaleString(locale, { maximumFractionDigits: 4 });
   }
   if (typeof value === "boolean") return value ? "true" : "false";
   try {
@@ -112,9 +176,11 @@ export default function GeneralFilesList({
   const [isDetailLoading, setIsDetailLoading] = useState(false);
   const [detailError, setDetailError] = useState<string | null>(null);
   const [page, setPage] = useState(0);
+  const [cardPage, setCardPage] = useState(0);
+  const [search, setSearch] = useState("");
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
-  const { t } = useTranslations();
+  const { t, locale } = useTranslations();
 
   const effectiveOrgName = organizationName || orgName;
 
@@ -129,6 +195,7 @@ export default function GeneralFilesList({
       }
       setError(null);
       setHasFetched(true);
+      setCardPage(0);
 
       try {
         const token = await getFreshToken();
@@ -168,6 +235,7 @@ export default function GeneralFilesList({
       setIsDetailLoading(true);
       setDetailError(null);
       setPage(0);
+      setSearch("");
       try {
         const token = await getFreshToken();
         const params = new URLSearchParams({ id: fileId });
@@ -216,14 +284,41 @@ export default function GeneralFilesList({
     }
   };
 
-  const totalPages = detail ? Math.max(1, Math.ceil(detail.rows.length / PAGE_SIZE)) : 0;
-  const pageRows = detail
-    ? detail.rows.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
-    : [];
-  const rowStart = detail && detail.rows.length > 0 ? page * PAGE_SIZE + 1 : 0;
-  const rowEnd = detail
-    ? Math.min((page + 1) * PAGE_SIZE, detail.rows.length)
-    : 0;
+  const normalizedSearch = search.trim().toLowerCase();
+
+  const filteredRows = useMemo(() => {
+    if (!detail) return [];
+    if (!normalizedSearch) return detail.rows;
+    return detail.rows.filter((row) =>
+      detail.columns.some((col) => {
+        if (col.toLowerCase().includes(normalizedSearch)) return true;
+        const value = row[col];
+        return (
+          value !== null &&
+          value !== undefined &&
+          String(value).toLowerCase().includes(normalizedSearch)
+        );
+      })
+    );
+  }, [detail, normalizedSearch]);
+
+  const filteredPages = Math.max(1, Math.ceil(filteredRows.length / PAGE_SIZE));
+  const pageRows = filteredRows.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+  const rowStart = filteredRows.length > 0 ? page * PAGE_SIZE + 1 : 0;
+  const rowEnd = Math.min((page + 1) * PAGE_SIZE, filteredRows.length);
+
+  const cardPages = Math.max(1, Math.ceil(files.length / CARD_PAGE_SIZE));
+  const pageCards = files.slice(
+    cardPage * CARD_PAGE_SIZE,
+    (cardPage + 1) * CARD_PAGE_SIZE
+  );
+  const cardStart = files.length > 0 ? cardPage * CARD_PAGE_SIZE + 1 : 0;
+  const cardEnd = Math.min((cardPage + 1) * CARD_PAGE_SIZE, files.length);
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(0);
+  };
 
   if (isLoading) {
     return (
@@ -360,7 +455,7 @@ export default function GeneralFilesList({
                     )}
                     <S.MetaTag>
                       {t("dataeng.generalFiles.created", {
-                        date: formatDate(file.created_at, t),
+                        date: formatDate(file.created_at, t, locale),
                       })}
                     </S.MetaTag>
                     {file.truncated && (
@@ -417,7 +512,7 @@ export default function GeneralFilesList({
                     )}
                     <S.MetaTag>
                       {t("dataeng.generalFiles.created", {
-                        date: formatDate(detail.created_at, t),
+                        date: formatDate(detail.created_at, t, locale),
                       })}
                     </S.MetaTag>
                     {detail.truncated && (
@@ -460,57 +555,101 @@ export default function GeneralFilesList({
                 </S.Empty>
               ) : (
                 <>
-                  <S.TableWrap>
-                    <S.Table>
-                      <S.THead>
-                        <tr>
-                          {detail.columns.map((col, i) => (
-                            <S.Th key={`${col}-${i}`}>{col}</S.Th>
-                          ))}
-                        </tr>
-                      </S.THead>
-                      <tbody>
-                        {pageRows.map((row, i) => (
-                          <tr key={page * PAGE_SIZE + i}>
-                            {detail.columns.map((col, j) => {
-                              const value = row[col];
-                              return (
-                                <S.Td key={`${col}-${j}`} $numeric={typeof value === "number"}>
-                                  {formatCell(value)}
-                                </S.Td>
-                              );
-                            })}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </S.Table>
-                  </S.TableWrap>
-                  {totalPages > 1 && (
-                    <S.Pagination>
-                      <S.PaginationInfo>
-                        {t("dataeng.generalFiles.showingRows", {
-                          start: rowStart,
-                          end: rowEnd,
-                          count: detail.rows.length,
+                  <S.SearchToolbar>
+                    <S.SearchBox>
+                      <S.SearchIcon>
+                        <Search size={15} />
+                      </S.SearchIcon>
+                      <S.SearchInput
+                        type="text"
+                        value={search}
+                        onChange={(e) => handleSearchChange(e.target.value)}
+                        placeholder={t("dataeng.generalFiles.searchPlaceholder")}
+                        aria-label={t("dataeng.generalFiles.searchPlaceholder")}
+                      />
+                      {search && (
+                        <S.ClearSearchButton
+                          onClick={() => handleSearchChange("")}
+                          aria-label={t("dataeng.generalFiles.clearSearch")}
+                          title={t("dataeng.generalFiles.clearSearch")}
+                        >
+                          <X size={14} />
+                        </S.ClearSearchButton>
+                      )}
+                    </S.SearchBox>
+                    {normalizedSearch && filteredRows.length > 0 && (
+                      <S.SearchResultHint>
+                        {t("dataeng.generalFiles.searchResults", {
+                          count: filteredRows.length,
                         })}
-                      </S.PaginationInfo>
-                      <S.PaginationButtons>
-                        <S.PaginationButton
-                          onClick={() => setPage((p) => Math.max(0, p - 1))}
-                          disabled={page === 0}
-                        >
-                          {t("dataeng.generalFiles.prev")}
-                        </S.PaginationButton>
-                        <S.PaginationButton
-                          onClick={() =>
-                            setPage((p) => Math.min(totalPages - 1, p + 1))
-                          }
-                          disabled={page >= totalPages - 1}
-                        >
-                          {t("dataeng.generalFiles.next")}
-                        </S.PaginationButton>
-                      </S.PaginationButtons>
-                    </S.Pagination>
+                      </S.SearchResultHint>
+                    )}
+                  </S.SearchToolbar>
+
+                  {filteredRows.length === 0 ? (
+                    <S.Empty>
+                      <S.EmptyIcon>&#128269;</S.EmptyIcon>
+                      <S.EmptyText>
+                        {t("dataeng.generalFiles.searchNoResults", {
+                          query: search,
+                        })}
+                      </S.EmptyText>
+                    </S.Empty>
+                  ) : (
+                    <>
+                      <S.TableWrap>
+                        <S.Table>
+                          <S.THead>
+                            <tr>
+                              {detail.columns.map((col, i) => (
+                                <S.Th key={`${col}-${i}`}>{col}</S.Th>
+                              ))}
+                            </tr>
+                          </S.THead>
+                          <tbody>
+                            {pageRows.map((row, i) => (
+                              <tr key={page * PAGE_SIZE + i}>
+                                {detail.columns.map((col, j) => {
+                                  const value = row[col];
+                                  return (
+                                    <S.Td key={`${col}-${j}`} $numeric={typeof value === "number"}>
+                                      {formatCell(value, locale)}
+                                    </S.Td>
+                                  );
+                                })}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </S.Table>
+                      </S.TableWrap>
+                      {filteredPages > 1 && (
+                        <S.Pagination>
+                          <S.PaginationInfo>
+                            {t("dataeng.generalFiles.showingRows", {
+                              start: rowStart,
+                              end: rowEnd,
+                              count: filteredRows.length,
+                            })}
+                          </S.PaginationInfo>
+                          <S.PaginationButtons>
+                            <S.PaginationButton
+                              onClick={() => setPage((p) => Math.max(0, p - 1))}
+                              disabled={page === 0}
+                            >
+                              {t("dataeng.generalFiles.prev")}
+                            </S.PaginationButton>
+                            <S.PaginationButton
+                              onClick={() =>
+                                setPage((p) => Math.min(filteredPages - 1, p + 1))
+                              }
+                              disabled={page >= filteredPages - 1}
+                            >
+                              {t("dataeng.generalFiles.next")}
+                            </S.PaginationButton>
+                          </S.PaginationButtons>
+                        </S.Pagination>
+                      )}
+                    </>
                   )}
                 </>
               )}

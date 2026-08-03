@@ -647,7 +647,11 @@
       "noData": "此文件没有可显示的数据行",
       "loadingDetail": "正在加载数据…",
       "loadDetailError": "加载文件数据失败",
-      "truncatedNote": "数据已截断（大小限制）"
+      "truncatedNote": "数据已截断（大小限制）",
+      "searchPlaceholder": "搜索此文件的所有列…",
+      "clearSearch": "清除搜索",
+      "searchResults": "{count} 个结果",
+      "searchNoResults": "没有与 \"{query}\" 匹配的行"
     }
   },
   "workflows": {

@@ -647,7 +647,11 @@
       "noData": "Este archivo no tiene filas de datos para mostrar",
       "loadingDetail": "Cargando datos…",
       "loadDetailError": "Error al cargar los datos del archivo",
-      "truncatedNote": "Datos truncados (límite de tamaño)"
+      "truncatedNote": "Datos truncados (límite de tamaño)",
+      "searchPlaceholder": "Buscar en todas las columnas de este archivo…",
+      "clearSearch": "Borrar búsqueda",
+      "searchResults": "{count} resultado(s)",
+      "searchNoResults": "Ninguna fila coincide con \"{query}\""
     }
   },
   "workflows": {

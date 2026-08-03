@@ -647,7 +647,11 @@
       "noData": "Questo file non ha righe di dati da mostrare",
       "loadingDetail": "Caricamento dati…",
       "loadDetailError": "Errore nel caricamento dei dati del file",
-      "truncatedNote": "Dati troncati (limite di dimensione)"
+      "truncatedNote": "Dati troncati (limite di dimensione)",
+      "searchPlaceholder": "Cerca in tutte le colonne di questo file…",
+      "clearSearch": "Cancella ricerca",
+      "searchResults": "{count} risultato/i",
+      "searchNoResults": "Nessuna riga corrisponde a \"{query}\""
     }
   },
   "workflows": {

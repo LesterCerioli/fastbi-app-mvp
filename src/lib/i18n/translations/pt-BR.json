@@ -774,7 +774,11 @@
       "noData": "Este arquivo não possui linhas de dados para exibir",
       "loadingDetail": "Carregando dados…",
       "loadDetailError": "Falha ao carregar os dados do arquivo",
-      "truncatedNote": "Dados truncados (limite de tamanho)"
+      "truncatedNote": "Dados truncados (limite de tamanho)",
+      "searchPlaceholder": "Buscar em todas as colunas deste arquivo…",
+      "clearSearch": "Limpar busca",
+      "searchResults": "{count} resultado(s)",
+      "searchNoResults": "Nenhuma linha corresponde a \"{query}\""
     }
   },
   "workflows": {
