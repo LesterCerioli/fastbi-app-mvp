@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { RefreshCw, ChevronRight, X, Search } from "lucide-react";
 import * as S from "./styles";
+import Pagination from "@/components/shared/pagination/pagination";
 import { useTranslations } from "@/lib/i18n/useTranslations";
 
 interface GeneralFile {
@@ -32,7 +33,7 @@ interface GeneralFilesListProps {
 }
 
 const PAGE_SIZE = 100;
-const CARD_PAGE_SIZE = 20;
+const CARD_PAGE_SIZE = 10;
 
 async function getFreshToken(): Promise<string> {
   const res = await fetch("/api/auth/token", {
@@ -312,8 +313,6 @@ export default function GeneralFilesList({
     cardPage * CARD_PAGE_SIZE,
     (cardPage + 1) * CARD_PAGE_SIZE
   );
-  const cardStart = files.length > 0 ? cardPage * CARD_PAGE_SIZE + 1 : 0;
-  const cardEnd = Math.min((cardPage + 1) * CARD_PAGE_SIZE, files.length);
 
   const handleSearchChange = (value: string) => {
     setSearch(value);
@@ -413,7 +412,7 @@ export default function GeneralFilesList({
 
       {files.length > 0 && (
         <S.Grid>
-          {files.map((file, index) => (
+          {pageCards.map((file, index) => (
             <S.Card
               key={file.id}
               $index={index}
@@ -481,6 +480,17 @@ export default function GeneralFilesList({
             </S.Card>
           ))}
         </S.Grid>
+      )}
+
+      {files.length > 0 && (
+        <Pagination
+          page={cardPage}
+          pageCount={cardPages}
+          onPageChange={setCardPage}
+          totalItems={files.length}
+          pageSize={CARD_PAGE_SIZE}
+          infoKey="dataeng.generalFiles.showingFiles"
+        />
       )}
 
       {detail && (

@@ -778,7 +778,8 @@
       "searchPlaceholder": "Search in all columns of this file…",
       "clearSearch": "Clear search",
       "searchResults": "{count} result(s)",
-      "searchNoResults": "No rows match \"{query}\""
+      "searchNoResults": "No rows match \"{query}\"",
+      "showingFiles": "Files {start}-{end} of {count}"
     }
   },
   "workflows": {
@@ -817,5 +818,10 @@
     "byCategory": "By Category",
     "byRegion": "By Region",
     "byPeriod": "By Period"
+  },
+  "pagination": {
+    "prev": "Prev",
+    "next": "Next",
+    "pageLabel": "Page {page}"
   }
 }
