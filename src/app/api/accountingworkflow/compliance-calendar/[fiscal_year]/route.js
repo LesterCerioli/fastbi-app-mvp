@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { authenticate } from "@/lib/api-auth";
+import { getOrganizationName } from "@/lib/session";
 import { AccountingWorkflowEngineService } from "@/services/accounting/accounting_workflow_engine_service";
 
 const service = new AccountingWorkflowEngineService();
@@ -8,13 +9,14 @@ export async function GET(request, { params }) {
   try {
     await authenticate(request);
 
-    const { fiscal_year } = await params;
-    const { searchParams } = new URL(request.url);
-    const organizationName = searchParams.get("organization_name");
+    const organizationName = await getOrganizationName();
 
     if (!organizationName) {
-      return NextResponse.json({ error: "organization_name is required" }, { status: 400 });
+      return NextResponse.json({ error: "session not initialized" }, { status: 400 });
     }
+
+    const { fiscal_year } = await params;
+    const { searchParams } = new URL(request.url);
 
     const fiscalYear = parseInt(fiscal_year, 10);
     if (isNaN(fiscalYear)) {

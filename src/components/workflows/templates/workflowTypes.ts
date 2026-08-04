@@ -7,12 +7,29 @@ export interface WorkflowNode {
   position: { x: number; y: number };
 }
 
+export type EdgeStyle = "solid" | "dashed" | "dotted" | "animated" | "curved" | "stepped";
+
+export const EDGE_STYLES: EdgeStyle[] = ["solid", "dashed", "dotted", "animated", "curved", "stepped"];
+
+export const EDGE_COLORS: { label: string; value: string }[] = [
+  { label: "Default", value: "#475569" },
+  { label: "Slate", value: "#64748b" },
+  { label: "Green", value: "#22c55e" },
+  { label: "Blue", value: "#3b82f6" },
+  { label: "Amber", value: "#f59e0b" },
+  { label: "Red", value: "#ef4444" },
+  { label: "Purple", value: "#a855f7" },
+  { label: "Cyan", value: "#06b6d4" },
+];
+
 export interface WorkflowEdge {
   id: string;
   source: string;
   target: string;
   label?: string;
   condition?: string;
+  style?: EdgeStyle;
+  color?: string;
 }
 
 export interface WorkflowMeta {

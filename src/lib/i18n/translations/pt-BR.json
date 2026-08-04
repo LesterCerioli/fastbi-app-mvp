@@ -36,9 +36,18 @@
       }
     },
     "features": {
-      "intuitiveDashboards": { "title": "Dashboards Intuitivos", "desc": "Visualize seus dados de forma clara e prática" },
-      "reportAutomation": { "title": "Automação de Relatórios", "desc": "Relatórios automatizados e atualizados" },
-      "accurateInsights": { "title": "Insights Precisos", "desc": "Obtenha insights valiosos para seu negócio" }
+      "intuitiveDashboards": {
+        "title": "Dashboards Intuitivos",
+        "desc": "Visualize seus dados de forma clara e prática"
+      },
+      "reportAutomation": {
+        "title": "Automação de Relatórios",
+        "desc": "Relatórios automatizados e atualizados"
+      },
+      "accurateInsights": {
+        "title": "Insights Precisos",
+        "desc": "Obtenha insights valiosos para seu negócio"
+      }
     },
     "carousel": {
       "title": "Dashboards que evoluem com seu negócio",
@@ -61,9 +70,18 @@
     },
     "details": {
       "alt": "Pessoas analisando dados",
-      "connect": { "title": "Conecte-se aos seus Dados", "desc": "Integração fácil com suas fontes de dados" },
-      "dashboards": { "title": "Crie Dashboards Personalizados", "desc": "Dashboards adaptados às suas necessidades." },
-      "decisions": { "title": "Tome Decisões Confiantes", "desc": "Informações precisas para guiar suas estratégias." }
+      "connect": {
+        "title": "Conecte-se aos seus Dados",
+        "desc": "Integração fácil com suas fontes de dados"
+      },
+      "dashboards": {
+        "title": "Crie Dashboards Personalizados",
+        "desc": "Dashboards adaptados às suas necessidades."
+      },
+      "decisions": {
+        "title": "Tome Decisões Confiantes",
+        "desc": "Informações precisas para guiar suas estratégias."
+      }
     }
   },
   "features": {
@@ -71,8 +89,15 @@
     "title": "Transforme dados em",
     "titleHighlight": "AÇÃO DECISIVA",
     "description": "Unifique sua inteligência de negócios com insights em tempo real, análises preditivas e relatórios automatizados que escalam com sua organização.",
-    "buttons": { "startTrial": "Teste Grátis →", "bookDemo": "Agendar Demo" },
-    "stats": { "activeUsers": "Usuários ativos", "uptimeSla": "SLA de disponibilidade", "integrations": "Integrações" },
+    "buttons": {
+      "startTrial": "Teste Grátis →",
+      "bookDemo": "Agendar Demo"
+    },
+    "stats": {
+      "activeUsers": "Usuários ativos",
+      "uptimeSla": "SLA de disponibilidade",
+      "integrations": "Integrações"
+    },
     "imageAlt": "Prévia do dashboard",
     "exploreDashboards": {
       "title": "Explore Dashboards Inteligentes",
@@ -166,7 +191,11 @@
     "title": "Dashboards Inteligentes",
     "titleHighlight": " para FastBI",
     "description": "Previsões em tempo real com modelos de machine learning. Tome decisões baseadas em dados com confiança.",
-    "stats": { "modelAccuracy": "Precisão do Modelo", "revenueGrowth": "Crescimento de Receita", "activeUsers": "Usuários Ativos" },
+    "stats": {
+      "modelAccuracy": "Precisão do Modelo",
+      "revenueGrowth": "Crescimento de Receita",
+      "activeUsers": "Usuários Ativos"
+    },
     "controls": {
       "salesForecast": "Previsão de Vendas",
       "compositionAnalysis": "Análise de Composição",
@@ -177,16 +206,36 @@
     "insights": {
       "title": "Insights de IA",
       "subtitle": "Principais previsões e recomendações baseadas em seus dados",
-      "revenueGrowth": { "title": "Projeção de Crescimento", "text": "Crescimento esperado de 18,5% no Q1 2025, impulsionado pela demanda no varejo.", "confidence": "Confiança: {pct}%" },
-      "riskAlert": { "title": "Alerta de Risco", "text": "Taxa de churn prevista para aumentar 2,3% no próximo mês. Campanha de retenção recomendada.", "confidence": "Confiança: {pct}%" },
-      "optimization": { "title": "Oportunidade de Otimização", "text": "Canal de e-commerce mostra potencial de crescimento de 45% com marketing direcionado.", "confidence": "Confiança: {pct}%" }
+      "revenueGrowth": {
+        "title": "Projeção de Crescimento",
+        "text": "Crescimento esperado de 18,5% no Q1 2025, impulsionado pela demanda no varejo.",
+        "confidence": "Confiança: {pct}%"
+      },
+      "riskAlert": {
+        "title": "Alerta de Risco",
+        "text": "Taxa de churn prevista para aumentar 2,3% no próximo mês. Campanha de retenção recomendada.",
+        "confidence": "Confiança: {pct}%"
+      },
+      "optimization": {
+        "title": "Oportunidade de Otimização",
+        "text": "Canal de e-commerce mostra potencial de crescimento de 45% com marketing direcionado.",
+        "confidence": "Confiança: {pct}%"
+      }
     }
   },
   "crm": {
     "title": "Hub de Inteligência BI",
     "subtitle": "Insights de negócios em tempo real e painel de análise de desempenho",
-    "stats": { "totalRevenue": "Receita Total", "activeUsers": "Usuários Ativos", "growthRate": "Taxa de Crescimento", "satisfaction": "Satisfação" },
-    "errors": { "stats": "Falha ao carregar estatísticas", "dashboard": "Falha ao carregar dados do dashboard" },
+    "stats": {
+      "totalRevenue": "Receita Total",
+      "activeUsers": "Usuários Ativos",
+      "growthRate": "Taxa de Crescimento",
+      "satisfaction": "Satisfação"
+    },
+    "errors": {
+      "stats": "Falha ao carregar estatísticas",
+      "dashboard": "Falha ao carregar dados do dashboard"
+    },
     "retry": "Tentar novamente",
     "refreshTitle": "Atualizar Dashboard"
   },
@@ -207,47 +256,117 @@
       "starter": {
         "name": "Iniciante",
         "desc": "Para pequenas equipes transformando seus primeiros dashboards em decisões.",
-        "features": ["Até 5 usuários", "10 fontes de dados conectadas", "Dashboards ilimitados", "Atualização diária", "Suporte por email"]
+        "features": [
+          "Até 5 usuários",
+          "10 fontes de dados conectadas",
+          "Dashboards ilimitados",
+          "Atualização diária",
+          "Suporte por email"
+        ]
       },
       "professional": {
         "name": "Profissional",
         "badge": "Mais popular",
         "desc": "Para equipes em crescimento que precisam de previsões e relatórios automatizados.",
-        "features": ["Tudo do Iniciante, mais:", "50 fontes de dados conectadas", "Análises preditivas", "Relatórios com IA", "Atualização horária e relatórios agendados", "Suporte prioritário"]
+        "features": [
+          "Tudo do Iniciante, mais:",
+          "50 fontes de dados conectadas",
+          "Análises preditivas",
+          "Relatórios com IA",
+          "Atualização horária e relatórios agendados",
+          "Suporte prioritário"
+        ]
       },
       "business": {
         "name": "Empresarial",
         "desc": "Para organizações que precisam de governança, papéis e escala.",
-        "features": ["Tudo do Profissional, mais:", "Fontes de dados ilimitadas", "Controle de acesso por função", "Atualização em tempo real", "Logs de auditoria e linhagem de dados", "Gerente de sucesso dedicado"]
+        "features": [
+          "Tudo do Profissional, mais:",
+          "Fontes de dados ilimitadas",
+          "Controle de acesso por função",
+          "Atualização em tempo real",
+          "Logs de auditoria e linhagem de dados",
+          "Gerente de sucesso dedicado"
+        ]
       }
     },
     "enterprise": {
       "title": "Enterprise",
       "desc": "SSO/SAML, residência de dados personalizada, SLA de 99,9% e preços por volume para equipes que usam FastBI em toda a organização.",
-      "stats": { "activeUsers": "Usuários ativos", "uptimeSla": "SLA de disponibilidade", "integrations": "Integrações" },
+      "stats": {
+        "activeUsers": "Usuários ativos",
+        "uptimeSla": "SLA de disponibilidade",
+        "integrations": "Integrações"
+      },
       "button": "Falar com vendas"
     },
     "comparison": {
       "title": "Compare todos os planos",
       "subtitle": "A comparação completa para equipes escolherem o plano certo na primeira vez.",
-      "headers": { "feature": "Recurso", "starter": "Iniciante", "professional": "Profissional", "business": "Empresarial", "enterprise": "Enterprise" },
-      "groups": { "coreAnalytics": "Análises principais", "intelligence": "Inteligência", "governance": "Governança & suporte" },
-      "rows": {
-        "usersIncluded": "Usuários incluídos", "connectedSources": "Fontes de dados conectadas", "dashboards": "Dashboards", "refreshRate": "Frequência de atualização",
-        "predictiveAnalytics": "Análises preditivas", "aiReporting": "Relatórios com IA", "scheduledReports": "Relatórios agendados",
-        "rbac": "Controle de acesso por função", "auditLogs": "Logs de auditoria", "sso": "SSO / SAML", "uptimeSla": "SLA de disponibilidade", "support": "Suporte"
+      "headers": {
+        "feature": "Recurso",
+        "starter": "Iniciante",
+        "professional": "Profissional",
+        "business": "Empresarial",
+        "enterprise": "Enterprise"
       },
-      "values": { "unlimited": "Ilimitado", "daily": "Diário", "hourly": "Por hora", "realTime": "Tempo real", "email": "Email", "priority": "Prioritário", "successManager": "Gerente de sucesso", "dedicatedSla": "Dedicado + SLA" }
+      "groups": {
+        "coreAnalytics": "Análises principais",
+        "intelligence": "Inteligência",
+        "governance": "Governança & suporte"
+      },
+      "rows": {
+        "usersIncluded": "Usuários incluídos",
+        "connectedSources": "Fontes de dados conectadas",
+        "dashboards": "Dashboards",
+        "refreshRate": "Frequência de atualização",
+        "predictiveAnalytics": "Análises preditivas",
+        "aiReporting": "Relatórios com IA",
+        "scheduledReports": "Relatórios agendados",
+        "rbac": "Controle de acesso por função",
+        "auditLogs": "Logs de auditoria",
+        "sso": "SSO / SAML",
+        "uptimeSla": "SLA de disponibilidade",
+        "support": "Suporte"
+      },
+      "values": {
+        "unlimited": "Ilimitado",
+        "daily": "Diário",
+        "hourly": "Por hora",
+        "realTime": "Tempo real",
+        "email": "Email",
+        "priority": "Prioritário",
+        "successManager": "Gerente de sucesso",
+        "dedicatedSla": "Dedicado + SLA"
+      }
     },
     "faq": {
       "title": "Perguntas frequentes",
       "items": [
-        { "q": "Como funciona o preço por usuário?", "a": "Você paga pelas pessoas que criam e visualizam relatórios. Adicione ou remova usuários a qualquer momento — o faturamento é ajustado na próxima fatura, sem mínimo em planos anuais." },
-        { "q": "Posso mudar de plano depois?", "a": "Sim. Faça upgrade instantaneamente e pague apenas a diferença proporcional. Downgrades entram em vigor no início do próximo ciclo de faturamento." },
-        { "q": "O que acontece após o teste grátis?", "a": "O teste de 14 dias inclui recursos Profissionais. Ao finalizar, escolha um plano para continuar — nada é deletado e você só será cobrado ao escolher continuar." },
-        { "q": "Vocês oferecem faturamento anual?", "a": "O faturamento anual economiza 20% em todos os planos pagos. Alterne no topo da página para ver o valor ajustado." },
-        { "q": "Meus dados estão seguros?", "a": "Os dados são criptografados em trânsito e em repouso. O plano Business adiciona logs de auditoria; o Enterprise adiciona SSO/SAML e residência de dados personalizada." },
-        { "q": "O que conta como fonte de dados?", "a": "Qualquer sistema conectado que o FastBI leia — banco de dados, data warehouse, planilha ou uma das 150+ integrações. Cada conexão conta uma vez." }
+        {
+          "q": "Como funciona o preço por usuário?",
+          "a": "Você paga pelas pessoas que criam e visualizam relatórios. Adicione ou remova usuários a qualquer momento — o faturamento é ajustado na próxima fatura, sem mínimo em planos anuais."
+        },
+        {
+          "q": "Posso mudar de plano depois?",
+          "a": "Sim. Faça upgrade instantaneamente e pague apenas a diferença proporcional. Downgrades entram em vigor no início do próximo ciclo de faturamento."
+        },
+        {
+          "q": "O que acontece após o teste grátis?",
+          "a": "O teste de 14 dias inclui recursos Profissionais. Ao finalizar, escolha um plano para continuar — nada é deletado e você só será cobrado ao escolher continuar."
+        },
+        {
+          "q": "Vocês oferecem faturamento anual?",
+          "a": "O faturamento anual economiza 20% em todos os planos pagos. Alterne no topo da página para ver o valor ajustado."
+        },
+        {
+          "q": "Meus dados estão seguros?",
+          "a": "Os dados são criptografados em trânsito e em repouso. O plano Business adiciona logs de auditoria; o Enterprise adiciona SSO/SAML e residência de dados personalizada."
+        },
+        {
+          "q": "O que conta como fonte de dados?",
+          "a": "Qualquer sistema conectado que o FastBI leia — banco de dados, data warehouse, planilha ou uma das 150+ integrações. Cada conexão conta uma vez."
+        }
       ]
     },
     "cta": {
@@ -271,13 +390,34 @@
       "subtitle": "Preencha os campos abaixo para gerar um novo modelo de workflow contábil",
       "success": "Modelo criado com sucesso!",
       "fields": {
-        "name": { "label": "Nome", "placeholder": "ex. Contabilidade Mensal" },
-        "category": { "label": "Categoria", "placeholder": "Selecione a categoria" },
-        "taxRegime": { "label": "Regime Tributário", "placeholder": "Selecione o regime" },
-        "fiscalPeriod": { "label": "Período Fiscal", "placeholder": "Selecione o período" },
-        "regulatoryBody": { "label": "Órgão Regulador", "placeholder": "Selecione o órgão" },
-        "createdBy": { "label": "Criado por", "placeholder": "ex. João Silva" },
-        "structure": { "label": "Estrutura (JSON)", "placeholder": "{\"stages\": [...], \"kpis\": [...], ...}" }
+        "name": {
+          "label": "Nome",
+          "placeholder": "ex. Contabilidade Mensal"
+        },
+        "category": {
+          "label": "Categoria",
+          "placeholder": "Selecione a categoria"
+        },
+        "taxRegime": {
+          "label": "Regime Tributário",
+          "placeholder": "Selecione o regime"
+        },
+        "fiscalPeriod": {
+          "label": "Período Fiscal",
+          "placeholder": "Selecione o período"
+        },
+        "regulatoryBody": {
+          "label": "Órgão Regulador",
+          "placeholder": "Selecione o órgão"
+        },
+        "createdBy": {
+          "label": "Criado por",
+          "placeholder": "ex. João Silva"
+        },
+        "structure": {
+          "label": "Estrutura (JSON)",
+          "placeholder": "{\"stages\": [...], \"kpis\": [...], ...}"
+        }
       },
       "buttons": {
         "cancel": "Cancelar",
@@ -431,18 +571,48 @@
       "successTitle": "Mensagem enviada! 🎉",
       "successMessage": "Obrigado por entrar em contato. Nossa equipe geralmente responde em até 24 horas. Enquanto isso, sinta-se à vontade para explorar nossos recursos.",
       "fields": {
-        "name": { "label": "Nome completo", "placeholder": "Maria Silva" },
-        "email": { "label": "Email", "placeholder": "maria@empresa.com" },
-        "subject": { "label": "Assunto", "placeholder": "Como podemos ajudar?" },
-        "message": { "label": "Mensagem", "placeholder": "Conte-nos sobre seu projeto, pergunta ou ideia..." }
+        "name": {
+          "label": "Nome completo",
+          "placeholder": "Maria Silva"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "maria@empresa.com"
+        },
+        "subject": {
+          "label": "Assunto",
+          "placeholder": "Como podemos ajudar?"
+        },
+        "message": {
+          "label": "Mensagem",
+          "placeholder": "Conte-nos sobre seu projeto, pergunta ou ideia..."
+        }
       },
       "submit": "Enviar mensagem"
     },
     "info": {
-      "email": { "title": "Email", "primary": "hello@fastbi.com", "support": "support@fastbi.com" },
-      "phone": { "title": "Telefone", "number": "+1 (212) 796-2141", "hours": "Seg–Sex, 9h–18h EST" },
-      "office": { "title": "Escritório", "line1": "16 E 52nd St #302", "line2": "Nova York, NY 10022", "line3": "Estados Unidos" },
-      "social": { "title": "Siga-nos", "github": "GitHub", "linkedin": "LinkedIn", "twitter": "Twitter / X" }
+      "email": {
+        "title": "Email",
+        "primary": "hello@fastbi.com",
+        "support": "support@fastbi.com"
+      },
+      "phone": {
+        "title": "Telefone",
+        "number": "+1 (212) 796-2141",
+        "hours": "Seg–Sex, 9h–18h EST"
+      },
+      "office": {
+        "title": "Escritório",
+        "line1": "16 E 52nd St #302",
+        "line2": "Nova York, NY 10022",
+        "line3": "Estados Unidos"
+      },
+      "social": {
+        "title": "Siga-nos",
+        "github": "GitHub",
+        "linkedin": "LinkedIn",
+        "twitter": "Twitter / X"
+      }
     },
     "cta": {
       "title": "Pronto para transformar seus",
@@ -476,7 +646,141 @@
     "upload": "Upload de Dados",
     "transform": "Transformar",
     "schedule": "Agendar",
-    "history": "Histórico"
+    "history": "Histórico",
+    "dataImporting": {
+      "title": "Importação de Dados",
+      "hint": "Envie planilhas e documentos de texto para o seu armazenamento de dados",
+      "success": "Arquivo enviado com sucesso",
+      "uploadError": "Falha ao enviar o arquivo",
+      "serverError": "Não foi possível acessar o servidor"
+    },
+    "createConnection": {
+      "title": "Nova Conexão",
+      "subtitle": "Configure uma nova conexão de banco de dados para sua organização",
+      "sectionOrganization": "Organização",
+      "organizationName": "Nome da Organização",
+      "orgPlaceholder": "ex.: minha-org",
+      "sectionConnection": "Detalhes da Conexão",
+      "connectionName": "Nome da Conexão",
+      "connNamePlaceholder": "ex.: Banco de Produção",
+      "dbType": "Tipo de Banco de Dados",
+      "sslMode": "Modo SSL",
+      "host": "Host",
+      "hostPlaceholder": "ex.: localhost ou db.exemplo.com",
+      "port": "Porta",
+      "databaseName": "Nome do Banco de Dados",
+      "dbNamePlaceholder": "ex.: meu_banco",
+      "sectionAuth": "Autenticação",
+      "username": "Nome de Usuário",
+      "userPlaceholder": "Usuário do banco",
+      "password": "Senha",
+      "passPlaceholder": "Senha do banco",
+      "sectionLimits": "Limites",
+      "maxRows": "Limite Máximo de Linhas",
+      "maxRowsHint": "Número máximo de linhas retornadas por consulta",
+      "queryTimeout": "Tempo Limite da Consulta (segundos)",
+      "queryTimeoutHint": "Tempo máximo de execução por consulta",
+      "cancel": "Cancelar",
+      "testing": "Testando",
+      "testConnection": "Testar Conexão",
+      "creating": "Criando",
+      "createConnection": "Criar Conexão",
+      "testSuccess": "Conexão bem-sucedida!",
+      "testFailed": "Falha no teste de conexão",
+      "createSuccess": "Conexão criada com sucesso!",
+      "createFailed": "Falha ao criar conexão",
+      "serverError": "Não foi possível acessar o servidor"
+    },
+    "connections": {
+      "title": "Conexões",
+      "countOne": "{count} conexão",
+      "countMany": "{count} conexões",
+      "active": "Ativa",
+      "inactive": "Inativa",
+      "created": "Criada em {date}",
+      "never": "Nunca",
+      "justNow": "Agora mesmo",
+      "minutesAgo": "há {count} min",
+      "hoursAgo": "há {count} h",
+      "daysAgo": "há {count} dias",
+      "empty": "Nenhuma conexão encontrada para esta organização",
+      "noOrg": "Digite um nome de organização para ver suas conexões",
+      "orgPlaceholder": "ex.: minha-org",
+      "retry": "Tentar novamente",
+      "loading": "Carregando conexões…",
+      "loadError": "Falha ao carregar conexões",
+      "deleteError": "Falha ao excluir conexão",
+      "deleteTitle": "Excluir conexão",
+      "serverError": "Não foi possível acessar o servidor"
+    },
+    "sqlEditor": {
+      "title": "Editor SQL",
+      "subtitle": "Execute consultas SELECT na sua conexão",
+      "placeholder": "SELECT * FROM sua_tabela LIMIT 100;",
+      "run": "Executar Consulta",
+      "running": "Executando",
+      "back": "Voltar para conexões",
+      "success": "Consulta executada com sucesso",
+      "runFailed": "Falha ao executar consulta",
+      "queryFailed": "A consulta falhou",
+      "rowsOne": "{count} linha",
+      "rowsMany": "{count} linhas",
+      "queryLabel": "consulta: {query}",
+      "noColumns": "A consulta não retornou colunas",
+      "serverError": "Não foi possível acessar o servidor"
+    },
+    "schemaPreview": {
+      "tables": "Tabelas",
+      "tablesOne": "{count} tabela",
+      "tablesMany": "{count} tabelas",
+      "filterPlaceholder": "Filtrar tabelas ou colunas…",
+      "loading": "Carregando schema…",
+      "timedOut": "A solicitação expirou. Tente novamente",
+      "retry": "Tentar novamente",
+      "noTables": "Nenhuma tabela encontrada",
+      "noMatch": "Nenhuma tabela corresponde a \"{filter}\"",
+      "failedToLoad": "Falha ao carregar schema",
+      "serverError": "Não foi possível acessar o servidor"
+    },
+    "generalFiles": {
+      "title": "Arquivos Armazenados",
+      "countOne": "{count} arquivo",
+      "countMany": "{count} arquivos",
+      "rowsOne": "{count} linha",
+      "rowsMany": "{count} linhas",
+      "columns": "colunas",
+      "created": "Enviado {date}",
+      "never": "Nunca",
+      "justNow": "Agora mesmo",
+      "minutesAgo": "há {count} min",
+      "hoursAgo": "há {count} h",
+      "daysAgo": "há {count} d",
+      "statusProcessed": "Processado",
+      "statusUnsupported": "Não suportado",
+      "statusUnknown": "Desconhecido",
+      "truncated": "truncado",
+      "empty": "Nenhum arquivo armazenado para esta organização ainda",
+      "noOrg": "Informe o nome da organização para ver seus arquivos",
+      "orgPlaceholder": "ex.: minha-org",
+      "retry": "Tentar novamente",
+      "refresh": "Atualizar",
+      "loading": "Carregando arquivos…",
+      "loadError": "Falha ao carregar arquivos",
+      "serverError": "Não foi possível acessar o servidor",
+      "close": "Fechar",
+      "showingRows": "Linhas {start}-{end} de {count}",
+      "prev": "Anterior",
+      "next": "Próxima",
+      "noData": "Este arquivo não possui linhas de dados para exibir",
+      "loadingDetail": "Carregando dados…",
+      "loadDetailError": "Falha ao carregar os dados do arquivo",
+      "truncatedNote": "Dados truncados (limite de tamanho)",
+      "searchPlaceholder": "Buscar em todas as colunas deste arquivo…",
+      "clearSearch": "Limpar busca",
+      "searchResults": "{count} resultado(s)",
+      "searchNoResults": "Nenhuma linha corresponde a \"{query}\"",
+      "showingFiles": "Arquivos {start}-{end} de {count}"
+    }
   },
   "workflows": {
     "title": "Workflows",
@@ -514,5 +818,10 @@
     "byCategory": "Por Categoria",
     "byRegion": "Por Região",
     "byPeriod": "Por Período"
+  },
+  "pagination": {
+    "prev": "Anterior",
+    "next": "Próxima",
+    "pageLabel": "Página {page}"
   }
 }

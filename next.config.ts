@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['images.unsplash.com'],
   },
+  serverExternalPackages: ['oracledb'],
 }
 
 export default nextConfig

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { authenticate } from "@/lib/api-auth";
+import { getOrganizationName } from "@/lib/session";
 import { AccountingWorkflowEngineService } from "@/services/accounting/accounting_workflow_engine_service";
 
 const service = new AccountingWorkflowEngineService();
@@ -7,6 +8,12 @@ const service = new AccountingWorkflowEngineService();
 export async function POST(request) {
   try {
     await authenticate(request);
+
+    const organizationName = await getOrganizationName();
+
+    if (!organizationName) {
+      return NextResponse.json({ error: "session not initialized" }, { status: 400 });
+    }
 
     const body = await request.json().catch(() => ({}));
 
@@ -16,9 +23,6 @@ export async function POST(request) {
     if (!body.template_category) {
       return NextResponse.json({ error: "template_category is required" }, { status: 400 });
     }
-    if (!body.organization_name) {
-      return NextResponse.json({ error: "organization_name is required" }, { status: 400 });
-    }
     if (!body.fiscal_year) {
       return NextResponse.json({ error: "fiscal_year is required" }, { status: 400 });
     }
@@ -27,7 +31,7 @@ export async function POST(request) {
 
     const workflow = await service.createWorkflowFromTemplate(
       templateID,
-      body.organization_name,
+      organizationName,
       body.fiscal_year,
       body.fiscal_period || undefined,
       body.name || undefined,

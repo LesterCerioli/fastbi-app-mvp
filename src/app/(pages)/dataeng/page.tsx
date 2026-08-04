@@ -5,6 +5,8 @@ import { Analytics } from "@vercel/analytics/next";
 import * as S from "./styles";
 import CreateClientConnection from "@/components/data_eng/clientconnection/createClientConnection/createClientConnection";
 import ListClientConnection from "@/components/data_eng/clientconnection/listClientConnection/listClientConnection";
+import DataImporting from "@/components/data_eng/dataImporting/dataImporting";
+import GeneralFilesList from "@/components/data_eng/generalFiles/generalFiles";
 import SqlEditor from "@/components/data_eng/sqlEditor/sqlEditor";
 
 export default function DataEngPage() {
@@ -51,6 +53,10 @@ export default function DataEngPage() {
                   setSelectedConnection({ id, name })
                 }
               />
+            </S.ListSection>
+            <DataImporting />
+            <S.ListSection>
+              <GeneralFilesList organizationName={organizationName} />
             </S.ListSection>
           </>
         )}

@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from "react";
 import * as S from "./styles";
+import { useTranslations } from "@/lib/i18n/useTranslations";
 
 interface CreateClientConnectionProps {
   organizationName?: string;
@@ -26,6 +27,15 @@ const SSL_MODES = [
   { value: "verify-ca", label: "Verify CA" },
   { value: "verify-full", label: "Verify Full" },
 ];
+
+const DEFAULT_PORTS: Record<string, string> = {
+  postgresql: "5432",
+  mysql: "3306",
+  mariadb: "3306",
+  mssql: "1433",
+  oracle: "1521",
+  sqlite: "",
+};
 
 export default function CreateClientConnection({
   organizationName = "",
@@ -53,8 +63,26 @@ export default function CreateClientConnection({
     text: string;
   } | null>(null);
 
+  const { t } = useTranslations();
+
   const updateField = (field: string, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
+    setMessage(null);
+  };
+
+  const handleDbTypeChange = (value: string) => {
+    setForm((prev) => {
+      const currentDefault = DEFAULT_PORTS[prev.db_type];
+      const isDefaultPort = !prev.port || prev.port === currentDefault;
+      return {
+        ...prev,
+        db_type: value,
+        port:
+          isDefaultPort && DEFAULT_PORTS[value]
+            ? DEFAULT_PORTS[value]
+            : prev.port,
+      };
+    });
     setMessage(null);
   };
 
@@ -97,13 +125,19 @@ export default function CreateClientConnection({
       const data = await res.json();
 
       if (!res.ok) {
-        setMessage({ type: "error", text: data.error || "Connection test failed" });
+        setMessage({
+          type: "error",
+          text: data.error || t("dataeng.createConnection.testFailed"),
+        });
         return;
       }
 
-      setMessage({ type: "success", text: "Connection successful!" });
+      setMessage({ type: "success", text: t("dataeng.createConnection.testSuccess") });
     } catch {
-      setMessage({ type: "error", text: "Unable to reach the server" });
+      setMessage({
+        type: "error",
+        text: t("dataeng.createConnection.serverError"),
+      });
     } finally {
       setIsTesting(false);
     }
@@ -140,14 +174,23 @@ export default function CreateClientConnection({
       const data = await res.json();
 
       if (!res.ok) {
-        setMessage({ type: "error", text: data.error || "Failed to create connection" });
+        setMessage({
+          type: "error",
+          text: data.error || t("dataeng.createConnection.createFailed"),
+        });
         return;
       }
 
-      setMessage({ type: "success", text: "Connection created successfully!" });
+      setMessage({
+        type: "success",
+        text: t("dataeng.createConnection.createSuccess"),
+      });
       onSuccess?.();
     } catch {
-      setMessage({ type: "error", text: "Unable to reach the server" });
+      setMessage({
+        type: "error",
+        text: t("dataeng.createConnection.serverError"),
+      });
     } finally {
       setIsLoading(false);
     }
@@ -157,9 +200,9 @@ export default function CreateClientConnection({
     <S.Wrapper>
       <S.Card onSubmit={handleSubmit}>
         <S.Header>
-          <S.Title>New Connection</S.Title>
+          <S.Title>{t("dataeng.createConnection.title")}</S.Title>
           <S.Subtitle>
-            Configure a new database connection for your organization
+            {t("dataeng.createConnection.subtitle")}
           </S.Subtitle>
         </S.Header>
 
@@ -169,16 +212,19 @@ export default function CreateClientConnection({
           </S.Message>
         )}
 
-        <S.SectionTitle>Organization</S.SectionTitle>
+        <S.SectionTitle>
+          {t("dataeng.createConnection.sectionOrganization")}
+        </S.SectionTitle>
 
         <S.Field>
           <S.Label htmlFor="organization_name">
-            Organization Name <S.Required>*</S.Required>
+            {t("dataeng.createConnection.organizationName")}{" "}
+            <S.Required>*</S.Required>
           </S.Label>
           <S.Input
             id="organization_name"
             type="text"
-            placeholder="e.g. my-org"
+            placeholder={t("dataeng.createConnection.orgPlaceholder")}
             value={form.organization_name}
             onChange={(e) => updateField("organization_name", e.target.value)}
             required
@@ -187,16 +233,19 @@ export default function CreateClientConnection({
 
         <S.Divider />
 
-        <S.SectionTitle>Connection Details</S.SectionTitle>
+        <S.SectionTitle>
+          {t("dataeng.createConnection.sectionConnection")}
+        </S.SectionTitle>
 
         <S.Field>
           <S.Label htmlFor="connection_name">
-            Connection Name <S.Required>*</S.Required>
+            {t("dataeng.createConnection.connectionName")}{" "}
+            <S.Required>*</S.Required>
           </S.Label>
           <S.Input
             id="connection_name"
             type="text"
-            placeholder="e.g. Production Database"
+            placeholder={t("dataeng.createConnection.connNamePlaceholder")}
             value={form.connection_name}
             onChange={(e) => updateField("connection_name", e.target.value)}
             required
@@ -206,12 +255,12 @@ export default function CreateClientConnection({
         <S.Row>
           <S.Field>
             <S.Label htmlFor="db_type">
-              Database Type <S.Required>*</S.Required>
+              {t("dataeng.createConnection.dbType")} <S.Required>*</S.Required>
             </S.Label>
             <S.Select
               id="db_type"
               value={form.db_type}
-              onChange={(e) => updateField("db_type", e.target.value)}
+              onChange={(e) => handleDbTypeChange(e.target.value)}
               required
             >
               {DB_TYPES.map((db) => (
@@ -223,7 +272,9 @@ export default function CreateClientConnection({
           </S.Field>
 
           <S.Field>
-            <S.Label htmlFor="ssl_mode">SSL Mode</S.Label>
+            <S.Label htmlFor="ssl_mode">
+              {t("dataeng.createConnection.sslMode")}
+            </S.Label>
             <S.Select
               id="ssl_mode"
               value={form.ssl_mode}
@@ -241,12 +292,12 @@ export default function CreateClientConnection({
         <S.Row>
           <S.Field>
             <S.Label htmlFor="host">
-              Host <S.Required>*</S.Required>
+              {t("dataeng.createConnection.host")} <S.Required>*</S.Required>
             </S.Label>
             <S.Input
               id="host"
               type="text"
-              placeholder="e.g. localhost or db.example.com"
+              placeholder={t("dataeng.createConnection.hostPlaceholder")}
               value={form.host}
               onChange={(e) => updateField("host", e.target.value)}
               required
@@ -255,7 +306,7 @@ export default function CreateClientConnection({
 
           <S.Field>
             <S.Label htmlFor="port">
-              Port <S.Required>*</S.Required>
+              {t("dataeng.createConnection.port")} <S.Required>*</S.Required>
             </S.Label>
             <S.Input
               id="port"
@@ -272,12 +323,13 @@ export default function CreateClientConnection({
 
         <S.Field>
           <S.Label htmlFor="database_name">
-            Database Name <S.Required>*</S.Required>
+            {t("dataeng.createConnection.databaseName")}{" "}
+            <S.Required>*</S.Required>
           </S.Label>
           <S.Input
             id="database_name"
             type="text"
-            placeholder="e.g. my_database"
+            placeholder={t("dataeng.createConnection.dbNamePlaceholder")}
             value={form.database_name}
             onChange={(e) => updateField("database_name", e.target.value)}
             required
@@ -286,17 +338,20 @@ export default function CreateClientConnection({
 
         <S.Divider />
 
-        <S.SectionTitle>Authentication</S.SectionTitle>
+        <S.SectionTitle>
+          {t("dataeng.createConnection.sectionAuth")}
+        </S.SectionTitle>
 
         <S.Row>
           <S.Field>
             <S.Label htmlFor="username">
-              Username <S.Required>*</S.Required>
+              {t("dataeng.createConnection.username")}{" "}
+              <S.Required>*</S.Required>
             </S.Label>
             <S.Input
               id="username"
               type="text"
-              placeholder="Database user"
+              placeholder={t("dataeng.createConnection.userPlaceholder")}
               value={form.username}
               onChange={(e) => updateField("username", e.target.value)}
               required
@@ -305,12 +360,13 @@ export default function CreateClientConnection({
 
           <S.Field>
             <S.Label htmlFor="password">
-              Password <S.Required>*</S.Required>
+              {t("dataeng.createConnection.password")}{" "}
+              <S.Required>*</S.Required>
             </S.Label>
             <S.Input
               id="password"
               type="password"
-              placeholder="Database password"
+              placeholder={t("dataeng.createConnection.passPlaceholder")}
               value={form.password}
               onChange={(e) => updateField("password", e.target.value)}
               required
@@ -320,11 +376,13 @@ export default function CreateClientConnection({
 
         <S.Divider />
 
-        <S.SectionTitle>Limits</S.SectionTitle>
+        <S.SectionTitle>{t("dataeng.createConnection.sectionLimits")}</S.SectionTitle>
 
         <S.Row>
           <S.Field>
-            <S.Label htmlFor="max_rows_limit">Max Rows Limit</S.Label>
+            <S.Label htmlFor="max_rows_limit">
+              {t("dataeng.createConnection.maxRows")}
+            </S.Label>
             <S.Input
               id="max_rows_limit"
               type="number"
@@ -333,12 +391,14 @@ export default function CreateClientConnection({
               onChange={(e) => updateField("max_rows_limit", e.target.value)}
               min={1}
             />
-            <S.Hint>Maximum number of rows returned per query</S.Hint>
+            <S.Hint>
+              {t("dataeng.createConnection.maxRowsHint")}
+            </S.Hint>
           </S.Field>
 
           <S.Field>
             <S.Label htmlFor="query_timeout_seconds">
-              Query Timeout (seconds)
+              {t("dataeng.createConnection.queryTimeout")}
             </S.Label>
             <S.Input
               id="query_timeout_seconds"
@@ -350,7 +410,9 @@ export default function CreateClientConnection({
               }
               min={1}
             />
-            <S.Hint>Maximum execution time per query</S.Hint>
+            <S.Hint>
+              {t("dataeng.createConnection.queryTimeoutHint")}
+            </S.Hint>
           </S.Field>
         </S.Row>
 
@@ -364,7 +426,7 @@ export default function CreateClientConnection({
               onClick={onCancel}
               disabled={isLoading || isTesting}
             >
-              Cancel
+              {t("dataeng.createConnection.cancel")}
             </S.Button>
           )}
           <S.Button
@@ -375,10 +437,10 @@ export default function CreateClientConnection({
           >
             {isTesting ? (
               <>
-                <S.Spinner /> Testing
+                <S.Spinner /> {t("dataeng.createConnection.testing")}
               </>
             ) : (
-              "Test Connection"
+              t("dataeng.createConnection.testConnection")
             )}
           </S.Button>
           <S.Button
@@ -388,10 +450,10 @@ export default function CreateClientConnection({
           >
             {isLoading ? (
               <>
-                <S.Spinner /> Creating
+                <S.Spinner /> {t("dataeng.createConnection.creating")}
               </>
             ) : (
-              "Create Connection"
+              t("dataeng.createConnection.createConnection")
             )}
           </S.Button>
         </S.Actions>

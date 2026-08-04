@@ -1,4 +1,4 @@
-# FastBI-App
+ FastBI-App
 
 **FastBI** is a full-stack, multi-tenant Business Intelligence SaaS platform for small and medium-sized businesses. Turn your data into intelligent decisions with dashboards, KPIs, automated reporting, workflow management, and AI-powered analytics.
 
@@ -114,4 +114,4 @@ The project uses [Jest](https://jestjs.io) with `ts-jest` for TypeScript support
 
 
 
-####  gdgggdgdgdggd
+
