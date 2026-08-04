@@ -152,6 +152,20 @@ export default function WorkflowDesigner({ definition, onChange, readOnly = fals
     emit(autoLayout(definition.nodes), definition.edges);
   }
 
+  function toggleConnectMode() {
+    setConnectingFrom((prev) => (prev ? null : selectedId));
+  }
+
+  function handleNodeClick(nodeId: string) {
+    if (connectingFrom && connectingFrom !== nodeId) {
+      addEdge(connectingFrom, nodeId);
+      setConnectingFrom(null);
+      return;
+    }
+    setSelectedId(nodeId);
+    setConnectingFrom(null);
+  }
+
   const nodeIds = definition.nodes.map((n) => n.id);
 
   return (
@@ -171,6 +185,16 @@ export default function WorkflowDesigner({ definition, onChange, readOnly = fals
         </S.ToolbarGroup>
         <S.ToolbarGroup>
           <S.ActionButton onClick={autoLayoutAll}>Auto Layout</S.ActionButton>
+          <S.ActionButton
+            onClick={toggleConnectMode}
+            style={{
+              background: connectingFrom ? "rgba(239, 68, 68, 0.2)" : "transparent",
+              borderColor: connectingFrom ? "#ef4444" : "#475569",
+              color: connectingFrom ? "#ef4444" : "#94a3b8",
+            }}
+          >
+            {connectingFrom ? "Cancel Connect" : "Connect"}
+          </S.ActionButton>
         </S.ToolbarGroup>
       </S.Toolbar>
 
@@ -227,7 +251,7 @@ export default function WorkflowDesigner({ definition, onChange, readOnly = fals
                 key={node.id}
                 node={node}
                 selected={selectedId === node.id}
-                onSelect={() => { setSelectedId(node.id); }}
+                onSelect={() => handleNodeClick(node.id)}
                 onUpdate={(updates) => updateNode(node.id, updates)}
                 onRemove={() => removeNode(node.id)}
               />
@@ -291,6 +315,11 @@ export default function WorkflowDesigner({ definition, onChange, readOnly = fals
           </S.PropRow>
 
           <S.PropertiesTitle style={{ marginTop: 16 }}>Connections</S.PropertiesTitle>
+          {connectingFrom && (
+            <S.ConnectInfo style={{ color: "#fbbf24", fontStyle: "normal" }}>
+              Connect mode active. Click another node to create a connection from "{selectedNode?.label}".
+            </S.ConnectInfo>
+          )}
           <S.EdgeList>
             {definition.edges
               .filter((e) => e.source === selectedNode.id || e.target === selectedNode.id)
@@ -313,10 +342,12 @@ export default function WorkflowDesigner({ definition, onChange, readOnly = fals
             )}
           </S.EdgeList>
 
-          <S.ConnectInfo>
-            To connect nodes, add them to the canvas and edges will be created automatically between adjacent nodes.
-            Click an edge line to remove it.
-          </S.ConnectInfo>
+          {!connectingFrom && (
+            <S.ConnectInfo>
+              Select a node, then click "Connect" to create a connection to another node.
+              Click an existing edge line to remove it.
+            </S.ConnectInfo>
+          )}
         </S.PropertiesPanel>
       )}
     </S.DesignerWrapper>
