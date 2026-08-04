@@ -20,7 +20,10 @@ import {
 import {
   type WorkflowNode,
   type WorkflowEdge,
+  type EdgeStyle,
   type WorkflowDefinition,
+  EDGE_STYLES,
+  EDGE_COLORS,
   NODE_WIDTH,
   NODE_HEIGHT,
   NODE_GAP_X,
@@ -74,10 +77,88 @@ function autoLayout(nodes: WorkflowNode[]): WorkflowNode[] {
 
 const NODE_TYPES: WorkflowNode["type"][] = ["start", "process", "decision", "condition", "end"];
 
+function capitalize(value: string) {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+function edgeGeometry(
+  style: EdgeStyle,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number
+): { path: string | null; midX: number; midY: number } {
+  const midX = (x1 + x2) / 2;
+  const midY = (y1 + y2) / 2;
+  if (style === "curved") {
+    return { path: `M ${x1} ${y1} C ${midX} ${y1}, ${midX} ${y2}, ${x2} ${y2}`, midX, midY };
+  }
+  if (style === "stepped") {
+    return { path: `M ${x1} ${y1} L ${midX} ${y1} L ${midX} ${y2} L ${x2} ${y2}`, midX, midY };
+  }
+  return { path: null, midX, midY };
+}
+
+function edgeDashArray(style: EdgeStyle): string {
+  if (style === "dashed") return "6,3";
+  if (style === "dotted") return "2,6";
+  if (style === "animated") return "10,8";
+  return "none";
+}
+
+function EdgePreview({ style, color }: { style: EdgeStyle; color: string }) {
+  const prefersReducedMotion =
+    typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  const markerId = `preview-arrow-${color.replace("#", "")}`;
+  const { path } = edgeGeometry(style, 6, 12, 130, 12);
+  const dashArray = edgeDashArray(style);
+  const common = {
+    stroke: color,
+    strokeWidth: 2,
+    strokeDasharray: dashArray,
+    strokeLinecap: (style === "dotted" ? "round" : "butt") as "round" | "butt",
+    fill: "none",
+    markerEnd: `url(#${markerId})`,
+  };
+
+  return (
+    <svg width="140" height="24" style={{ display: "block" }} aria-hidden="true">
+      <defs>
+        <marker
+          id={markerId}
+          viewBox="0 0 10 10"
+          refX="9"
+          refY="5"
+          markerWidth="6"
+          markerHeight="6"
+          orient="auto-start-reverse"
+        >
+          <path d="M 0 0 L 10 5 L 0 10 z" fill={color} />
+        </marker>
+      </defs>
+      {path ? (
+        <path d={path} {...common}>
+          {style === "animated" && !prefersReducedMotion && (
+            <animate attributeName="stroke-dashoffset" from="18" to="0" dur="1s" repeatCount="indefinite" />
+          )}
+        </path>
+      ) : (
+        <line x1={6} y1={12} x2={130} y2={12} {...common}>
+          {style === "animated" && !prefersReducedMotion && (
+            <animate attributeName="stroke-dashoffset" from="18" to="0" dur="1s" repeatCount="indefinite" />
+          )}
+        </line>
+      )}
+    </svg>
+  );
+}
+
 export default function WorkflowDesigner({ definition, onChange, readOnly = false }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [connectingFrom, setConnectingFrom] = useState<string | null>(null);
   const [hoveredEdge, setHoveredEdge] = useState<string | null>(null);
+  const [newEdgeStyle, setNewEdgeStyle] = useState<EdgeStyle>("solid");
+  const [newEdgeColor, setNewEdgeColor] = useState("#475569");
   const canvasRef = useRef<HTMLDivElement>(null);
 
   const sensors = useSensors(
@@ -86,6 +167,9 @@ export default function WorkflowDesigner({ definition, onChange, readOnly = fals
   );
 
   const selectedNode = definition.nodes.find((n) => n.id === selectedId) || null;
+  const nodeById = new Map(definition.nodes.map((n) => [n.id, n]));
+  const prefersReducedMotion =
+    typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
   function emit(nodes: WorkflowNode[], edges: WorkflowEdge[]) {
     onChange({ ...definition, nodes, edges });
@@ -124,8 +208,15 @@ export default function WorkflowDesigner({ definition, onChange, readOnly = fals
     if (definition.edges.some((e) => e.source === source && e.target === target)) return;
     emit(definition.nodes, [
       ...definition.edges,
-      { id: genEdgeId(), source, target },
+      { id: genEdgeId(), source, target, style: newEdgeStyle, color: newEdgeColor },
     ]);
+  }
+
+  function updateEdge(id: string, updates: Partial<WorkflowEdge>) {
+    emit(
+      definition.nodes,
+      definition.edges.map((e) => (e.id === id ? { ...e, ...updates } : e))
+    );
   }
 
   function removeEdge(id: string) {
@@ -202,32 +293,67 @@ export default function WorkflowDesigner({ definition, onChange, readOnly = fals
         <div data-canvas-bg style={{ position: "absolute", inset: 0, zIndex: 0 }} />
 
         <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 1 }}>
+          <defs>
+            {Array.from(new Set(definition.edges.map((e) => e.color || "#475569"))).map((color) => (
+              <marker
+                key={color}
+                id={`edge-arrow-${color.replace("#", "")}`}
+                viewBox="0 0 10 10"
+                refX="9"
+                refY="5"
+                markerWidth="7"
+                markerHeight="7"
+                orient="auto-start-reverse"
+              >
+                <path d="M 0 0 L 10 5 L 0 10 z" fill={color} />
+              </marker>
+            ))}
+          </defs>
           {definition.edges.map((edge) => {
-            const source = definition.nodes.find((n) => n.id === edge.source);
-            const target = definition.nodes.find((n) => n.id === edge.target);
+            const source = nodeById.get(edge.source);
+            const target = nodeById.get(edge.target);
             if (!source || !target) return null;
+
+            const style =
+              edge.style ?? (source.type === "decision" || source.type === "condition" ? "dashed" : "solid");
+            const color = edge.color ?? "#475569";
 
             const x1 = source.position.x + NODE_WIDTH / 2;
             const y1 = source.position.y + NODE_HEIGHT / 2;
             const x2 = target.position.x + NODE_WIDTH / 2;
             const y2 = target.position.y + NODE_HEIGHT / 2;
-            const midX = (x1 + x2) / 2;
-            const midY = (y1 + y2) / 2;
+            const { path, midX, midY } = edgeGeometry(style, x1, y1, x2, y2);
 
             const isHovered = hoveredEdge === edge.id;
+            const dashArray = edgeDashArray(style);
+            const common = {
+              stroke: isHovered ? "#ef4444" : color,
+              strokeWidth: isHovered ? 3 : 2,
+              strokeDasharray: dashArray,
+              strokeLinecap: (style === "dotted" ? "round" : "butt") as "round" | "butt",
+              fill: "none",
+              markerEnd: `url(#edge-arrow-${color.replace("#", "")})`,
+              style: { pointerEvents: "stroke" as const, cursor: "pointer" as const },
+              onMouseEnter: () => setHoveredEdge(edge.id),
+              onMouseLeave: () => setHoveredEdge(null),
+              onClick: (e: React.MouseEvent) => { e.stopPropagation(); removeEdge(edge.id); },
+            };
 
             return (
               <g key={edge.id}>
-                <line
-                  x1={x1} y1={y1} x2={x2} y2={y2}
-                  stroke={isHovered ? "#ef4444" : "#475569"}
-                  strokeWidth={isHovered ? 3 : 2}
-                  strokeDasharray={source.type === "decision" || source.type === "condition" ? "6,3" : "none"}
-                  style={{ pointerEvents: "stroke", cursor: "pointer" }}
-                  onMouseEnter={() => setHoveredEdge(edge.id)}
-                  onMouseLeave={() => setHoveredEdge(null)}
-                  onClick={(e) => { e.stopPropagation(); removeEdge(edge.id); }}
-                />
+                {path ? (
+                  <path d={path} {...common}>
+                    {style === "animated" && !prefersReducedMotion && (
+                      <animate attributeName="stroke-dashoffset" from="18" to="0" dur="1s" repeatCount="indefinite" />
+                    )}
+                  </path>
+                ) : (
+                  <line x1={x1} y1={y1} x2={x2} y2={y2} {...common}>
+                    {style === "animated" && !prefersReducedMotion && (
+                      <animate attributeName="stroke-dashoffset" from="18" to="0" dur="1s" repeatCount="indefinite" />
+                    )}
+                  </line>
+                )}
                 {edge.label && (
                   <text
                     x={midX} y={midY - 8}
@@ -320,20 +446,88 @@ export default function WorkflowDesigner({ definition, onChange, readOnly = fals
               Connect mode active. Click another node to create a connection from "{selectedNode?.label}".
             </S.ConnectInfo>
           )}
+          <S.PropRow>
+            <S.PropLabel>Line style</S.PropLabel>
+            <S.PropSelect
+              value={newEdgeStyle}
+              onChange={(e) => setNewEdgeStyle(e.target.value as EdgeStyle)}
+            >
+              {EDGE_STYLES.map((s) => (
+                <option key={s} value={s}>{capitalize(s)}</option>
+              ))}
+            </S.PropSelect>
+          </S.PropRow>
+          <S.PropRow>
+            <S.PropLabel>Color</S.PropLabel>
+            <S.PropSelect
+              value={newEdgeColor}
+              onChange={(e) => setNewEdgeColor(e.target.value)}
+            >
+              {EDGE_COLORS.map((c) => (
+                <option key={c.value} value={c.value}>{c.label}</option>
+              ))}
+            </S.PropSelect>
+          </S.PropRow>
+          <S.PropRow>
+            <S.PropLabel>Preview</S.PropLabel>
+            <EdgePreview style={newEdgeStyle} color={newEdgeColor} />
+          </S.PropRow>
+          <S.PropRow>
+            <S.PropLabel>Connect to</S.PropLabel>
+            <S.PropSelect
+              value=""
+              onChange={(e) => {
+                if (e.target.value) addEdge(selectedNode.id, e.target.value);
+              }}
+            >
+              <option value="">Select a node...</option>
+              {definition.nodes
+                .filter((n) => n.id !== selectedNode.id)
+                .filter((n) => !definition.edges.some((e) => e.source === selectedNode.id && e.target === n.id))
+                .map((n) => (
+                  <option key={n.id} value={n.id}>{n.label}</option>
+                ))}
+            </S.PropSelect>
+          </S.PropRow>
           <S.EdgeList>
             {definition.edges
               .filter((e) => e.source === selectedNode.id || e.target === selectedNode.id)
               .map((edge) => {
-                const other = definition.nodes.find((n) => n.id === (edge.source === selectedNode.id ? edge.target : edge.source));
+                const other = nodeById.get(edge.source === selectedNode.id ? edge.target : edge.source);
+                const edgeSource = edge.source === selectedNode.id ? selectedNode : other;
+                const edgeDefaultStyle =
+                  edgeSource?.type === "decision" || edgeSource?.type === "condition" ? "dashed" : "solid";
                 return (
                   <S.EdgeItem key={edge.id}>
                     <span style={{ color: "#94a3b8", fontSize: 12 }}>
                       {edge.source === selectedNode.id ? "→" : "←"} {other?.label || other?.id}
                     </span>
-                    <button
-                      onClick={() => removeEdge(edge.id)}
-                      style={{ background: "transparent", border: "none", color: "#ef4444", cursor: "pointer", fontSize: 12 }}
-                    >✕</button>
+                    <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+                      <S.PropSelect
+                        value={edge.style ?? edgeDefaultStyle}
+                        onChange={(e) => updateEdge(edge.id, { style: e.target.value as EdgeStyle })}
+                        style={{ flex: "0 0 86px", padding: "2px 22px 2px 6px", fontSize: 11 }}
+                        title="Line style"
+                      >
+                        {EDGE_STYLES.map((s) => (
+                          <option key={s} value={s}>{capitalize(s)}</option>
+                        ))}
+                      </S.PropSelect>
+                      <S.PropSelect
+                        value={edge.color ?? "#475569"}
+                        onChange={(e) => updateEdge(edge.id, { color: e.target.value })}
+                        style={{ flex: "0 0 82px", padding: "2px 22px 2px 6px", fontSize: 11 }}
+                        title="Color"
+                      >
+                        {EDGE_COLORS.map((c) => (
+                          <option key={c.value} value={c.value}>{c.label}</option>
+                        ))}
+                      </S.PropSelect>
+                      <button
+                        onClick={() => removeEdge(edge.id)}
+                        style={{ background: "transparent", border: "none", color: "#ef4444", cursor: "pointer", fontSize: 12 }}
+                      >✕</button>
+                    </div>
                   </S.EdgeItem>
                 );
               })}

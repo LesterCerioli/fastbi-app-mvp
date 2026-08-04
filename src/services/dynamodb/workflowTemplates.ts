@@ -78,15 +78,28 @@ export async function updateWorkflowTemplate(id: string, updates: Partial<Workfl
 }
 
 export async function listWorkflowTemplatesByOrganization(organizationId: string): Promise<WorkflowTemplateRecord[]> {
-  const result = await docClient.send(
-    new QueryCommand({
+  try {
+    const result = await docClient.send(
+      new QueryCommand({
+        TableName: TABLE_NAME,
+        IndexName: "gsi1",
+        KeyConditionExpression: "organization_id = :oid",
+        ExpressionAttributeValues: { ":oid": organizationId },
+      })
+    );
+    const items = (result.Items as WorkflowTemplateRecord[]) || [];
+    if (items.length > 0) return items;
+  } catch {
+    // GSI query failed (e.g. index not populated in LocalStack) — fall through to scan
+  }
+  const scanResult = await docClient.send(
+    new ScanCommand({
       TableName: TABLE_NAME,
-      IndexName: "gsi1",
-      KeyConditionExpression: "organization_id = :oid",
+      FilterExpression: "organization_id = :oid",
       ExpressionAttributeValues: { ":oid": organizationId },
     })
   );
-  return (result.Items as WorkflowTemplateRecord[]) || [];
+  return (scanResult.Items as WorkflowTemplateRecord[]) || [];
 }
 
 export async function deleteWorkflowTemplate(id: string): Promise<void> {

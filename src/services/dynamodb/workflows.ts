@@ -1,6 +1,5 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand, GetCommand, UpdateCommand, QueryCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
-
 const client = new DynamoDBClient({
   region: process.env.AWS_DEFAULT_REGION || "us-east-1",
   endpoint: process.env.LOCALSTACK_ENDPOINT || "http://localhost:4566",
@@ -93,15 +92,28 @@ export async function updateWorkflow(id: string, updates: Partial<WorkflowRecord
 }
 
 export async function listWorkflowsByOrganization(organizationId: string): Promise<WorkflowRecord[]> {
-  const result = await docClient.send(
-    new QueryCommand({
+  try {
+    const result = await docClient.send(
+      new QueryCommand({
+        TableName: TABLE_NAME,
+        IndexName: "gsi1",
+        KeyConditionExpression: "organization_id = :oid",
+        ExpressionAttributeValues: { ":oid": organizationId },
+      })
+    );
+    const items = (result.Items as WorkflowRecord[]) || [];
+    if (items.length > 0) return items;
+  } catch {
+    // GSI query failed (e.g. index not populated in LocalStack) — fall through to scan
+  }
+  const scanResult = await docClient.send(
+    new ScanCommand({
       TableName: TABLE_NAME,
-      IndexName: "gsi1",
-      KeyConditionExpression: "organization_id = :oid",
+      FilterExpression: "organization_id = :oid",
       ExpressionAttributeValues: { ":oid": organizationId },
     })
   );
-  return (result.Items as WorkflowRecord[]) || [];
+  return (scanResult.Items as WorkflowRecord[]) || [];
 }
 
 export async function deleteWorkflow(id: string): Promise<void> {
