@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const session = request.cookies.get("fastbi_org_name")?.value;
 
-  const protectedRoutes = ["/dataeng", "/dashboards"];
+  const protectedRoutes = ["/dataeng", "/dashboards", "/workflows"];
 
   if (protectedRoutes.some((route) => path.startsWith(route)) && !session) {
     return NextResponse.redirect(new URL("/login", request.url));

@@ -362,11 +362,10 @@ function buildSpec() {
         },
         CreateWorkflowRequest: {
           type: "object",
-          required: ["template_name", "template_category", "organization_name", "fiscal_year"],
+          required: ["template_name", "template_category", "fiscal_year"],
           properties: {
             template_name: { type: "string" },
             template_category: { type: "string" },
-            organization_name: { type: "string" },
             fiscal_year: { type: "integer" },
             fiscal_period: { type: "string" },
             name: { type: "string" },
@@ -777,6 +776,52 @@ function buildSpec() {
             top_customers: { type: "array", items: { type: "object" } },
             time_series: { type: "array", items: { type: "object" } },
             alerts: { type: "array", items: { type: "object" } },
+          },
+        },
+        GeneralFile: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            organization_id: { type: "string", format: "uuid" },
+            file_name: { type: "string" },
+            s3_key: { type: "string" },
+            bucket_name: { type: "string" },
+            file_size: { type: "integer" },
+            file_extension: { type: "string" },
+            row_count: { type: "integer" },
+            columns: { type: "array", items: { type: "string" } },
+            status: { type: "string" },
+            error: { type: "string" },
+            truncated: { type: "boolean" },
+            created_at: { type: "string", format: "date-time" },
+            updated_at: { type: "string", format: "date-time" },
+          },
+        },
+        Workflow: {
+          type: "object",
+          properties: {
+            id: { type: "string", format: "uuid" },
+            organization_id: { type: "string", format: "uuid" },
+            name: { type: "string" },
+            description: { type: "string", nullable: true },
+            status: { type: "string", example: "draft" },
+            definition: { type: "object" },
+            steps: { type: "array", items: { type: "object" } },
+            created_at: { type: "string", format: "date-time" },
+            updated_at: { type: "string", format: "date-time" },
+          },
+        },
+        WorkflowTemplate: {
+          type: "object",
+          properties: {
+            id: { type: "string", format: "uuid" },
+            organization_id: { type: "string", format: "uuid" },
+            name: { type: "string" },
+            description: { type: "string", nullable: true },
+            category: { type: "string", nullable: true },
+            definition: { type: "object" },
+            created_at: { type: "string", format: "date-time" },
+            updated_at: { type: "string", format: "date-time" },
           },
         },
       },
@@ -1659,6 +1704,58 @@ function buildSpec() {
           },
         },
       },
+      "/dataeng/generalfiles": {
+        get: {
+          tags: ["Data Engineering"],
+          summary: "Get general file(s)",
+          description: "Retrieve a single general file by ID, or list all general files for an organization. Requires Authorization: Bearer header.",
+          security: [{ BearerAuth: [] }],
+          parameters: [
+            { $ref: "#/components/parameters/AuthorizationHeader" },
+            {
+              name: "id",
+              in: "query",
+              required: false,
+              schema: { type: "string" },
+              description: "File ID to fetch a single general file",
+            },
+            {
+              name: "organization_name",
+              in: "query",
+              required: false,
+              schema: { type: "string" },
+              description: "Organization name to list its general files",
+            },
+          ],
+          responses: {
+            "200": {
+              description: "Success",
+              content: {
+                "application/json": {
+                  schema: {
+                    oneOf: [
+                      { $ref: "#/components/schemas/GeneralFile" },
+                      { type: "array", items: { $ref: "#/components/schemas/GeneralFile" } },
+                    ],
+                  },
+                },
+              },
+            },
+            "400": {
+              description: "Missing organization_name or id",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+            "401": {
+              description: "Unauthorized",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+            "404": {
+              description: "Organization or file not found",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+      },
       "/organizations": {
         get: {
           tags: ["Organizations"],
@@ -2273,7 +2370,7 @@ function buildSpec() {
         post: {
           tags: ["Accounting Workflow"],
           summary: "Create workflow from template",
-          description: "Create a new accounting workflow instance from an existing template.",
+          description: "Create a new accounting workflow instance from an existing template. The organization is resolved from the current session cookie (set by POST /api/session/init after login).",
           security: [{ BearerAuth: [] }],
           parameters: [{ $ref: "#/components/parameters/AuthorizationHeader" }],
           requestBody: {
@@ -2292,7 +2389,7 @@ function buildSpec() {
         get: {
           tags: ["Accounting Workflow"],
           summary: "Get workflows by fiscal period",
-          description: "Retrieve workflows for an organization filtered by fiscal year.",
+          description: "Retrieve workflows for the current session organization, filtered by fiscal year. Requires calling POST /api/session/init first.",
           security: [{ BearerAuth: [] }],
           parameters: [
             { $ref: "#/components/parameters/AuthorizationHeader" },
@@ -2302,13 +2399,6 @@ function buildSpec() {
               required: true,
               schema: { type: "integer" },
               description: "Fiscal year",
-            },
-            {
-              name: "organization_name",
-              in: "query",
-              required: true,
-              schema: { type: "string" },
-              description: "Organization name",
             },
             {
               name: "fiscal_period",
@@ -2333,7 +2423,7 @@ function buildSpec() {
         get: {
           tags: ["Accounting Workflow"],
           summary: "Get compliance calendar",
-          description: "Retrieve compliance calendar obligations for an organization in a fiscal year.",
+          description: "Retrieve compliance calendar obligations for the current session organization in a fiscal year. Requires calling POST /api/session/init first.",
           security: [{ BearerAuth: [] }],
           parameters: [
             { $ref: "#/components/parameters/AuthorizationHeader" },
@@ -2344,19 +2434,61 @@ function buildSpec() {
               schema: { type: "integer" },
               description: "Fiscal year",
             },
-            {
-              name: "organization_name",
-              in: "query",
-              required: true,
-              schema: { type: "string" },
-              description: "Organization name",
-            },
           ],
           responses: {
             "200": { description: "Compliance calendar", content: { "application/json": { schema: { $ref: "#/components/schemas/ComplianceCalendar" } } } },
             "400": { description: "Bad request", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
             "401": { description: "Unauthorized", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
             "404": { description: "Organization not found", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+          },
+        },
+      },
+      "/accountingworkflow": {
+        get: {
+          tags: ["Accounting Workflow"],
+          summary: "List accounting workflow templates",
+          description: "Retrieve all accounting workflow templates, optionally filtered by category or tax regime. Alias for GET /accountingworkflow/templates.",
+          security: [{ BearerAuth: [] }],
+          parameters: [
+            { $ref: "#/components/parameters/AuthorizationHeader" },
+            {
+              name: "category",
+              in: "query",
+              required: false,
+              schema: { type: "string" },
+              description: "Filter by category",
+            },
+            {
+              name: "tax_regime",
+              in: "query",
+              required: false,
+              schema: { type: "string" },
+              description: "Filter by tax regime",
+            },
+          ],
+          responses: {
+            "200": {
+              description: "List of templates",
+              content: { "application/json": { schema: { type: "object", properties: { data: { type: "array", items: { $ref: "#/components/schemas/AccountingWorkflowTemplate" } } } } } },
+            },
+            "400": { description: "Bad request", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "401": { description: "Unauthorized", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+          },
+        },
+        post: {
+          tags: ["Accounting Workflow"],
+          summary: "Create accounting workflow template",
+          description: "Create a new accounting workflow template with stages, KPIs, and compliance settings. Alias for POST /accountingworkflow/templates.",
+          security: [{ BearerAuth: [] }],
+          parameters: [{ $ref: "#/components/parameters/AuthorizationHeader" }],
+          requestBody: {
+            required: true,
+            content: { "application/json": { schema: { $ref: "#/components/schemas/CreateAccountingTemplateRequest" } } },
+          },
+          responses: {
+            "201": { description: "Template created", content: { "application/json": { schema: { $ref: "#/components/schemas/AccountingWorkflowTemplate" } } } },
+            "400": { description: "Bad request", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "401": { description: "Unauthorized", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
           },
         },
       },
@@ -2792,6 +2924,29 @@ function buildSpec() {
             },
             "400": { description: "Missing organization_id", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
             "404": { description: "Organization not found", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+          },
+        },
+      },
+      "/session/organization": {
+        get: {
+          tags: ["Session"],
+          summary: "Get current session organization",
+          description: "Returns the organization name stored in the current httpOnly session cookie (set by POST /api/session/init).",
+          responses: {
+            "200": {
+              description: "Current session organization",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      organization_name: { type: "string" },
+                    },
+                  },
+                },
+              },
+            },
+            "400": { description: "Organization not set in session", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
           },
         },
       },
@@ -3615,6 +3770,308 @@ function buildSpec() {
           responses: {
             "200": { description: "Avatar uploaded" },
             "400": { description: "File and userId are required" },
+          },
+        },
+      },
+      "/reports": {
+        get: {
+          tags: ["Reports"],
+          summary: "Get report execution overview",
+          description: "Returns consolidated report execution analytics (status distribution, failure rates, bottlenecks, delivery trend, activity metrics) for the current organization session. Requires calling POST /api/session/init first.",
+          security: [{ BearerAuth: [] }],
+          parameters: [{ $ref: "#/components/parameters/AuthorizationHeader" }],
+          responses: {
+            "200": {
+              description: "Report execution overview",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      organizationName: { type: "string" },
+                      statusDistribution: { type: "object" },
+                      failureRates: { type: "object" },
+                      bottleneckAnalysis: { type: "object" },
+                      deliveryTrend: { type: "object" },
+                      activityMetrics: { type: "object" },
+                    },
+                  },
+                },
+              },
+            },
+            "400": { description: "Session not initialized", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "401": { description: "Unauthorized", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+          },
+        },
+      },
+      "/workflows": {
+        get: {
+          tags: ["Workflows"],
+          summary: "List or get a workflow",
+          description: "List all workflows for the current session organization, or retrieve a single workflow by its id (via ?id=).",
+          security: [{ BearerAuth: [] }],
+          parameters: [
+            { $ref: "#/components/parameters/AuthorizationHeader" },
+            {
+              name: "id",
+              in: "query",
+              required: false,
+              schema: { type: "string", format: "uuid" },
+              description: "Workflow ID to fetch a single workflow",
+            },
+          ],
+          responses: {
+            "200": {
+              description: "Workflow(s)",
+              content: {
+                "application/json": {
+                  schema: {
+                    oneOf: [
+                      { $ref: "#/components/schemas/Workflow" },
+                      { type: "object", properties: { data: { type: "array", items: { $ref: "#/components/schemas/Workflow" } } } },
+                    ],
+                  },
+                },
+              },
+            },
+            "400": { description: "Session not initialized or bad request", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "401": { description: "Unauthorized", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "403": { description: "Access denied", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "404": { description: "Workflow or organization not found", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+          },
+        },
+        post: {
+          tags: ["Workflows"],
+          summary: "Create workflow",
+          description: "Create a new workflow for the current session organization.",
+          security: [{ BearerAuth: [] }],
+          parameters: [{ $ref: "#/components/parameters/AuthorizationHeader" }],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["name", "definition"],
+                  properties: {
+                    name: { type: "string" },
+                    description: { type: "string" },
+                    definition: { type: "object" },
+                    steps: { type: "array", items: { type: "object" } },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            "201": { description: "Workflow created", content: { "application/json": { schema: { $ref: "#/components/schemas/Workflow" } } } },
+            "400": { description: "Session not initialized or missing required fields", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "401": { description: "Unauthorized", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "403": { description: "Access denied", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "404": { description: "Organization not found", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+          },
+        },
+        put: {
+          tags: ["Workflows"],
+          summary: "Update workflow",
+          description: "Update an existing workflow identified by its id in the request body.",
+          security: [{ BearerAuth: [] }],
+          parameters: [{ $ref: "#/components/parameters/AuthorizationHeader" }],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["id"],
+                  properties: {
+                    id: { type: "string", format: "uuid" },
+                    name: { type: "string" },
+                    description: { type: "string" },
+                    status: { type: "string" },
+                    definition: { type: "object" },
+                    steps: { type: "array", items: { type: "object" } },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            "200": { description: "Workflow updated", content: { "application/json": { schema: { $ref: "#/components/schemas/Workflow" } } } },
+            "400": { description: "Session not initialized or id is required", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "401": { description: "Unauthorized", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "403": { description: "Access denied", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "404": { description: "Workflow or organization not found", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+          },
+        },
+        delete: {
+          tags: ["Workflows"],
+          summary: "Delete workflow",
+          description: "Delete a workflow by its id (?id=).",
+          security: [{ BearerAuth: [] }],
+          parameters: [
+            { $ref: "#/components/parameters/AuthorizationHeader" },
+            {
+              name: "id",
+              in: "query",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+              description: "Workflow ID to delete",
+            },
+          ],
+          responses: {
+            "200": {
+              description: "Workflow deleted",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      message: { type: "string" },
+                    },
+                  },
+                },
+              },
+            },
+            "400": { description: "Session not initialized or id is required", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "401": { description: "Unauthorized", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "403": { description: "Access denied", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "404": { description: "Workflow or organization not found", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+          },
+        },
+      },
+      "/workflows/templates": {
+        get: {
+          tags: ["Workflows"],
+          summary: "List or get a workflow template",
+          description: "List all workflow templates for the current session organization, or retrieve a single template by its id (via ?id=).",
+          security: [{ BearerAuth: [] }],
+          parameters: [
+            { $ref: "#/components/parameters/AuthorizationHeader" },
+            {
+              name: "id",
+              in: "query",
+              required: false,
+              schema: { type: "string", format: "uuid" },
+              description: "Template ID to fetch a single template",
+            },
+          ],
+          responses: {
+            "200": {
+              description: "Template(s)",
+              content: {
+                "application/json": {
+                  schema: {
+                    oneOf: [
+                      { $ref: "#/components/schemas/WorkflowTemplate" },
+                      { type: "object", properties: { data: { type: "array", items: { $ref: "#/components/schemas/WorkflowTemplate" } } } },
+                    ],
+                  },
+                },
+              },
+            },
+            "400": { description: "Session not initialized or bad request", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "401": { description: "Unauthorized", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "403": { description: "Access denied", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "404": { description: "Template or organization not found", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+          },
+        },
+        post: {
+          tags: ["Workflows"],
+          summary: "Create workflow template",
+          description: "Save a workflow definition as a reusable template for the current session organization.",
+          security: [{ BearerAuth: [] }],
+          parameters: [{ $ref: "#/components/parameters/AuthorizationHeader" }],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["name", "definition"],
+                  properties: {
+                    name: { type: "string" },
+                    description: { type: "string" },
+                    category: { type: "string" },
+                    definition: { type: "object" },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            "201": { description: "Template created", content: { "application/json": { schema: { $ref: "#/components/schemas/WorkflowTemplate" } } } },
+            "400": { description: "Session not initialized or missing required fields", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "401": { description: "Unauthorized", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "403": { description: "Access denied", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "404": { description: "Organization not found", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+          },
+        },
+        put: {
+          tags: ["Workflows"],
+          summary: "Update workflow template",
+          description: "Update an existing workflow template identified by its id in the request body.",
+          security: [{ BearerAuth: [] }],
+          parameters: [{ $ref: "#/components/parameters/AuthorizationHeader" }],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["id"],
+                  properties: {
+                    id: { type: "string", format: "uuid" },
+                    name: { type: "string" },
+                    description: { type: "string" },
+                    category: { type: "string" },
+                    definition: { type: "object" },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            "200": { description: "Template updated", content: { "application/json": { schema: { $ref: "#/components/schemas/WorkflowTemplate" } } } },
+            "400": { description: "Session not initialized or id is required", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "401": { description: "Unauthorized", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "403": { description: "Access denied", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "404": { description: "Template or organization not found", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+          },
+        },
+        delete: {
+          tags: ["Workflows"],
+          summary: "Delete workflow template",
+          description: "Delete a workflow template by its id (?id=).",
+          security: [{ BearerAuth: [] }],
+          parameters: [
+            { $ref: "#/components/parameters/AuthorizationHeader" },
+            {
+              name: "id",
+              in: "query",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+              description: "Template ID to delete",
+            },
+          ],
+          responses: {
+            "200": {
+              description: "Template deleted",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      message: { type: "string" },
+                    },
+                  },
+                },
+              },
+            },
+            "400": { description: "Session not initialized or id is required", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "401": { description: "Unauthorized", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "403": { description: "Access denied", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
+            "404": { description: "Template or organization not found", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } },
           },
         },
       },

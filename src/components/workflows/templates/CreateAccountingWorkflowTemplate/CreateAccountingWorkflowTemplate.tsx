@@ -44,7 +44,10 @@ export default function CreateAccountingWorkflowTemplate() {
   const [taxRegime, setTaxRegime] = useState("");
   const [fiscalPeriod, setFiscalPeriod] = useState("");
   const [regulatoryBody, setRegulatoryBody] = useState("");
-  const [createdBy, setCreatedBy] = useState("");
+  const [createdBy, setCreatedBy] = useState(() => {
+    if (typeof window === "undefined") return "";
+    return sessionStorage.getItem("organization_name") || "";
+  });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [saving, setSaving] = useState(false);
