@@ -778,7 +778,8 @@
       "searchPlaceholder": "Buscar em todas as colunas deste arquivo…",
       "clearSearch": "Limpar busca",
       "searchResults": "{count} resultado(s)",
-      "searchNoResults": "Nenhuma linha corresponde a \"{query}\""
+      "searchNoResults": "Nenhuma linha corresponde a \"{query}\"",
+      "showingFiles": "Arquivos {start}-{end} de {count}"
     }
   },
   "workflows": {
@@ -817,5 +818,10 @@
     "byCategory": "Por Categoria",
     "byRegion": "Por Região",
     "byPeriod": "Por Período"
+  },
+  "pagination": {
+    "prev": "Anterior",
+    "next": "Próxima",
+    "pageLabel": "Página {page}"
   }
 }

@@ -651,7 +651,8 @@
       "searchPlaceholder": "Buscar en todas las columnas de este archivo…",
       "clearSearch": "Borrar búsqueda",
       "searchResults": "{count} resultado(s)",
-      "searchNoResults": "Ninguna fila coincide con \"{query}\""
+      "searchNoResults": "Ninguna fila coincide con \"{query}\"",
+      "showingFiles": "Archivos {start}-{end} de {count}"
     }
   },
   "workflows": {
@@ -690,5 +691,10 @@
     "byCategory": "By Category",
     "byRegion": "By Region",
     "byPeriod": "By Period"
+  },
+  "pagination": {
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "pageLabel": "Página {page}"
   }
 }

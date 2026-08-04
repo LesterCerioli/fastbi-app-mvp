@@ -651,7 +651,8 @@
       "searchPlaceholder": "このファイルの全列を検索…",
       "clearSearch": "検索をクリア",
       "searchResults": "{count} 件の結果",
-      "searchNoResults": "\"{query}\" に一致する行がありません"
+      "searchNoResults": "\"{query}\" に一致する行がありません",
+      "showingFiles": "{count} 個のファイル中 {start}-{end}"
     }
   },
   "workflows": {
@@ -690,5 +691,10 @@
     "byCategory": "By Category",
     "byRegion": "By Region",
     "byPeriod": "By Period"
+  },
+  "pagination": {
+    "prev": "前へ",
+    "next": "次へ",
+    "pageLabel": "{page} ページ"
   }
 }

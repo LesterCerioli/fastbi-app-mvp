@@ -651,7 +651,8 @@
       "searchPlaceholder": "Cerca in tutte le colonne di questo file…",
       "clearSearch": "Cancella ricerca",
       "searchResults": "{count} risultato/i",
-      "searchNoResults": "Nessuna riga corrisponde a \"{query}\""
+      "searchNoResults": "Nessuna riga corrisponde a \"{query}\"",
+      "showingFiles": "File {start}-{end} di {count}"
     }
   },
   "workflows": {
@@ -690,5 +691,10 @@
     "byCategory": "By Category",
     "byRegion": "By Region",
     "byPeriod": "By Period"
+  },
+  "pagination": {
+    "prev": "Precedente",
+    "next": "Successiva",
+    "pageLabel": "Pagina {page}"
   }
 }

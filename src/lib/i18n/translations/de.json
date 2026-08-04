@@ -651,7 +651,8 @@
       "searchPlaceholder": "In allen Spalten dieser Datei suchen…",
       "clearSearch": "Suche löschen",
       "searchResults": "{count} Ergebnis(se)",
-      "searchNoResults": "Keine Zeilen entsprechen \"{query}\""
+      "searchNoResults": "Keine Zeilen entsprechen \"{query}\"",
+      "showingFiles": "Dateien {start}-{end} von {count}"
     }
   },
   "workflows": {
@@ -690,5 +691,10 @@
     "byCategory": "By Category",
     "byRegion": "By Region",
     "byPeriod": "By Period"
+  },
+  "pagination": {
+    "prev": "Zurück",
+    "next": "Weiter",
+    "pageLabel": "Seite {page}"
   }
 }
