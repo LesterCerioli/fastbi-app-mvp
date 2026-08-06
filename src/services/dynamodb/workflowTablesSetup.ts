@@ -2,10 +2,10 @@ import { DynamoDBClient, ListTablesCommand, CreateTableCommand, DescribeTableCom
 
 const client = new DynamoDBClient({
   region: process.env.AWS_DEFAULT_REGION || "us-east-1",
-  endpoint: "http://localhost:4566",
+  endpoint: process.env.LOCALSTACK_ENDPOINT,
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || "t-100",
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "amadeus74367908",
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
   },
 });
 

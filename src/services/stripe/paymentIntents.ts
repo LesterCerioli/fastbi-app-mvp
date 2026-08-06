@@ -7,10 +7,10 @@ const TABLE_NAME = "FASTBI_payment_intents";
 
 const client = new DynamoDBClient({
   region: process.env.AWS_DEFAULT_REGION || "us-east-1",
-  endpoint: process.env.LOCALSTACK_ENDPOINT || process.env.LOCALSTACK_ENDPOINT,
+  endpoint: process.env.LOCALSTACK_ENDPOINT,
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || "dummy",
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "dummy",
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
   },
 });
 
@@ -44,6 +44,7 @@ export interface PaymentIntentRecord {
 
 export async function createPaymentIntent(
   paymentMethodId: string,
+  customerId: string,
   amount: number,
   currency: string
 ): Promise<PaymentIntentRecord | null> {
@@ -54,6 +55,7 @@ export async function createPaymentIntent(
     const body = encodeFormData({
       amount: amountInCents,
       currency,
+      customer: customerId,
       payment_method: paymentMethodId,
       confirm: "true",
       "automatic_payment_methods[enabled]": "true",

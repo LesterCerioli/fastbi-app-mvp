@@ -7,10 +7,10 @@ import {
 
 const client = new DynamoDBClient({
   region: process.env.AWS_DEFAULT_REGION || "us-east-1",
-  endpoint: process.env.LOCALSTACK_ENDPOINT || "http://localhost:4566",
+  endpoint: process.env.LOCALSTACK_ENDPOINT,
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || "dummy",
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "dummy",
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
   },
 });
 

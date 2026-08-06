@@ -43,6 +43,7 @@ export async function POST(request) {
     if (body.amount && body.currency) {
       paymentIntent = await createPaymentIntent(
         result.paymentMethodId,
+        result.customerId,
         body.amount,
         body.currency
       );
