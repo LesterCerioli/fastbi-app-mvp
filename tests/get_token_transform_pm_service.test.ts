@@ -130,13 +130,50 @@ afterAll(() => {
   delete process.env.AWS_SECRET_ACCESS_KEY;
 });
 
+function buildCustomerListResponse(hasCustomer: boolean) {
+  if (hasCustomer) {
+    return {
+      data: [{ id: "cus_existing123", email: "maria@example.com" }],
+      has_more: false,
+      object: "list",
+      url: "/v1/customers",
+    };
+  }
+  return {
+    data: [],
+    has_more: false,
+    object: "list",
+    url: "/v1/customers",
+  };
+}
+
+function buildCustomerCreateResponse() {
+  return {
+    id: "cus_new123",
+    object: "customer",
+    email: "maria@example.com",
+    name: "Maria Silva",
+    created: 1726673582,
+    livemode: false,
+  };
+}
+
 describe("get_token_transform_pm_service", () => {
   describe("processSingleToken - positive scenarios", () => {
     it("converts a card token and persists to DynamoDB", async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => buildCardResponse(),
-      });
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => buildCustomerListResponse(false),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => buildCustomerCreateResponse(),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => buildCardResponse({ customer: "cus_new123" }),
+        });
 
       const result = await processSingleToken(
         "tok_visa_123",
@@ -149,16 +186,50 @@ describe("get_token_transform_pm_service", () => {
         paymentMethodId: "pm_1Q0PsIJvEtkwdCNYMSaVuRz6",
       });
 
-      expect(mockSend).toHaveBeenCalledTimes(1);
+      expect(mockFetch).toHaveBeenCalledTimes(3);
       const putCall = mockSend.mock.calls[0][0];
       expect(putCall.input.TableName).toBe("FASTBI_stripe_payment_methods");
     });
 
-    it("converts a us_bank_account token and persists to DynamoDB", async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => buildBankResponse(),
+    it("reuses an existing customer when one exists", async () => {
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => buildCustomerListResponse(true),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => buildCardResponse({ customer: "cus_existing123" }),
+        });
+
+      const result = await processSingleToken(
+        "tok_visa_456",
+        "Maria Silva",
+        "maria@example.com"
+      );
+
+      expect(result).toEqual({
+        id: MOCK_UUID,
+        paymentMethodId: "pm_1Q0PsIJvEtkwdCNYMSaVuRz6",
       });
+
+      expect(mockFetch).toHaveBeenCalledTimes(2);
+    });
+
+    it("converts a us_bank_account token and persists to DynamoDB", async () => {
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => buildCustomerListResponse(false),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => buildCustomerCreateResponse(),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => buildBankResponse({ customer: "cus_new123" }),
+        });
 
       const result = await processSingleToken(
         "tok_bank_456",
@@ -170,10 +241,19 @@ describe("get_token_transform_pm_service", () => {
         id: MOCK_UUID,
         paymentMethodId: "pm_2Q0PsIJvEtkwdCNYMSaVuRz7",
       });
+      expect(mockFetch).toHaveBeenCalledTimes(3);
     });
 
     it("succeeds on retry after first Stripe failure", async () => {
       mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => buildCustomerListResponse(false),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => buildCustomerCreateResponse(),
+        })
         .mockResolvedValueOnce({
           ok: false,
           status: 500,
@@ -181,7 +261,7 @@ describe("get_token_transform_pm_service", () => {
         })
         .mockResolvedValueOnce({
           ok: true,
-          json: async () => buildCardResponse(),
+          json: async () => buildCardResponse({ customer: "cus_new123" }),
         });
 
       const result = await processSingleToken(
@@ -194,11 +274,12 @@ describe("get_token_transform_pm_service", () => {
         id: MOCK_UUID,
         paymentMethodId: "pm_1Q0PsIJvEtkwdCNYMSaVuRz6",
       });
-      expect(mockFetch).toHaveBeenCalledTimes(2);
+      expect(mockFetch).toHaveBeenCalledTimes(4);
     });
 
     it("persists full Stripe response with all nested fields to DynamoDB", async () => {
       const stripeResponse = buildCardResponse({
+        customer: "cus_new123",
         billing_details: {
           address: {
             city: "Sao Paulo",
@@ -215,10 +296,19 @@ describe("get_token_transform_pm_service", () => {
         metadata: { order_id: "ord_123" },
       });
 
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => stripeResponse,
-      });
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => buildCustomerListResponse(false),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => buildCustomerCreateResponse(),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => stripeResponse,
+        });
 
       await processSingleToken(
         "tok_full_001",
@@ -240,10 +330,12 @@ describe("get_token_transform_pm_service", () => {
       expect(item.metadata.order_id).toBe("ord_123");
       expect(item.created_at).toBeDefined();
       expect(item.updated_at).toBeDefined();
+      expect(item.customer).toBe("cus_new123");
     });
 
     it("handles bank account with full nested details in DynamoDB item", async () => {
       const stripeResponse = buildBankResponse({
+        customer: "cus_new123",
         us_bank_account: {
           account_holder_type: "company",
           account_type: "savings",
@@ -257,10 +349,19 @@ describe("get_token_transform_pm_service", () => {
         },
       });
 
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => stripeResponse,
-      });
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => buildCustomerListResponse(false),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => buildCustomerCreateResponse(),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => stripeResponse,
+        });
 
       await processSingleToken(
         "tok_bank_full_002",
@@ -277,6 +378,7 @@ describe("get_token_transform_pm_service", () => {
       expect(item.us_bank_account.routing_number).toBe("021000021");
       expect(item.us_bank_account.account_holder_type).toBe("company");
       expect(item.us_bank_account.networks.supported).toEqual(["ach", "sepa"]);
+      expect(item.customer).toBe("cus_new123");
     });
   });
 
@@ -296,18 +398,27 @@ describe("get_token_transform_pm_service", () => {
     });
 
     it("returns null when Stripe returns 400 - token_already_used", async () => {
-      mockFetch.mockResolvedValue({
-        ok: false,
-        status: 400,
-        text: async () =>
-          JSON.stringify({
-            error: {
-              code: "token_already_used",
-              message: "The token tok_used has already been used.",
-              type: "invalid_request_error",
-            },
-          }),
-      });
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => buildCustomerListResponse(false),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => buildCustomerCreateResponse(),
+        })
+        .mockResolvedValue({
+          ok: false,
+          status: 400,
+          text: async () =>
+            JSON.stringify({
+              error: {
+                code: "token_already_used",
+                message: "The token tok_used has already been used.",
+                type: "invalid_request_error",
+              },
+            }),
+        });
 
       const result = await processSingleToken(
         "tok_used",
@@ -320,17 +431,26 @@ describe("get_token_transform_pm_service", () => {
     });
 
     it("returns null when Stripe returns invalid payment method ID", async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          id: "src_abc123",
-          object: "source",
-          type: "card",
-          billing_details: { name: null, email: null },
-          created: 1726673582,
-          livemode: false,
-        }),
-      });
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => buildCustomerListResponse(false),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => buildCustomerCreateResponse(),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({
+            id: "src_abc123",
+            object: "source",
+            type: "card",
+            billing_details: { name: null, email: null },
+            created: 1726673582,
+            livemode: false,
+          }),
+        });
 
       const result = await processSingleToken(
         "tok_invalid_pm",
@@ -339,14 +459,24 @@ describe("get_token_transform_pm_service", () => {
       );
 
       expect(result).toBeNull();
+      expect(mockFetch).toHaveBeenCalledTimes(3);
     });
 
     it("returns null when all 3 retry attempts fail", async () => {
-      mockFetch.mockResolvedValue({
-        ok: false,
-        status: 502,
-        text: async () => "Bad Gateway",
-      });
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => buildCustomerListResponse(false),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => buildCustomerCreateResponse(),
+        })
+        .mockResolvedValue({
+          ok: false,
+          status: 502,
+          text: async () => "Bad Gateway",
+        });
 
       const result = await processSingleToken(
         "tok_all_fail",
@@ -368,6 +498,7 @@ describe("get_token_transform_pm_service", () => {
       );
 
       expect(result).toBeNull();
+      expect(mockFetch).toHaveBeenCalledTimes(1);
     });
   });
 });

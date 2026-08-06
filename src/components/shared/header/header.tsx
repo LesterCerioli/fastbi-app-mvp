@@ -87,7 +87,9 @@ export default function Header() {
         
         {user ? (
           <>
-            <S.UserInfo>{user.name || user.email}</S.UserInfo>
+            <S.UserInfo onClick={() => handleNavigation('/profile')}>
+              {user.name || user.email}
+            </S.UserInfo>
             <S.LogoutButton onClick={handleLogout}>
               <LogOut size={16} />
               {t("header.buttons.logout")}

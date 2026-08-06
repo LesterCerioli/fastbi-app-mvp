@@ -696,5 +696,35 @@
     "prev": "上一页",
     "next": "下一页",
     "pageLabel": "第 {page} 页"
+  },
+  "profile": {
+    "title": "个人资料",
+    "personalInfo": "个人信息",
+    "name": "姓名",
+    "email": "邮箱",
+    "organization": "组织",
+    "avatar": {
+      "upload": "上传照片",
+      "uploading": "上传中...",
+      "uploaded": "照片上传成功",
+      "error": "照片上传失败"
+    },
+    "billing": {
+      "title": "Billing",
+      "paidInvoices": "已支付账单",
+      "nextCharge": "下次扣款",
+      "download": "下载 PDF",
+      "amount": "金额",
+      "status": "状态",
+      "date": "日期",
+      "plan": "套餐",
+      "cycle": "计费周期",
+      "dueDate": "到期日",
+      "paid": "已支付",
+      "invoice": "账单",
+      "noInvoices": "未找到账单",
+      "noSubscription": "无有效订阅",
+      "loading": "加载中..."
+    }
   }
 }

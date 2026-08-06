@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { authenticate } from "@/lib/api-auth";
 import { getAvatarUrl, saveAvatarUrl } from "@/services/dynamodb/userProfiles";
+import { ensureUserProfilesTable } from "@/services/dynamodb/userProfileTablesSetup";
 import { uploadToS3 } from "@/services/s3/upload";
+import { ensureGeneralBucket, ensurePhotosBucket } from "@/services/s3/bucketSetup";
 
 export async function GET(request) {
   try {
@@ -36,16 +38,26 @@ export async function POST(request) {
     const buffer = Buffer.from(await file.arrayBuffer());
     const ext = file.name.split(".").pop() || "jpg";
 
-    let key;
-    let avatar_url;
     if (organizationName) {
-      key = `imports/${organizationName}/${Date.now()}_${file.name}`;
-      avatar_url = await uploadToS3(buffer, key, file.type);
-      return NextResponse.json({ file_url: avatar_url, organization_name: organizationName }, { status: 201 });
+      await ensureGeneralBucket();
+      const key = `imports/${organizationName}/${Date.now()}_${file.name}`;
+      const file_url = await uploadToS3(buffer, key, file.type);
+      return NextResponse.json({ file_url, organization_name: organizationName }, { status: 201 });
     }
 
-    key = `avatars/${userId}/${Date.now()}.${ext}`;
-    avatar_url = await uploadToS3(buffer, key, file.type);
+    const photosBucket = process.env.S3_AVATAR_BUCKET;
+    if (!photosBucket) {
+      return NextResponse.json(
+        { error: "S3_AVATAR_BUCKET is not configured" },
+        { status: 500 }
+      );
+    }
+
+    await ensurePhotosBucket();
+    await ensureUserProfilesTable();
+
+    const key = `avatars/${userId}/${Date.now()}.${ext}`;
+    const avatar_url = await uploadToS3(buffer, key, file.type, photosBucket);
 
     await saveAvatarUrl(userId, avatar_url);
 

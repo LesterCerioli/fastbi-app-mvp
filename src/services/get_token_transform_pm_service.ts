@@ -2,20 +2,21 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { v4 as uuidv4 } from "uuid";
 import { getTokenByStripeTokenId, updateTokenStatus } from "@/services/dynamodb/stripePaymentTokens";
+import { saveCustomer } from "@/services/dynamodb/stripeCustomers";
 
 const STRIPE_API_BASE = "https://api.stripe.com/v1";
 const MAX_ATTEMPTS = 3;
 
-const client = new DynamoDBClient({
+const CLIENT = new DynamoDBClient({
   region: process.env.AWS_DEFAULT_REGION || "us-east-1",
-  endpoint: process.env.LOCALSTACK_ENDPOINT || process.env.LOCALSTACK_ENDPOINT,
+  endpoint: process.env.LOCALSTACK_ENDPOINT,
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || "dummy",
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "dummy",
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
   },
 });
 
-const docClient = DynamoDBDocumentClient.from(client);
+const docClient = DynamoDBDocumentClient.from(CLIENT);
 
 const PAYMENT_METHODS_TABLE = "FASTBI_stripe_payment_methods";
 
@@ -35,6 +36,53 @@ function encodeFormData(data: Record<string, string>): string {
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function findOrCreateCustomer(
+  userEmail: string,
+  userName: string
+): Promise<string> {
+  const secretKey = getSecretKey();
+
+  const listUrl = `${STRIPE_API_BASE}/customers?email=${encodeURIComponent(userEmail)}&limit=1`;
+
+  const listResponse = await fetch(listUrl, {
+    method: "GET",
+    headers: {
+      Authorization: `Basic ${Buffer.from(`${secretKey}:`).toString("base64")}`,
+    },
+  });
+
+  if (listResponse.ok) {
+    const listData = await listResponse.json();
+    if (listData.data && listData.data.length > 0) {
+      return listData.data[0].id;
+    }
+  }
+
+  const createBody = encodeFormData({
+    email: userEmail,
+    name: userName,
+  });
+
+  const createResponse = await fetch(`${STRIPE_API_BASE}/customers`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: `Basic ${Buffer.from(`${secretKey}:`).toString("base64")}`,
+    },
+    body: createBody,
+  });
+
+  if (!createResponse.ok) {
+    const errorBody = await createResponse.text();
+    throw new Error(
+      `Stripe API error creating customer (${createResponse.status}): ${errorBody}`
+    );
+  }
+
+  const customerData = await createResponse.json();
+  return customerData.id;
 }
 
 interface StripeBillingDetails {
@@ -130,12 +178,14 @@ async function savePaymentMethod(
 interface PaymentMethodResult {
   id: string;
   paymentMethodId: string;
+  customerId: string;
 }
 
 async function callStripePaymentMethods(
   stripeTokenId: string,
   userName: string,
-  userEmail: string
+  userEmail: string,
+  customerId: string
 ): Promise<StripePaymentMethodResponse> {
   const secretKey = getSecretKey();
   let lastError: Error | null = null;
@@ -169,6 +219,25 @@ async function callStripePaymentMethods(
         throw new Error(`Invalid payment method ID received: ${data.id}`);
       }
 
+      // Stripe forbids attaching a PaymentMethod to a Customer during
+      // creation; it must be created first and then attached explicitly.
+      const attachResponse = await fetch(
+        `${STRIPE_API_BASE}/payment_methods/${data.id}/attach`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization: `Basic ${Buffer.from(`${secretKey}:`).toString("base64")}`,
+          },
+          body: encodeFormData({ customer: customerId }),
+        }
+      );
+
+      if (!attachResponse.ok) {
+        const errorBody = await attachResponse.text();
+        throw new Error(`Stripe attach error (${attachResponse.status}): ${errorBody}`);
+      }
+
       return data;
     } catch (err) {
       lastError = err instanceof Error ? err : new Error(String(err));
@@ -195,13 +264,24 @@ export async function processSingleToken(
   userEmail: string
 ): Promise<PaymentMethodResult | null> {
   try {
+    const customerId = await findOrCreateCustomer(userEmail, userName);
+
     const stripeResponse = await callStripePaymentMethods(
       stripeTokenId,
       userName,
-      userEmail
+      userEmail,
+      customerId
     );
 
     const recordId = await savePaymentMethod(stripeResponse);
+
+    await saveCustomer({
+      id: uuidv4(),
+      stripe_customer_id: customerId,
+      email: userEmail,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    });
 
     const tokenRecord = await getTokenByStripeTokenId(stripeTokenId);
     if (tokenRecord) {
@@ -210,13 +290,15 @@ export async function processSingleToken(
 
     console.log(
       `[get_token_transform_pm_service] Token ${stripeTokenId} converted ` +
-      `to payment method ${stripeResponse.id} and saved as ${recordId}` +
+      `to payment method ${stripeResponse.id} (customer: ${customerId}) ` +
+      `and saved as ${recordId}` +
       (tokenRecord ? `, status updated to success` : ``)
     );
 
     return {
       id: recordId,
       paymentMethodId: stripeResponse.id,
+      customerId,
     };
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);

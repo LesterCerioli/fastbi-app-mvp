@@ -696,5 +696,35 @@
     "prev": "前へ",
     "next": "次へ",
     "pageLabel": "{page} ページ"
+  },
+  "profile": {
+    "title": "プロフィール",
+    "personalInfo": "個人情報",
+    "name": "名前",
+    "email": "メール",
+    "organization": "組織",
+    "avatar": {
+      "upload": "写真をアップロード",
+      "uploading": "アップロード中...",
+      "uploaded": "写真をアップロードしました",
+      "error": "写真のアップロードに失敗しました"
+    },
+    "billing": {
+      "title": "Billing",
+      "paidInvoices": "支払済み請求書",
+      "nextCharge": "次回請求",
+      "download": "PDFをダウンロード",
+      "amount": "金額",
+      "status": "ステータス",
+      "date": "日付",
+      "plan": "プラン",
+      "cycle": "請求サイクル",
+      "dueDate": "期限日",
+      "paid": "支払済み",
+      "invoice": "請求書",
+      "noInvoices": "請求書が見つかりません",
+      "noSubscription": "有効なサブスクリプションがありません",
+      "loading": "読み込み中..."
+    }
   }
 }
