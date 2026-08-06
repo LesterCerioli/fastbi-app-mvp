@@ -823,5 +823,35 @@
     "prev": "Anterior",
     "next": "Próxima",
     "pageLabel": "Página {page}"
+  },
+  "profile": {
+    "title": "Perfil",
+    "personalInfo": "Informações Pessoais",
+    "name": "Nome",
+    "email": "E-mail",
+    "organization": "Organização",
+    "avatar": {
+      "upload": "Enviar Foto",
+      "uploading": "Enviando...",
+      "uploaded": "Foto enviada com sucesso",
+      "error": "Falha ao enviar a foto"
+    },
+    "billing": {
+      "title": "Billing",
+      "paidInvoices": "Faturas Pagas",
+      "nextCharge": "Próxima Cobrança",
+      "download": "Baixar PDF",
+      "amount": "Valor",
+      "status": "Status",
+      "date": "Data",
+      "plan": "Plano",
+      "cycle": "Ciclo de Cobrança",
+      "dueDate": "Vencimento",
+      "paid": "Pago",
+      "invoice": "Fatura",
+      "noInvoices": "Nenhuma fatura encontrada",
+      "noSubscription": "Nenhuma assinatura ativa",
+      "loading": "Carregando..."
+    }
   }
 }
