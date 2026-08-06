@@ -10,12 +10,19 @@ const s3 = new S3Client({
   },
 });
 
-const BUCKET = process.env.S3_BUCKET_NAME || "fastbi";
+export const BUCKET = process.env.S3_BUCKET_NAME || "fastbi";
 
-export async function uploadToS3(file: Buffer, key: string, contentType: string): Promise<string> {
+export async function uploadToS3(
+  file: Buffer,
+  key: string,
+  contentType: string,
+  bucketName?: string
+): Promise<string> {
+  const targetBucket = bucketName || BUCKET;
+
   await s3.send(
     new PutObjectCommand({
-      Bucket: BUCKET,
+      Bucket: targetBucket,
       Key: key,
       Body: file,
       ContentType: contentType,
@@ -24,7 +31,7 @@ export async function uploadToS3(file: Buffer, key: string, contentType: string)
 
   const endpoint = process.env.LOCALSTACK_ENDPOINT;
   if (endpoint) {
-    return `${endpoint}/${BUCKET}/${key}`;
+    return `${endpoint}/${targetBucket}/${key}`;
   }
-  return `https://${BUCKET}.s3.amazonaws.com/${key}`;
+  return `https://${targetBucket}.s3.amazonaws.com/${key}`;
 }

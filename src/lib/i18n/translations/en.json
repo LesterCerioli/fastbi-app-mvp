@@ -823,5 +823,35 @@
     "prev": "Prev",
     "next": "Next",
     "pageLabel": "Page {page}"
+  },
+  "profile": {
+    "title": "Profile",
+    "personalInfo": "Personal Information",
+    "name": "Name",
+    "email": "Email",
+    "organization": "Organization",
+    "avatar": {
+      "upload": "Upload Photo",
+      "uploading": "Uploading...",
+      "uploaded": "Photo uploaded successfully",
+      "error": "Failed to upload photo"
+    },
+    "billing": {
+      "title": "Billing",
+      "paidInvoices": "Paid Invoices",
+      "nextCharge": "Next Charge",
+      "download": "Download PDF",
+      "amount": "Amount",
+      "status": "Status",
+      "date": "Date",
+      "plan": "Plan",
+      "cycle": "Billing Cycle",
+      "dueDate": "Due Date",
+      "paid": "Paid",
+      "invoice": "Invoice",
+      "noInvoices": "No invoices found",
+      "noSubscription": "No active subscription",
+      "loading": "Loading..."
+    }
   }
 }

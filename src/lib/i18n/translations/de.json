@@ -696,5 +696,35 @@
     "prev": "Zurück",
     "next": "Weiter",
     "pageLabel": "Seite {page}"
+  },
+  "profile": {
+    "title": "Profil",
+    "personalInfo": "Persönliche Informationen",
+    "name": "Name",
+    "email": "E-Mail",
+    "organization": "Organisation",
+    "avatar": {
+      "upload": "Foto Hochladen",
+      "uploading": "Hochladen...",
+      "uploaded": "Foto erfolgreich hochgeladen",
+      "error": "Foto konnte nicht hochgeladen werden"
+    },
+    "billing": {
+      "title": "Billing",
+      "paidInvoices": "Bezahlte Rechnungen",
+      "nextCharge": "Nächste Belastung",
+      "download": "PDF Herunterladen",
+      "amount": "Betrag",
+      "status": "Status",
+      "date": "Datum",
+      "plan": "Tarif",
+      "cycle": "Abrechnungszyklus",
+      "dueDate": "Fälligkeitsdatum",
+      "paid": "Bezahlt",
+      "invoice": "Rechnung",
+      "noInvoices": "Keine Rechnungen gefunden",
+      "noSubscription": "Kein aktives Abonnement",
+      "loading": "Laden..."
+    }
   }
 }

@@ -12,7 +12,7 @@ const client = new DynamoDBClient({
 
 const docClient = DynamoDBDocumentClient.from(client);
 
-const TABLE_NAME = process.env.DYNAMODB_USER_PROFILES_TABLE || "FastBI_user_profiles";
+export const TABLE_NAME = process.env.DYNAMODB_USER_PROFILES_TABLE || "FastBI_user_profiles";
 
 export async function getAvatarUrl(userId: string): Promise<string | null> {
   try {

@@ -244,6 +244,12 @@ export const UserInfo = styled.span`
   color: #FFFFFF;
   font-weight: 500;
   white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #00D4FF;
+  }
 `;
 
 export const LogoutButton = styled.button`
