@@ -1,11 +1,9 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
-import { useRouter } from "next/navigation";
 import * as S from "./styles";
 import { useTranslations } from "@/lib/i18n/useTranslations";
 import WorkflowDesigner from "@/components/workflows/templates/workflowDesigner/workflowDesigner";
 import { WorkflowDefinition } from "@/components/workflows/templates/workflowTypes";
-import { ArrowLeft } from "lucide-react";
 
 function getFreshToken(): Promise<string | null> {
   return fetch("/api/auth/token", {
@@ -22,7 +20,6 @@ function getFreshToken(): Promise<string | null> {
 
 export default function WorkflowsPage() {
   const { t } = useTranslations();
-  const router = useRouter();
   const [definition, setDefinition] = useState<WorkflowDefinition>({
     nodes: [],
     edges: [],
@@ -271,12 +268,6 @@ export default function WorkflowsPage() {
       <S.Content>
         <S.PageHeader>
           <S.PageTitle>Workflows</S.PageTitle>
-          <S.Toolbar>
-            <S.Button onClick={() => router.push("/dashboard")}>
-              <ArrowLeft size={14} style={{ marginRight: 6 }} />
-              Back to Dashboard
-            </S.Button>
-          </S.Toolbar>
         </S.PageHeader>
 
         <S.Toolbar style={{ marginBottom: 24 }}>

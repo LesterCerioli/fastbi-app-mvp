@@ -726,5 +726,143 @@
       "noSubscription": "无有效订阅",
       "loading": "加载中..."
     }
+  },
+  "kpis": {
+    "card": {
+      "title": "KPIs",
+      "description": "创建和管理关键绩效指标"
+    },
+    "page": {
+      "title": "关键绩效指标",
+      "subtitle": "设定目标并监控业务绩效"
+    },
+    "creation": {
+      "title": "创建 KPI",
+      "subtitle": "定义新的关键绩效指标及其目标",
+      "sectionBasic": "基本信息",
+      "sectionParameters": "测量与目标",
+      "sectionAlerts": "警报",
+      "organizationName": "组织",
+      "organizationPlaceholder": "组织名称",
+      "code": "代码",
+      "codePlaceholder": "例如：毛利率",
+      "name": "名称",
+      "namePlaceholder": "例如：毛利率",
+      "description": "描述",
+      "descriptionPlaceholder": "描述此 KPI 跟踪的内容",
+      "category": "类别",
+      "categories": {
+        "revenue_profitability": "收入与盈利能力",
+        "financial_health": "财务健康",
+        "growth_trends": "增长趋势",
+        "customer_value": "客户价值",
+        "operational_efficiency": "运营效率",
+        "retention_expansion": "留存与扩展",
+        "forecasting_predictive": "预测与预测性"
+      },
+      "unit": "单位",
+      "units": {
+        "currency": "货币",
+        "percentage": "百分比",
+        "number": "数字",
+        "days": "天",
+        "ratio": "比率",
+        "rating": "评级",
+        "boolean": "布尔"
+      },
+      "aggregation": "聚合",
+      "aggregations": {
+        "sum": "求和",
+        "avg": "平均",
+        "count": "计数",
+        "min": "最小",
+        "max": "最大"
+      },
+      "reportingPeriod": "报告周期",
+      "periods": {
+        "realtime": "实时",
+        "hourly": "每小时",
+        "daily": "每日",
+        "weekly": "每周",
+        "monthly": "每月",
+        "quarterly": "每季",
+        "annual": "每年"
+      },
+      "comparison": "比较",
+      "operators": {
+        "greater_than": "大于",
+        "greater_equal": "大于或等于",
+        "less_than": "小于",
+        "less_equal": "小于或等于",
+        "equal_to": "等于",
+        "between": "介于"
+      },
+      "targetValue": "目标值",
+      "targetPlaceholder": "目标值",
+      "targetMin": "目标最小值",
+      "targetMinPlaceholder": "目标最小值",
+      "targetMax": "目标最大值",
+      "targetMaxPlaceholder": "目标最大值",
+      "alertEnabled": "为此 KPI 启用警报",
+      "alertThreshold": "警报阈值",
+      "alertThresholdPlaceholder": "阈值",
+      "alertSeverity": "警报严重性",
+      "severities": {
+        "low": "低",
+        "medium": "中",
+        "high": "高",
+        "critical": "严重"
+      },
+      "createKpi": "创建 KPI",
+      "creating": "创建中...",
+      "success": "KPI 创建成功",
+      "error": "创建 KPI 失败"
+    },
+    "list": {
+      "title": "已创建KPI",
+      "countOne": "{count} 个KPI",
+      "countMany": "{count} 个KPI",
+      "loading": "加载中...",
+      "empty": "该组织尚未创建KPI",
+      "loadError": "加载KPI失败",
+      "serverError": "加载KPI时服务器错误",
+      "retry": "重试",
+      "created": "创建于 {date}",
+      "lastValue": "最后值",
+      "statuses": {
+        "draft": "草稿",
+        "active": "有效",
+        "inactive": "无效",
+        "deprecated": "已弃用"
+      }
+    },
+    "details": {
+      "description": "描述",
+      "noDescription": "未提供描述",
+      "aggregation": "聚合方式",
+      "reportingPeriod": "报告周期",
+      "lookbackDays": "回看天数",
+      "target": "目标值",
+      "noTarget": "未定义",
+      "comparison": "比较方式",
+      "alert": "告警",
+      "alertEnabled": "已启用",
+      "alertDisabled": "已禁用",
+      "alertThreshold": "阈值",
+      "lastValue": "最新数值",
+      "lastVariance": "变动率",
+      "updatedAt": "更新时间"
+    },
+    "chart": {
+      "title": "KPI 可视化",
+      "distribution": "分布",
+      "trend": "增长趋势",
+      "total": "总计",
+      "empty": "此KPI暂无可用数据",
+      "value": "值"
+    }
+  },
+  "backToDashboards": {
+    "label": "返回仪表板"
   }
 }

@@ -726,5 +726,143 @@
       "noSubscription": "Nessuna sottoscrizione attiva",
       "loading": "Caricamento..."
     }
+  },
+  "kpis": {
+    "card": {
+      "title": "KPIs",
+      "description": "Crea e gestisci gli indicatori chiave di prestazione"
+    },
+    "page": {
+      "title": "Indicatori Chiave di Prestazione",
+      "subtitle": "Definisci obiettivi e monitora le prestazioni aziendali"
+    },
+    "creation": {
+      "title": "Crea KPI",
+      "subtitle": "Definisci un nuovo indicatore chiave di prestazione e i suoi obiettivi",
+      "sectionBasic": "Informazioni di Base",
+      "sectionParameters": "Misurazione e Obiettivo",
+      "sectionAlerts": "Avvisi",
+      "organizationName": "Organizzazione",
+      "organizationPlaceholder": "Nome dell'organizzazione",
+      "code": "Codice",
+      "codePlaceholder": "es. margine_lordo",
+      "name": "Nome",
+      "namePlaceholder": "es. Margine Lordo",
+      "description": "Descrizione",
+      "descriptionPlaceholder": "Descrivi cosa traccia questo KPI",
+      "category": "Categoria",
+      "categories": {
+        "revenue_profitability": "Ricavi e Redditività",
+        "financial_health": "Salute Finanziaria",
+        "growth_trends": "Tendenze di Crescita",
+        "customer_value": "Valore del Cliente",
+        "operational_efficiency": "Efficienza Operativa",
+        "retention_expansion": "Retention ed Espansione",
+        "forecasting_predictive": "Previsione e Predittiva"
+      },
+      "unit": "Unità",
+      "units": {
+        "currency": "Valuta",
+        "percentage": "Percentuale",
+        "number": "Numero",
+        "days": "Giorni",
+        "ratio": "Rapporto",
+        "rating": "Valutazione",
+        "boolean": "Booleano"
+      },
+      "aggregation": "Aggregazione",
+      "aggregations": {
+        "sum": "Somma",
+        "avg": "Media",
+        "count": "Conteggio",
+        "min": "Minimo",
+        "max": "Massimo"
+      },
+      "reportingPeriod": "Periodo di Report",
+      "periods": {
+        "realtime": "In tempo reale",
+        "hourly": "Ogni ora",
+        "daily": "Giornaliero",
+        "weekly": "Settimanale",
+        "monthly": "Mensile",
+        "quarterly": "Trimestrale",
+        "annual": "Annuale"
+      },
+      "comparison": "Confronto",
+      "operators": {
+        "greater_than": "Maggiore di",
+        "greater_equal": "Maggiore o uguale",
+        "less_than": "Minore di",
+        "less_equal": "Minore o uguale",
+        "equal_to": "Uguale",
+        "between": "Tra"
+      },
+      "targetValue": "Valore Obiettivo",
+      "targetPlaceholder": "Valore obiettivo",
+      "targetMin": "Obiettivo Minimo",
+      "targetMinPlaceholder": "Obiettivo minimo",
+      "targetMax": "Obiettivo Massimo",
+      "targetMaxPlaceholder": "Obiettivo massimo",
+      "alertEnabled": "Abilita avvisi per questo KPI",
+      "alertThreshold": "Soglia Avviso",
+      "alertThresholdPlaceholder": "Valore soglia",
+      "alertSeverity": "Gravità Avviso",
+      "severities": {
+        "low": "Bassa",
+        "medium": "Media",
+        "high": "Alta",
+        "critical": "Critica"
+      },
+      "createKpi": "Crea KPI",
+      "creating": "Creazione...",
+      "success": "KPI creato con successo",
+      "error": "Errore nella creazione del KPI"
+    },
+    "list": {
+      "title": "KPI Creati",
+      "countOne": "{count} KPI",
+      "countMany": "{count} KPI",
+      "loading": "Caricamento...",
+      "empty": "Nessun KPI creato ancora per questa organizzazione",
+      "loadError": "Errore nel caricamento dei KPI",
+      "serverError": "Errore del server durante il caricamento dei KPI",
+      "retry": "Riprova",
+      "created": "Creato il {date}",
+      "lastValue": "Ultimo valore",
+      "statuses": {
+        "draft": "Bozza",
+        "active": "Attivo",
+        "inactive": "Inattivo",
+        "deprecated": "Deprecato"
+      }
+    },
+    "details": {
+      "description": "Descrizione",
+      "noDescription": "Nessuna descrizione fornita",
+      "aggregation": "Aggregazione",
+      "reportingPeriod": "Periodo di report",
+      "lookbackDays": "Giorni di retro",
+      "target": "Obiettivo",
+      "noTarget": "Non definito",
+      "comparison": "Confronto",
+      "alert": "Avviso",
+      "alertEnabled": "Attivo",
+      "alertDisabled": "Disattivo",
+      "alertThreshold": "Soglia",
+      "lastValue": "Ultimo valore",
+      "lastVariance": "Variazione",
+      "updatedAt": "Aggiornato"
+    },
+    "chart": {
+      "title": "Visualizzazioni KPI",
+      "distribution": "Distribuzione",
+      "trend": "Tendenza di Crescita",
+      "total": "Totale",
+      "empty": "Nessun dato ancora disponibile per questo KPI",
+      "value": "Valore"
+    }
+  },
+  "backToDashboards": {
+    "label": "Torna ai Dashboard"
   }
 }

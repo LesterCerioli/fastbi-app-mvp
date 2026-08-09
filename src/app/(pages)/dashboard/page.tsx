@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import * as S from "./styles";
 import { useTranslations } from "@/lib/i18n/useTranslations";
-import { TrendingUp, Users, DollarSign, ShoppingCart, ArrowRight, Workflow } from "lucide-react";
+import { TrendingUp, Users, DollarSign, ShoppingCart, ArrowRight, Workflow, Gauge } from "lucide-react";
 
 interface DashboardOverview {
   revenue: number | null;
@@ -137,6 +137,14 @@ export default function DashboardPage() {
               <S.NavCardDesc>Build and manage custom business workflows</S.NavCardDesc>
             </S.NavCardContent>
             <Workflow size={20} />
+          </S.NavCard>
+
+          <S.NavCard onClick={() => router.push("/kpis")}>
+            <S.NavCardContent>
+              <S.NavCardTitle>{t("kpis.card.title")}</S.NavCardTitle>
+              <S.NavCardDesc>{t("kpis.card.description")}</S.NavCardDesc>
+            </S.NavCardContent>
+            <Gauge size={20} />
           </S.NavCard>
         </S.NavGrid>
       </S.Content>

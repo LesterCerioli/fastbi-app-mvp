@@ -16,6 +16,29 @@ function randomBetween(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function useDeferredRandom(min: number, max: number, initial = 0): number {
+  const [value, setValue] = useState<number>(initial);
+  useEffect(() => {
+    const id = setTimeout(() => setValue(randomBetween(min, max)), 0);
+    return () => clearTimeout(id);
+  }, [min, max]);
+  return value;
+}
+
+function useRandomBars(length: number, min: number, max: number): number[] {
+  const [bars, setBars] = useState<number[]>(() =>
+    Array.from({ length }, () => 50)
+  );
+  useEffect(() => {
+    const id = setTimeout(
+      () => setBars(Array.from({ length }, () => randomBetween(min, max))),
+      0
+    );
+    return () => clearTimeout(id);
+  }, [length, min, max]);
+  return bars;
+}
+
 interface LiveMetrics {
   bars: {
     revenue_percent: number | null;
@@ -81,6 +104,7 @@ function BarCard({ index, revPct, usersPct, ordersPct }: { index: number; revPct
   const rev = useLiveValue(revPct ?? 85, 55, 100, 1800);
   const users = useLiveValue(usersPct ?? 72, 40, 98, 2200);
   const orders = useLiveValue(ordersPct ?? 93, 65, 100, 1500);
+  const bars = useRandomBars(16, 20, 100);
 
   return (
     <S.Card $delay={index * 0.12} $color={COLORS.green}>
@@ -112,7 +136,7 @@ function BarCard({ index, revPct, usersPct, ordersPct }: { index: number; revPct
       </S.BarContainer>
       <S.MiniChart>
         {Array.from({ length: 16 }, (_, i) => (
-          <S.MiniBar key={i} $h={randomBetween(20, 100)} $color={COLORS.green} $i={i} />
+          <S.MiniBar key={i} $h={bars[i]} $color={COLORS.green} $i={i} />
         ))}
       </S.MiniChart>
     </S.Card>
@@ -121,6 +145,7 @@ function BarCard({ index, revPct, usersPct, ordersPct }: { index: number; revPct
 
 function StatCard({ index, momGrowth }: { index: number; momGrowth: number | null }) {
   const mom = useLiveValue(momGrowth ?? 18, Math.max(5, (momGrowth ?? 18) - 10), (momGrowth ?? 18) + 15, 2500);
+  const bars = useRandomBars(16, 30, 100);
 
   return (
     <S.Card $delay={index * 0.12} $color={COLORS.blue}>
@@ -138,7 +163,7 @@ function StatCard({ index, momGrowth }: { index: number; momGrowth: number | nul
       </div>
       <S.MiniChart>
         {Array.from({ length: 16 }, (_, i) => (
-          <S.MiniBar key={i} $h={randomBetween(30, 100)} $color={COLORS.blue} $i={i} />
+          <S.MiniBar key={i} $h={bars[i]} $color={COLORS.blue} $i={i} />
         ))}
       </S.MiniChart>
     </S.Card>
@@ -155,12 +180,13 @@ function StatusCard({ index }: { index: number }) {
   ]);
 
   const uptime = useLiveValue(99, 96, 100, 5000);
+  const uptimeDecimal = useDeferredRandom(0, 9);
 
   return (
     <S.Card $delay={index * 0.12} $color={COLORS.purple}>
       <S.CardIcon $color={COLORS.purple}>⚡</S.CardIcon>
       <S.CardTitle>System Health</S.CardTitle>
-      <S.CardSub>Uptime: <strong>{uptime}.{randomBetween(0, 9)}%</strong></S.CardSub>
+      <S.CardSub>Uptime: <strong>{uptime}.{uptimeDecimal}%</strong></S.CardSub>
       <div>
         {services.map((s, i) => (
           <S.StatusRow key={i}>
@@ -184,6 +210,9 @@ function RevenueCard({ index, kpiValues }: { index: number; kpiValues: LiveMetri
   const revenue = useLiveValue(revInitial, Math.max(50, revInitial - 40), revInitial + 50, 2000);
   const orders = useLiveValue(ordInitial, Math.max(50, ordInitial - 140), ordInitial + 160, 2500);
   const aov = useLiveValue(aovInitial, Math.max(10, aovInitial - 15), aovInitial + 15, 3000);
+  const changePct = useDeferredRandom(2, 8);
+  const aovDecimal = useDeferredRandom(0, 99);
+  const bars = useRandomBars(16, 25, 100);
 
   return (
     <S.Card $delay={index * 0.12} $color={COLORS.orange}>
@@ -195,7 +224,7 @@ function RevenueCard({ index, kpiValues }: { index: number; kpiValues: LiveMetri
           <S.StatLabel>Revenue</S.StatLabel>
           <S.ValueWithChange>
             <S.StatValue $color={COLORS.orange}>${revenue}K</S.StatValue>
-            <S.ChangeBadge $up={revenue > revInitial}>+{randomBetween(2, 8)}%</S.ChangeBadge>
+            <S.ChangeBadge $up={revenue > revInitial}>+{changePct}%</S.ChangeBadge>
           </S.ValueWithChange>
         </S.DualRow>
         <S.DualRow style={{ padding: "6px 0" }}>
@@ -204,12 +233,12 @@ function RevenueCard({ index, kpiValues }: { index: number; kpiValues: LiveMetri
         </S.DualRow>
         <S.DualRow>
           <S.StatLabel>AOV</S.StatLabel>
-          <S.StatValue $color={COLORS.orange}>${aov}.{randomBetween(0, 99)}</S.StatValue>
+          <S.StatValue $color={COLORS.orange}>${aov}.{aovDecimal}</S.StatValue>
         </S.DualRow>
       </div>
       <S.MiniChart>
         {Array.from({ length: 16 }, (_, i) => (
-          <S.MiniBar key={i} $h={randomBetween(25, 100)} $color={COLORS.orange} $i={i} />
+          <S.MiniBar key={i} $h={bars[i]} $color={COLORS.orange} $i={i} />
         ))}
       </S.MiniChart>
     </S.Card>
@@ -220,6 +249,8 @@ function TrafficCard({ index }: { index: number }) {
   const pageviews = useLiveValue(4500, 2000, 8000, 1800);
   const bounce = useLiveValue(32, 15, 55, 2200);
   const duration = useLiveValue(4, 1, 8, 3000);
+  const sessionSeconds = useDeferredRandom(10, 59);
+  const bars = useRandomBars(16, 15, 100);
 
   return (
     <S.Card $delay={index * 0.12} $color={COLORS.pink}>
@@ -237,12 +268,12 @@ function TrafficCard({ index }: { index: number }) {
         </S.StatRow>
         <S.StatRow>
           <S.StatLabel>Avg. Session</S.StatLabel>
-          <S.StatValue $color={COLORS.pink}>{duration}m {randomBetween(10, 59)}s</S.StatValue>
+          <S.StatValue $color={COLORS.pink}>{duration}m {sessionSeconds}s</S.StatValue>
         </S.StatRow>
       </div>
       <S.MiniChart>
         {Array.from({ length: 16 }, (_, i) => (
-          <S.MiniBar key={i} $h={randomBetween(15, 100)} $color={COLORS.pink} $i={i} />
+          <S.MiniBar key={i} $h={bars[i]} $color={COLORS.pink} $i={i} />
         ))}
       </S.MiniChart>
     </S.Card>
@@ -341,15 +372,22 @@ function AlertsCard({ index, items }: { index: number; items: LiveMetrics["alert
 }
 
 function SparklineCard({ index }: { index: number }) {
-  const [points, setPoints] = useState(() =>
-    Array.from({ length: 20 }, () => randomBetween(20, 100))
+  const [points, setPoints] = useState<number[]>(() =>
+    Array.from({ length: 20 }, () => 50)
   );
 
   useEffect(() => {
+    const initId = setTimeout(
+      () => setPoints(Array.from({ length: 20 }, () => randomBetween(20, 100))),
+      0
+    );
     const id = setInterval(() => {
       setPoints((prev) => [...prev.slice(1), randomBetween(20, 100)]);
     }, 600);
-    return () => clearInterval(id);
+    return () => {
+      clearTimeout(initId);
+      clearInterval(id);
+    };
   }, []);
 
   const max = Math.max(...points);

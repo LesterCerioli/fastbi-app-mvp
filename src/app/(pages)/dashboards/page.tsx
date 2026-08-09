@@ -69,7 +69,7 @@ async function getFreshToken(): Promise<string | null> {
 const DashboardsPage: React.FC = () => {
   const { t } = useTranslations();
   const [activeView, setActiveView] = useState<DashboardView>('sales');
-  const [lastUpdated, setLastUpdated] = useState(new Date());
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [overview, setOverview] = useState<DashboardOverview | null>(null);
   const [loadingOverview, setLoadingOverview] = useState(true);
 
@@ -94,6 +94,11 @@ const DashboardsPage: React.FC = () => {
   useEffect(() => {
     fetchOverview();
   }, [fetchOverview]);
+
+  useEffect(() => {
+    const id = setTimeout(() => setLastUpdated(new Date()), 0);
+    return () => clearTimeout(id);
+  }, []);
 
   const handleRefresh = () => {
     setLastUpdated(new Date());
@@ -180,7 +185,7 @@ const DashboardsPage: React.FC = () => {
             <S.ActionsGroup>
               <S.DateDisplay>
                 <Calendar size={16} />
-                {t("dashboards.controls.lastUpdated", { time: lastUpdated.toLocaleTimeString() })}
+                {t("dashboards.controls.lastUpdated", { time: lastUpdated ? lastUpdated.toLocaleTimeString() : "" })}
               </S.DateDisplay>
               <S.ActionButton onClick={handleRefresh}>
                 <RefreshCw size={16} />

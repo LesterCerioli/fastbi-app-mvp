@@ -726,5 +726,143 @@
       "noSubscription": "Kein aktives Abonnement",
       "loading": "Laden..."
     }
+  },
+  "kpis": {
+    "card": {
+      "title": "KPIs",
+      "description": "Leistungskennzahlen erstellen und verwalten"
+    },
+    "page": {
+      "title": "Leistungskennzahlen",
+      "subtitle": "Ziele festlegen und Geschäftsleistung überwachen"
+    },
+    "creation": {
+      "title": "KPI erstellen",
+      "subtitle": "Definieren Sie eine neue Leistungskennzahl und ihre Ziele",
+      "sectionBasic": "Grundinformationen",
+      "sectionParameters": "Messung & Ziel",
+      "sectionAlerts": "Warnungen",
+      "organizationName": "Organisation",
+      "organizationPlaceholder": "Name der Organisation",
+      "code": "Code",
+      "codePlaceholder": "z. B. brutto_marge",
+      "name": "Name",
+      "namePlaceholder": "z. B. Bruttomarge",
+      "description": "Beschreibung",
+      "descriptionPlaceholder": "Beschreiben Sie, was dieser KPI verfolgt",
+      "category": "Kategorie",
+      "categories": {
+        "revenue_profitability": "Umsatz und Rentabilität",
+        "financial_health": "Finanzielle Gesundheit",
+        "growth_trends": "Wachstumstrends",
+        "customer_value": "Kundenwert",
+        "operational_efficiency": "Operative Effizienz",
+        "retention_expansion": "Kundenbindung und Expansion",
+        "forecasting_predictive": "Prognose und Vorhersage"
+      },
+      "unit": "Einheit",
+      "units": {
+        "currency": "Währung",
+        "percentage": "Prozent",
+        "number": "Zahl",
+        "days": "Tage",
+        "ratio": "Verhältnis",
+        "rating": "Bewertung",
+        "boolean": "Boolesch"
+      },
+      "aggregation": "Aggregation",
+      "aggregations": {
+        "sum": "Summe",
+        "avg": "Durchschnitt",
+        "count": "Zählung",
+        "min": "Minimum",
+        "max": "Maximum"
+      },
+      "reportingPeriod": "Berichtszeitraum",
+      "periods": {
+        "realtime": "Echtzeit",
+        "hourly": "Stündlich",
+        "daily": "Täglich",
+        "weekly": "Wöchentlich",
+        "monthly": "Monatlich",
+        "quarterly": "Vierteljährlich",
+        "annual": "Jährlich"
+      },
+      "comparison": "Vergleich",
+      "operators": {
+        "greater_than": "Größer als",
+        "greater_equal": "Größer oder gleich",
+        "less_than": "Kleiner als",
+        "less_equal": "Kleiner oder gleich",
+        "equal_to": "Gleich",
+        "between": "Zwischen"
+      },
+      "targetValue": "Zielwert",
+      "targetPlaceholder": "Zielwert",
+      "targetMin": "Ziel Minimum",
+      "targetMinPlaceholder": "Zielmin",
+      "targetMax": "Ziel Maximum",
+      "targetMaxPlaceholder": "Zielmax",
+      "alertEnabled": "Warnungen für diesen KPI aktivieren",
+      "alertThreshold": "Alarmschwelle",
+      "alertThresholdPlaceholder": "Schwellenwert",
+      "alertSeverity": "Alarmschwere",
+      "severities": {
+        "low": "Niedrig",
+        "medium": "Mittel",
+        "high": "Hoch",
+        "critical": "Kritisch"
+      },
+      "createKpi": "KPI erstellen",
+      "creating": "Erstelle...",
+      "success": "KPI erfolgreich erstellt",
+      "error": "Fehler beim Erstellen des KPI"
+    },
+    "list": {
+      "title": "Erstellte KPIs",
+      "countOne": "{count} KPI",
+      "countMany": "{count} KPIs",
+      "loading": "Laden...",
+      "empty": "Noch keine KPIs für diese Organisation erstellt",
+      "loadError": "KPIs konnten nicht geladen werden",
+      "serverError": "Serverfehler beim Laden der KPIs",
+      "retry": "Erneut versuchen",
+      "created": "Erstellt am {date}",
+      "lastValue": "Letzter Wert",
+      "statuses": {
+        "draft": "Entwurf",
+        "active": "Aktiv",
+        "inactive": "Inaktiv",
+        "deprecated": "Veraltet"
+      }
+    },
+    "details": {
+      "description": "Beschreibung",
+      "noDescription": "Keine Beschreibung vorhanden",
+      "aggregation": "Aggregierung",
+      "reportingPeriod": "Berichtszeitraum",
+      "lookbackDays": "Rückblick-Tage",
+      "target": "Zielwert",
+      "noTarget": "Nicht definiert",
+      "comparison": "Vergleich",
+      "alert": "Benachrichtigung",
+      "alertEnabled": "Aktiviert",
+      "alertDisabled": "Deaktiviert",
+      "alertThreshold": "Schwelle",
+      "lastValue": "Letzter Wert",
+      "lastVariance": "Abweichung",
+      "updatedAt": "Aktualisiert"
+    },
+    "chart": {
+      "title": "KPI-Ansichten",
+      "distribution": "Verteilung",
+      "trend": "Wachstumstrend",
+      "total": "Gesamt",
+      "empty": "Noch keine Daten für dieses KPI verfügbar",
+      "value": "Wert"
+    }
+  },
+  "backToDashboards": {
+    "label": "Zurück zu Dashboards"
   }
 }

@@ -853,5 +853,165 @@
       "noSubscription": "No active subscription",
       "loading": "Loading..."
     }
+  },
+  "adminSubscriptions": {
+    "title": "Subscriptions Overview",
+    "accessDenied": "Access denied. This page is restricted to FastBI Admin users.",
+    "loading": "Loading...",
+    "loadError": "Failed to load subscription data.",
+    "section1Title": "Existing Subscriptions",
+    "section2Title": "Subscription Status",
+    "section3Title": "Overdue Payments",
+    "organization": "Organization",
+    "plan": "Plan",
+    "cycle": "Billing Cycle",
+    "amount": "Amount",
+    "nextCharge": "Next Charge",
+    "status": "Status",
+    "lastPayment": "Last Payment",
+    "endsAtPeriodEnd": "Ends at Period End",
+    "yes": "Yes",
+    "no": "No",
+    "overdue": "Overdue",
+    "noSubscriptions": "No subscriptions found",
+    "noOverdue": "No overdue payments"
+  },
+  "kpis": {
+    "card": {
+      "title": "KPIs",
+      "description": "Create and manage key performance indicators"
+    },
+    "page": {
+      "title": "Key Performance Indicators",
+      "subtitle": "Define targets and monitor business performance"
+    },
+    "creation": {
+      "title": "Create KPI",
+      "subtitle": "Define a new key performance indicator and its targets",
+      "sectionBasic": "Basic Information",
+      "sectionParameters": "Measurement & Target",
+      "sectionAlerts": "Alerts",
+      "organizationName": "Organization",
+      "organizationPlaceholder": "Organization name",
+      "code": "Code",
+      "codePlaceholder": "e.g. gross_margin",
+      "name": "Name",
+      "namePlaceholder": "e.g. Gross Margin",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe what this KPI tracks",
+      "category": "Category",
+      "categories": {
+        "revenue_profitability": "Revenue & Profitability",
+        "financial_health": "Financial Health",
+        "growth_trends": "Growth Trends",
+        "customer_value": "Customer Value",
+        "operational_efficiency": "Operational Efficiency",
+        "retention_expansion": "Retention & Expansion",
+        "forecasting_predictive": "Forecasting & Predictive"
+      },
+      "unit": "Unit",
+      "units": {
+        "currency": "Currency",
+        "percentage": "Percentage",
+        "number": "Number",
+        "days": "Days",
+        "ratio": "Ratio",
+        "rating": "Rating",
+        "boolean": "Boolean"
+      },
+      "aggregation": "Aggregation",
+      "aggregations": {
+        "sum": "Sum",
+        "avg": "Average",
+        "count": "Count",
+        "min": "Minimum",
+        "max": "Maximum"
+      },
+      "reportingPeriod": "Reporting Period",
+      "periods": {
+        "realtime": "Real-time",
+        "hourly": "Hourly",
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly",
+        "quarterly": "Quarterly",
+        "annual": "Annual"
+      },
+      "comparison": "Comparison",
+      "operators": {
+        "greater_than": "Greater than",
+        "greater_equal": "Greater or equal",
+        "less_than": "Less than",
+        "less_equal": "Less or equal",
+        "equal_to": "Equal",
+        "between": "Between"
+      },
+      "targetValue": "Target Value",
+      "targetPlaceholder": "Target value",
+      "targetMin": "Target Min",
+      "targetMinPlaceholder": "Minimum target",
+      "targetMax": "Target Max",
+      "targetMaxPlaceholder": "Maximum target",
+      "alertEnabled": "Enable alerts for this KPI",
+      "alertThreshold": "Alert Threshold",
+      "alertThresholdPlaceholder": "Threshold value",
+      "alertSeverity": "Alert Severity",
+      "severities": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High",
+        "critical": "Critical"
+      },
+      "createKpi": "Create KPI",
+      "creating": "Creating...",
+      "success": "KPI created successfully",
+      "error": "Failed to create KPI"
+    },
+    "list": {
+      "title": "Created KPIs",
+      "countOne": "{count} KPI",
+      "countMany": "{count} KPIs",
+      "loading": "Loading...",
+      "empty": "No KPIs created yet for this organization",
+      "loadError": "Failed to load KPIs",
+      "serverError": "Server error while loading KPIs",
+      "retry": "Retry",
+      "created": "Created {date}",
+      "lastValue": "Last value",
+      "statuses": {
+        "draft": "Draft",
+        "active": "Active",
+        "inactive": "Inactive",
+        "deprecated": "Deprecated"
+      }
+    },
+    "details": {
+      "description": "Description",
+      "noDescription": "No description provided",
+      "aggregation": "Aggregation",
+      "reportingPeriod": "Reporting period",
+      "lookbackDays": "Lookback days",
+      "target": "Target",
+      "noTarget": "Not defined",
+      "comparison": "Comparison",
+      "alert": "Alert",
+      "alertEnabled": "Enabled",
+      "alertDisabled": "Disabled",
+      "alertThreshold": "Threshold",
+      "lastValue": "Last value",
+      "lastVariance": "Variance",
+      "updatedAt": "Updated"
+    },
+    "chart": {
+      "title": "KPI Visuals",
+      "distribution": "Distribution",
+      "trend": "Growth Trend",
+      "total": "Total",
+      "empty": "No data available yet for this KPI",
+      "value": "Value"
+    }
+  },
+  "backToDashboards": {
+    "label": "Back to Dashboards"
   }
 }

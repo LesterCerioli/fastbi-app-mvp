@@ -853,5 +853,165 @@
       "noSubscription": "Nenhuma assinatura ativa",
       "loading": "Carregando..."
     }
+  },
+  "adminSubscriptions": {
+    "title": "Visão de Assinaturas",
+    "accessDenied": "Acesso negado. Esta página é restrita a usuários FastBI Admin.",
+    "loading": "Carregando...",
+    "loadError": "Falha ao carregar os dados de assinaturas.",
+    "section1Title": "Assinaturas Existentes",
+    "section2Title": "Status das Assinaturas",
+    "section3Title": "Pagamentos Atrasados",
+    "organization": "Organização",
+    "plan": "Plano",
+    "cycle": "Ciclo de Cobrança",
+    "amount": "Valor",
+    "nextCharge": "Próxima Cobrança",
+    "status": "Status",
+    "lastPayment": "Último Pagamento",
+    "endsAtPeriodEnd": "Termina no Fim do Período",
+    "yes": "Sim",
+    "no": "Não",
+    "overdue": "Atrasada",
+    "noSubscriptions": "Nenhuma assinatura encontrada",
+    "noOverdue": "Nenhum pagamento atrasado"
+  },
+  "kpis": {
+    "card": {
+      "title": "KPIs",
+      "description": "Crie e gerencie indicadores-chave de desempenho"
+    },
+    "page": {
+      "title": "Indicadores-Chave de Desempenho",
+      "subtitle": "Defina metas e monitore o desempenho do negócio"
+    },
+    "creation": {
+      "title": "Criar KPI",
+      "subtitle": "Defina um novo indicador-chave de desempenho e suas metas",
+      "sectionBasic": "Informações Básicas",
+      "sectionParameters": "Medição & Meta",
+      "sectionAlerts": "Alertas",
+      "organizationName": "Organização",
+      "organizationPlaceholder": "Nome da organização",
+      "code": "Código",
+      "codePlaceholder": "ex.: margem_bruta",
+      "name": "Nome",
+      "namePlaceholder": "ex.: Margem Bruta",
+      "description": "Descrição",
+      "descriptionPlaceholder": "Descreva o que este KPI acompanha",
+      "category": "Categoria",
+      "categories": {
+        "revenue_profitability": "Receita e Lucratividade",
+        "financial_health": "Saúde Financeira",
+        "growth_trends": "Tendências de Crescimento",
+        "customer_value": "Valor do Cliente",
+        "operational_efficiency": "Eficiência Operacional",
+        "retention_expansion": "Retenção e Expansão",
+        "forecasting_predictive": "Previsão e Predição"
+      },
+      "unit": "Unidade",
+      "units": {
+        "currency": "Moeda",
+        "percentage": "Percentual",
+        "number": "Número",
+        "days": "Dias",
+        "ratio": "Razão",
+        "rating": "Avaliação",
+        "boolean": "Booleano"
+      },
+      "aggregation": "Agregação",
+      "aggregations": {
+        "sum": "Soma",
+        "avg": "Média",
+        "count": "Contagem",
+        "min": "Mínimo",
+        "max": "Máximo"
+      },
+      "reportingPeriod": "Período de Reporte",
+      "periods": {
+        "realtime": "Tempo real",
+        "hourly": "Por hora",
+        "daily": "Diário",
+        "weekly": "Semanal",
+        "monthly": "Mensal",
+        "quarterly": "Trimestral",
+        "annual": "Anual"
+      },
+      "comparison": "Comparação",
+      "operators": {
+        "greater_than": "Maior que",
+        "greater_equal": "Maior ou igual",
+        "less_than": "Menor que",
+        "less_equal": "Menor ou igual",
+        "equal_to": "Igual",
+        "between": "Entre"
+      },
+      "targetValue": "Valor-Alvo",
+      "targetPlaceholder": "Valor-alvo",
+      "targetMin": "Meta Mínima",
+      "targetMinPlaceholder": "Meta mínima",
+      "targetMax": "Meta Máxima",
+      "targetMaxPlaceholder": "Meta máxima",
+      "alertEnabled": "Habilitar alertas para este KPI",
+      "alertThreshold": "Limiar de Alerta",
+      "alertThresholdPlaceholder": "Valor do limiar",
+      "alertSeverity": "Severidade do Alerta",
+      "severities": {
+        "low": "Baixa",
+        "medium": "Média",
+        "high": "Alta",
+        "critical": "Crítica"
+      },
+      "createKpi": "Criar KPI",
+      "creating": "Criando...",
+      "success": "KPI criado com sucesso",
+      "error": "Falha ao criar o KPI"
+    },
+    "list": {
+      "title": "KPIs Criados",
+      "countOne": "{count} KPI",
+      "countMany": "{count} KPIs",
+      "loading": "Carregando...",
+      "empty": "Nenhum KPI criado ainda para esta organização",
+      "loadError": "Falha ao carregar KPIs",
+      "serverError": "Erro de servidor ao carregar KPIs",
+      "retry": "Tentar novamente",
+      "created": "Criado em {date}",
+      "lastValue": "Último valor",
+      "statuses": {
+        "draft": "Rascunho",
+        "active": "Ativo",
+        "inactive": "Inativo",
+        "deprecated": "Descontinuado"
+      }
+    },
+    "details": {
+      "description": "Descrição",
+      "noDescription": "Nenhuma descrição fornecida",
+      "aggregation": "Agregação",
+      "reportingPeriod": "Período de reporte",
+      "lookbackDays": "Dias de lookback",
+      "target": "Meta",
+      "noTarget": "Não definido",
+      "comparison": "Comparação",
+      "alert": "Alerta",
+      "alertEnabled": "Habilitado",
+      "alertDisabled": "Desabilitado",
+      "alertThreshold": "Limiar",
+      "lastValue": "Último valor",
+      "lastVariance": "Variação",
+      "updatedAt": "Atualizado em"
+    },
+    "chart": {
+      "title": "Visualizações do KPI",
+      "distribution": "Distribuição",
+      "trend": "Tendência de Crescimento",
+      "total": "Total",
+      "empty": "Ainda não há dados disponíveis para este KPI",
+      "value": "Valor"
+    }
+  },
+  "backToDashboards": {
+    "label": "Voltar para Dashboards"
   }
 }
