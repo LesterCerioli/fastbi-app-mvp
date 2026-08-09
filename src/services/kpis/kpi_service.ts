@@ -3,24 +3,28 @@ import { query } from "../db";
 export enum KPIStatus {
   Draft = "draft",
   Active = "active",
-  Archived = "archived",
+  Inactive = "inactive",
+  Deprecated = "deprecated",
 }
 
 export enum KPICategory {
-  Financial = "financial",
-  Operational = "operational",
-  Customer = "customer",
-  Sales = "sales",
-  Revenue = "revenue",
+  RevenueProfitability = "revenue_profitability",
+  FinancialHealth = "financial_health",
+  GrowthTrends = "growth_trends",
+  CustomerValue = "customer_value",
+  OperationalEfficiency = "operational_efficiency",
+  RetentionExpansion = "retention_expansion",
+  ForecastingPredictive = "forecasting_predictive",
 }
 
 export enum KPIUnit {
-  Currency = "currency",
   Percentage = "percentage",
+  Currency = "currency",
   Number = "number",
-  Days = "days",
-  Hours = "hours",
   Ratio = "ratio",
+  Days = "days",
+  Rating = "rating",
+  Boolean = "boolean",
 }
 
 export enum AggregationType {
@@ -36,8 +40,7 @@ export enum ComparisonOperator {
   GreaterEqual = "greater_equal",
   LessThan = "less_than",
   LessEqual = "less_equal",
-  Equal = "equal",
-  NotEqual = "not_equal",
+  Equal = "equal_to",
   Between = "between",
 }
 
@@ -270,7 +273,7 @@ export class KPIService {
   async ResolveKPIIDByCode(code: string, organizationName: string): Promise<{ kpi_id: string; org_id: string }> {
     const orgID = await this.resolveOrganizationID(organizationName);
     const result = await query(
-      `SELECT id FROM public.kpis WHERE code = $1 AND organization_id = $2 AND deleted_at IS NULL`,
+      `SELECT id FROM public.kpis WHERE code = $1 AND organization_id = $2 AND status <> 'deprecated'`,
       [code, orgID]
     );
     if (!result.rows[0]) {
@@ -587,7 +590,7 @@ export class KPIService {
 
     await query(
       `UPDATE public.kpis SET status = $1, updated_at = CURRENT_TIMESTAMP, updated_by = $2 WHERE id = $3 AND organization_id = $4`,
-      [KPIStatus.Archived, deletedBy || null, id, organizationID]
+      [KPIStatus.Inactive, deletedBy || null, id, organizationID]
     );
 
     try {
@@ -1380,5 +1383,132 @@ export class KPIService {
     if (slice.length === 0) return "{}";
     const escaped = slice.map((s) => `"${s.replace(/"/g, '\\"')}"`);
     return "{" + escaped.join(",") + "}";
+  }
+
+  async GetKPIValues(
+    kpiID: string,
+    organizationID: string,
+    limit = 90,
+    offset = 0
+  ): Promise<KPIValue[]> {
+    if (limit <= 0) limit = 90;
+    if (offset < 0) offset = 0;
+
+    const result = await query(
+      `SELECT kpi_id, actual_value, variance_percentage, achieved_target, calculation_date, calculated_at
+       FROM public.kpi_values
+       WHERE kpi_id = $1 AND organization_id = $2
+       ORDER BY calculation_date ASC
+       LIMIT $3 OFFSET $4`,
+      [kpiID, organizationID, limit, offset]
+    );
+
+    return result.rows.map((row: Record<string, unknown>) => ({
+      kpi_id: row.kpi_id as string,
+      value: parseFloat(row.actual_value as string),
+      variance: row.variance_percentage !== null ? parseFloat(row.variance_percentage as string) : null,
+      target_status: row.achieved_target ? "achieved" : row.achieved_target === false ? "missed" : "unknown",
+      calculated_at: row.calculated_at as Date,
+    }));
+  }
+
+  async GetKPIValueBreakdown(
+    kpi: KPI,
+    organizationID: string
+  ): Promise<{ label: string; value: number }[]> {
+    const limit = 12;
+
+    if (kpi.category === "operational_efficiency" || kpi.category === "financial_health") {
+      const result = await query(
+        `SELECT
+           COALESCE(SUM(COALESCE(cogs_direct_material, 0)), 0) AS material,
+           COALESCE(SUM(COALESCE(cogs_direct_labor, 0)), 0) AS labor,
+           COALESCE(SUM(COALESCE(cogs_manufacturing, 0)), 0) AS manufacturing,
+           COALESCE(SUM(COALESCE(cogs_freight_in, 0)), 0) AS freight,
+           COALESCE(SUM(COALESCE(cogs_royalties, 0)), 0) AS royalties,
+           COALESCE(SUM(COALESCE(variable_commission, 0)), 0) AS commission,
+           COALESCE(SUM(COALESCE(variable_shipping, 0)), 0) AS shipping,
+           COALESCE(SUM(COALESCE(variable_payment_fees, 0)), 0) AS payment_fees,
+           COALESCE(SUM(COALESCE(variable_packaging, 0)), 0) AS packaging,
+           COALESCE(SUM(COALESCE(fixed_direct_allocated, 0)), 0) AS fixed_direct
+         FROM public.financial_transactions
+         WHERE organization_id = $1`,
+        [kpi.organization_id]
+      );
+      const row = result.rows[0] || {};
+      const map: Record<string, number> = {
+        material: parseFloat(row.material || "0"),
+        labor: parseFloat(row.labor || "0"),
+        manufacturing: parseFloat(row.manufacturing || "0"),
+        freight: parseFloat(row.freight || "0"),
+        royalties: parseFloat(row.royalties || "0"),
+        commission: parseFloat(row.commission || "0"),
+        shipping: parseFloat(row.shipping || "0"),
+        payment_fees: parseFloat(row["payment_fees"] || "0"),
+        packaging: parseFloat(row["packaging"] || "0"),
+        fixed_direct: parseFloat(row["fixed_direct"] || "0"),
+      };
+      return Object.entries(map)
+        .filter(([, value]) => value > 0)
+        .map(([label, value]) => ({ label, value }));
+    }
+
+    if (kpi.category === "customer_value" || kpi.category === "retention_expansion") {
+      const result = await query(
+        `SELECT customer_name, COALESCE(SUM(amount), 0) as total
+         FROM public.revenue_transactions
+         WHERE organization_id = $1
+         GROUP BY customer_name
+         ORDER BY total DESC
+         LIMIT $2`,
+        [kpi.organization_id, limit]
+      );
+      return result.rows
+        .map((row: Record<string, unknown>) => ({
+          label: (row.customer_name as string) || "unknown",
+          value: parseFloat(row["total"] as string),
+        }))
+        .filter((x) => x.value > 0);
+    }
+
+    if (kpi.category === "growth_trends" || kpi.category === "revenue_profitability" || kpi.category === "forecasting_predictive") {
+      let result = await query(
+        `SELECT product, COALESCE(SUM(amount), 0) as total
+         FROM public.revenue_transactions
+         WHERE organization_id = $1
+         GROUP BY product
+         ORDER BY total DESC
+         LIMIT $2`,
+        [kpi.organization_id, limit]
+      );
+      let slices = result.rows
+        .map((row: Record<string, unknown>) => ({
+          label: (row["product"] as string) || "unknown",
+          value: parseFloat(row["total"] as string),
+        }))
+        .filter((x) => x.value > 0);
+
+      if (slices.length === 0) {
+        result = await query(
+          `SELECT category, COALESCE(SUM(amount), 0) as total
+           FROM public.sales_records
+           WHERE organization_id = $1
+           GROUP BY category
+           ORDER BY total DESC
+           LIMIT $2`,
+          [kpi.organization_id, limit]
+        );
+        slices = result.rows
+          .map((row: Record<string, unknown>) => ({
+            label: (row["category"] as string) || "unknown",
+            value: parseFloat(row["total"] as string),
+          }))
+          .filter((x) => x.value > 0);
+      }
+
+      return slices;
+    }
+
+    return [];
   }
 }
