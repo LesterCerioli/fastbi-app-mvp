@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { authenticate } from "@/lib/api-auth";
 import { getOrganizationName } from "@/lib/session";
 import { ExecutiveAnalyticsService } from "@/services/ai/executive_analytics_service";
-import { query } from "@/services/db";
+import { liveMetricsService } from "@/services/dashboard/live_metrics_service";
 
 const executiveService = new ExecutiveAnalyticsService();
 
@@ -17,25 +17,9 @@ export async function GET(request) {
 
     const summaryPromise = executiveService.getExecutiveSummary(organizationName).catch(() => null);
 
-    const kpiValuesPromise = query(
-      `SELECT kv.kpi_id, kv.actual_value, kv.target_value, kv.variance_percentage, kv.achieved_target, k.code, k.name
-       FROM public.kpi_values kv
-       JOIN public.kpis k ON k.id = kv.kpi_id
-       WHERE kv.organization_id = (SELECT id FROM public.organizations WHERE name = $1)
-       ORDER BY kv.calculation_date DESC
-       LIMIT 20`,
-      [organizationName]
-    ).catch(() => ({ rows: [] }));
+    const kpiValuesPromise = liveMetricsService.getKpiValues(organizationName).catch(() => []);
 
-    const insightsPromise = query(
-      `SELECT id, insight_type, severity, title, description, confidence, created_at
-       FROM public.agent_insights
-       WHERE organization_id = (SELECT id FROM public.organizations WHERE name = $1)
-         AND is_dismissed = false
-       ORDER BY created_at DESC
-       LIMIT 10`,
-      [organizationName]
-    ).catch(() => ({ rows: [] }));
+    const insightsPromise = liveMetricsService.getInsights(organizationName).catch(() => []);
 
     const [summary, kpiValuesResult, insightsResult] = await Promise.all([
       summaryPromise,
@@ -43,16 +27,20 @@ export async function GET(request) {
       insightsPromise,
     ]);
 
-    const kpiRows = kpiValuesResult.rows || [];
-    const insights = insightsResult.rows || [];
+    const kpiRows = kpiValuesResult || [];
+    const insights = insightsResult || [];
 
     const revenueKpi = kpiRows.find(r => r.code === "revenue" || r.name?.toLowerCase().includes("revenue"));
     const customersKpi = kpiRows.find(r => r.code === "customers" || r.name?.toLowerCase().includes("customer"));
     const ordersKpi = kpiRows.find(r => r.code === "orders" || r.name?.toLowerCase().includes("order") || r.name?.toLowerCase().includes("transaction"));
 
     const revPercent = summary?.currentPeriod?.onTrackPercent ?? (revenueKpi ? (revenueKpi.achieved_target ? 85 : 60) : null);
-    const customersPercent = customersKpi ? (customersKpi.achieved_target ? 90 : 55) + Math.round(Math.random() * 8) : null;
-    const ordersPercent = ordersKpi ? (ordersKpi.achieved_target ? 80 : 50) + Math.round(Math.random() * 10) : null;
+    const customersPercent = customersKpi && customersKpi.target_value > 0
+      ? Math.min(100, Math.round((customersKpi.actual_value / customersKpi.target_value) * 100))
+      : customersKpi ? (customersKpi.achieved_target ? 100 : 0) : null;
+    const ordersPercent = ordersKpi && ordersKpi.target_value > 0
+      ? Math.min(100, Math.round((ordersKpi.actual_value / ordersKpi.target_value) * 100))
+      : ordersKpi ? (ordersKpi.achieved_target ? 100 : 0) : null;
 
     const alerts = insights.map(i => ({
       id: i.id,
