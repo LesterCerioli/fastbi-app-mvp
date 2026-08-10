@@ -16,7 +16,7 @@ describe("KPIService", () => {
     code: "REV_GROWTH",
     name: "Revenue Growth",
     description: "Tracks revenue growth over time",
-    category: KPICategory.Financial,
+    category: KPICategory.RevenueProfitability,
     unit: KPIUnit.Percentage,
     aggregation: AggregationType.Avg,
     comparison_operator: ComparisonOperator.GreaterThan,
@@ -225,7 +225,7 @@ describe("KPIService", () => {
         .mockResolvedValueOnce({ rows: [{ count: "0" }] } as any)
         .mockResolvedValueOnce({ rows: [] } as any);
 
-      const filter: KPIFilter = { organization_name: "TestOrg", category: KPICategory.Financial };
+      const filter: KPIFilter = { organization_name: "TestOrg", category: KPICategory.RevenueProfitability };
       const [kpis] = await service.ListKPIs(filter);
 
       expect(kpis).toHaveLength(0);
@@ -499,7 +499,7 @@ describe("KPIService", () => {
       await service.DeleteKPI("kpi-1", "org-1");
 
       expect(mockQuery.mock.calls[1][0]).toContain("UPDATE");
-      expect(mockQuery.mock.calls[1][1]).toContain("archived");
+      expect(mockQuery.mock.calls[1][1]).toContain("inactive");
     });
 
     it("throws when KPI not found", async () => {

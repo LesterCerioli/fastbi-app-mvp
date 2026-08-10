@@ -2,6 +2,8 @@
 
 import AnalyticsWrapper from "@/components/shared/analytics";
 import Header from "@/components/shared/header/header";
+import BackToDashboards from "@/components/shared/backToDashboards/backToDashboards";
+import { Toolbar as TopToolbar } from "@/components/shared/backToDashboards/styles";
 import LanguageBar from "@/components/shared/languageBar/languageBar";
 import StyledComponentsRegistry from "../lib/registry";
 import "./globals.css";
@@ -31,7 +33,10 @@ export default function RootLayout({
         <StyledComponentsRegistry>
           <I18nProvider>
             <Header />
-            <LanguageBar />
+            <TopToolbar>
+              <BackToDashboards />
+              <LanguageBar />
+            </TopToolbar>
             {children}
             <AnalyticsWrapper />
             <Footer />

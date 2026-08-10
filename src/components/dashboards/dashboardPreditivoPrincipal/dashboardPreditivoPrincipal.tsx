@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useCallback } from 'react';
 import * as S from "./styles";
+import ChartsOrganizationKpis from "@/components/kpis/chartsOrganization/chartsOrganization";
 import {
   ResponsiveContainer,
   LineChart,
@@ -348,6 +349,8 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
               </S.Table>
             </S.TableContainer>
           )}
+
+          <ChartsOrganizationKpis organizationName={organizationName} />
         </S.Content>
       );
     }

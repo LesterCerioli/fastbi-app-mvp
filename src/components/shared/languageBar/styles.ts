@@ -1,25 +1,7 @@
 import styled from "styled-components";
 
 export const Bar = styled.div`
-  position: absolute;
-  top: 100px;
-  right: 60px;
-  z-index: 10;
-
-  @media (max-width: 1024px) {
-    right: 32px;
-    top: 90px;
-  }
-
-  @media (max-width: 768px) {
-    right: 20px;
-    top: 72px;
-  }
-
-  @media (max-width: 640px) {
-    right: 12px;
-    top: 64px;
-  }
+  position: relative;
 `;
 
 export const LangLabel = styled.span`

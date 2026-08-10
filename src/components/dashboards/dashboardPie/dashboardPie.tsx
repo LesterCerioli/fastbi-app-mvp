@@ -2,6 +2,7 @@
 import React, { useState, useCallback } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import * as S from "./styles";
+import ChartsOrganizationKpis from "@/components/kpis/chartsOrganization/chartsOrganization";
 
 const colors = ['#00D4FF', '#00FF9F', '#FF9F00', '#FF4D4D', '#9F4DFF', '#FF69B4', '#4DC9F6', '#A8E6CF'];
 
@@ -259,6 +260,8 @@ const DashboardPie: React.FC<Props> = ({ organizationName, productMix }) => {
               </S.TableContainer>
             </S.ChartCard>
           )}
+
+          <ChartsOrganizationKpis organizationName={organizationName} />
         </S.Content>
       );
     }
