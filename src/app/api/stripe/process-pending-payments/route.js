@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { authenticate } from "@/lib/api-auth";
 import { processSingleToken } from "@/services/get_token_transform_pm_service";
 import { createPaymentIntent } from "@/services/stripe/paymentIntents";
+import { getPlanByKey, annualUnitAmount } from "@/lib/planLimits";
 
 export async function POST(request) {
   try {
@@ -27,6 +28,41 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
+    let expectedAmount = null;
+    if (body.plan_key) {
+      const plan = getPlanByKey(body.plan_key);
+      if (!plan) {
+        return NextResponse.json({
+          error: `Unknown plan_key: ${body.plan_key}`
+        }, { status: 400 });
+      }
+
+      const userQuantity = Number(body.user_quantity);
+      if (!Number.isInteger(userQuantity) || userQuantity < 1) {
+        return NextResponse.json({
+          error: "user_quantity must be a positive integer"
+        }, { status: 400 });
+      }
+
+      if (plan.maxUsers !== null && userQuantity > plan.maxUsers) {
+        return NextResponse.json({
+          error: `plan '${plan.key}' supports up to ${plan.maxUsers} users`
+        }, { status: 400 });
+      }
+
+      const unitAmount =
+        body.billing_cycle === "annual"
+          ? annualUnitAmount(plan)
+          : plan.monthlyPrice;
+      expectedAmount = unitAmount * userQuantity;
+
+      if (expectedAmount !== Number(body.amount)) {
+        return NextResponse.json({
+          error: `amount mismatch: expected ${expectedAmount} for ${userQuantity} users on plan '${plan.key}'`
+        }, { status: 400 });
+      }
+    }
+
     const result = await processSingleToken(
       body.stripe_token_id,
       body.user_name,
@@ -40,11 +76,11 @@ export async function POST(request) {
     }
 
     let paymentIntent = null;
-    if (body.amount && body.currency) {
+    if (expectedAmount !== null && body.currency) {
       paymentIntent = await createPaymentIntent(
         result.paymentMethodId,
         result.customerId,
-        body.amount,
+        expectedAmount,
         body.currency
       );
     }

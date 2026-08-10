@@ -254,7 +254,7 @@
         "name": "Starter",
         "desc": "Für kleine Teams, die ihre ersten Dashboards in Entscheidungen umwandeln.",
         "features": [
-          "Bis zu 5 Benutzer",
+          "Bis zu 10 Benutzer",
           "10 verbundene Datenquellen",
           "Unbegrenzte Dashboards",
           "Tägliche Datenaktualisierung",
@@ -285,6 +285,10 @@
           "Prüfprotokolle & Datenherkunft",
           "Dedizierter Erfolgsmanager"
         ]
+      },
+      "limits": {
+        "upTo": "Bis zu {limit} Benutzer",
+        "unlimited": "Unbegrenzte Benutzer"
       }
     },
     "enterprise": {

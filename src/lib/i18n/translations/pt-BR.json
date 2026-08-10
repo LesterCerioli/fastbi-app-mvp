@@ -257,7 +257,7 @@
         "name": "Iniciante",
         "desc": "Para pequenas equipes transformando seus primeiros dashboards em decisões.",
         "features": [
-          "Até 5 usuários",
+          "Até 10 usuários",
           "10 fontes de dados conectadas",
           "Dashboards ilimitados",
           "Atualização diária",
@@ -288,6 +288,10 @@
           "Logs de auditoria e linhagem de dados",
           "Gerente de sucesso dedicado"
         ]
+      },
+      "limits": {
+        "upTo": "Até {limit} usuários",
+        "unlimited": "Usuários ilimitados"
       }
     },
     "enterprise": {
@@ -526,8 +530,15 @@
         "processing": "Criando assinatura...",
         "errors": {
           "createFailed": "Falha ao criar assinatura",
-          "generic": "Ocorreu um erro. Tente novamente."
-        }
+          "generic": "Ocorreu um erro. Tente novamente.",
+          "usersRequired": "Informe um número válido de usuários",
+          "limitExceeded": "Este plano suporta até {limit} usuários"
+        },
+        "unlimitedUsers": "Usuários ilimitados",
+        "usersLimit": "Até {limit} usuários",
+        "users": "Número de Usuários",
+        "usersHint": "Informe quantos usuários você precisa (até {limit})",
+        "unlimitedHint": "Usuários ilimitados neste plano"
       },
       "payment": {
         "title": "Finalizar Pagamento",
@@ -555,7 +566,8 @@
           "cardholderNameRequired": "O nome no cartão é obrigatório",
           "paymentFailed": "Falha no pagamento. Tente novamente.",
           "generic": "Ocorreu um erro. Tente novamente."
-        }
+        },
+        "users": "Número de Usuários"
       }
     }
   },

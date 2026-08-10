@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import * as S from "./styles";
 import { useTranslations } from "@/lib/i18n/useTranslations";
 import { formatPrice } from "@/lib/i18n/currency";
+import { PLANS } from "@/lib/planLimits";
 
 interface PricingCardsProps {
   annual: boolean;
@@ -24,27 +25,17 @@ export default function PricingCards({ annual }: PricingCardsProps) {
   const annualPrice = (monthly: number) =>
     Math.round(monthly * 12 * 0.8) / 12;
 
-  const tiers = [
-    {
-      key: "starter",
-      monthlyPrice: 39,
-      featured: false,
-      primary: false,
-    },
-    {
-      key: "professional",
-      monthlyPrice: 89,
-      featured: true,
-      primary: true,
-      badge: t("pricing.cards.professional.badge"),
-    },
-    {
-      key: "business",
-      monthlyPrice: 149,
-      featured: false,
-      primary: false,
-    },
-  ];
+  const tiers = PLANS.map((plan) => ({
+    key: plan.key,
+    monthlyPrice: plan.monthlyPrice,
+    maxUsers: plan.maxUsers,
+    featured: plan.key === "professional",
+    primary: plan.key === "professional",
+    badge:
+      plan.key === "professional"
+        ? t("pricing.cards.professional.badge")
+        : null,
+  }));
 
   return (
     <S.Tiers>
@@ -54,6 +45,10 @@ export default function PricingCards({ annual }: PricingCardsProps) {
         const features = t(`pricing.cards.${tier.key}.features`);
         const usdAmount = annual ? annualPrice(tier.monthlyPrice) : tier.monthlyPrice;
         const { symbol, value } = formatPrice(usdAmount, locale, annual);
+        const userLimit =
+          tier.maxUsers === null
+            ? t("pricing.cards.limits.unlimited")
+            : t("pricing.cards.limits.upTo", { limit: String(tier.maxUsers) });
 
         return (
           <S.Card key={tier.key} $featured={tier.featured}>
@@ -68,6 +63,7 @@ export default function PricingCards({ annual }: PricingCardsProps) {
             <S.Billed>
               {annual ? t("pricing.cards.billedAnnually") : "\u00A0"}
             </S.Billed>
+            <S.UserLimit>{userLimit}</S.UserLimit>
             <S.CTAButton
               $primary={tier.primary}
               onClick={() => router.push("/signup")}

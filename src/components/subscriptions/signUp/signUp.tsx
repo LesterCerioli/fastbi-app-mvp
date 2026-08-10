@@ -15,4 +15,5 @@ export interface SubscriptionData {
   planName: string;
   billingCycle: "monthly" | "annual";
   amount: number;
+  userCount: number;
 }

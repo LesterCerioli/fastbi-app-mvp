@@ -231,12 +231,13 @@ export async function getBillingOverview(
   if (subscriptions.length > 0) {
     const sub = subscriptions[0];
     const billingAnchorUnix = Number(sub.billing_anchor_unix || 0);
+    const quantity = Number(sub.quantity || 1);
     next_charge = {
       subscription_id: String(sub.id || ""),
       stripe_subscription_id: String(sub.stripe_subscription_id || ""),
       plan_key: String(sub.plan_key || ""),
       billing_cycle: String(sub.billing_cycle || ""),
-      amount_cents: Number(sub.amount_cents || 0),
+      amount_cents: Number(sub.amount_cents || 0) * quantity,
       currency: String(sub.currency || "usd"),
       status: String(sub.status || ""),
       cancel_at_period_end: Boolean(sub.cancel_at_period_end),
