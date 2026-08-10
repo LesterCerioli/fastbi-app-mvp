@@ -147,6 +147,13 @@ export const PlanDesc = styled.div`
   color: #64748b;
 `;
 
+export const PlanLimit = styled.div`
+  font-size: 11px;
+  font-weight: 600;
+  color: #22c55e;
+  margin-top: 4px;
+`;
+
 export const PlanPrice = styled.div`
   font-size: 16px;
   font-weight: 700;
@@ -250,4 +257,32 @@ export const ErrorMessage = styled.div`
   color: #fca5a5;
   font-size: 13px;
   margin-bottom: 20px;
+`;
+
+export const UserField = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+`;
+
+export const Input = styled.input<{ $invalid?: boolean }>`
+  width: 96px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid ${({ $invalid }) => ($invalid ? "#ef4444" : "#334155")};
+  background: rgba(255, 255, 255, 0.04);
+  color: #f1f5f9;
+  font-size: 14px;
+  font-family: "Inter", system-ui, sans-serif;
+  outline: none;
+
+  &:focus {
+    border-color: #22c55e;
+  }
+`;
+
+export const UserHint = styled.span`
+  font-size: 12px;
+  color: #64748b;
 `;

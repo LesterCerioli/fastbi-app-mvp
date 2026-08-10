@@ -19,7 +19,7 @@ export default function PricingComparison() {
     {
       group: t("pricing.comparison.groups.coreAnalytics"),
       items: [
-        { label: t("pricing.comparison.rows.usersIncluded"), values: ["5", "25", "100", t("pricing.comparison.values.unlimited")] },
+        { label: t("pricing.comparison.rows.usersIncluded"), values: ["10", "200", t("pricing.comparison.values.unlimited"), t("pricing.comparison.values.unlimited")] },
         { label: t("pricing.comparison.rows.connectedSources"), values: ["10", "50", t("pricing.comparison.values.unlimited"), t("pricing.comparison.values.unlimited")] },
         { label: t("pricing.comparison.rows.dashboards"), values: [t("pricing.comparison.values.unlimited"), t("pricing.comparison.values.unlimited"), t("pricing.comparison.values.unlimited"), t("pricing.comparison.values.unlimited")] },
         { label: t("pricing.comparison.rows.refreshRate"), values: [t("pricing.comparison.values.daily"), t("pricing.comparison.values.hourly"), t("pricing.comparison.values.realTime"), t("pricing.comparison.values.realTime")] },

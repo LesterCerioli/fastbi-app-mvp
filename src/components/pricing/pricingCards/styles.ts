@@ -119,6 +119,14 @@ export const Billed = styled.div`
   min-height: 18px;
 `;
 
+export const UserLimit = styled.div`
+  color: #34d399;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 4px;
+  min-height: 16px;
+`;
+
 export const CTAButton = styled.button<{ $primary?: boolean }>`
   font-family: "Inter", system-ui, sans-serif;
   font-weight: 600;

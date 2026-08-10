@@ -26,6 +26,7 @@ interface SubscriptionData {
   planName: string;
   billingCycle: "monthly" | "annual";
   amount: number;
+  userCount: number;
 }
 
 interface PaymentData {
@@ -69,6 +70,9 @@ export default function SignUpPage() {
     setSubscriptionData(data);
     sessionStorage.setItem("signup_subscription_amount", String(data.amount));
     sessionStorage.setItem("signup_subscription_currency", locale === "en" ? "usd" : "brl");
+    sessionStorage.setItem("signup_subscription_plan_key", data.planKey);
+    sessionStorage.setItem("signup_subscription_billing_cycle", data.billingCycle);
+    sessionStorage.setItem("signup_subscription_user_count", String(data.userCount));
     setStep(4);
   }, [locale]);
 
@@ -112,6 +116,24 @@ export default function SignUpPage() {
         });
 
         if (orgRes.ok) {
+          const orgDataJson = await orgRes.json().catch(() => null);
+
+          if (orgDataJson?.id && subscriptionData) {
+            await fetch("/api/billing/license", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${jwtToken}`,
+              },
+              body: JSON.stringify({
+                organization_id: orgDataJson.id,
+                plan_key: subscriptionData.planKey,
+                user_quantity: subscriptionData.userCount,
+                billing_cycle: subscriptionData.billingCycle,
+              }),
+            });
+          }
+
           await fetch("/api/users/register", {
             method: "POST",
             headers: {
@@ -289,6 +311,12 @@ export default function SignUpPage() {
                           ? t("subscriptions.signUp.subscription.annual")
                           : t("subscriptions.signUp.subscription.monthly")}
                       </P.SummaryValue>
+                    </P.SummaryLine>
+                    <P.SummaryLine>
+                      <P.SummaryLabel>
+                        {t("subscriptions.signUp.subscription.users")}
+                      </P.SummaryLabel>
+                      <P.SummaryValue>{subscriptionData.userCount}</P.SummaryValue>
                     </P.SummaryLine>
                     <P.SummaryLine>
                       <P.SummaryLabel>
