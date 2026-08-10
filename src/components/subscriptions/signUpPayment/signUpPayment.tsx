@@ -120,6 +120,9 @@ function PaymentForm({
       const signupUserEmail = sessionStorage.getItem("signup_user_email") || "";
       const signupAmount = sessionStorage.getItem("signup_subscription_amount") || "0";
       const signupCurrency = sessionStorage.getItem("signup_subscription_currency") || "usd";
+      const signupPlanKey = sessionStorage.getItem("signup_subscription_plan_key") || "";
+      const signupBillingCycle = sessionStorage.getItem("signup_subscription_billing_cycle") || "";
+      const signupUserCount = sessionStorage.getItem("signup_subscription_user_count") || "";
 
       await fetch("/api/stripe/process-pending-payments", {
         method: "POST",
@@ -131,6 +134,9 @@ function PaymentForm({
           stripe_token_id: token.id,
           user_name: signupUserName,
           user_email: signupUserEmail,
+          plan_key: signupPlanKey,
+          billing_cycle: signupBillingCycle,
+          user_quantity: Number(signupUserCount),
           amount: Number(signupAmount),
           currency: signupCurrency,
         }),
@@ -234,6 +240,14 @@ function PaymentForm({
             {subscriptionData?.billingCycle === "annual"
               ? t("subscriptions.signUp.payment.annual")
               : t("subscriptions.signUp.payment.monthly")}
+          </S.SummaryValue>
+        </S.SummaryRow>
+        <S.SummaryRow>
+          <S.SummaryLabel>
+            {t("subscriptions.signUp.payment.users")}
+          </S.SummaryLabel>
+          <S.SummaryValue>
+            {subscriptionData?.userCount ?? 1}
           </S.SummaryValue>
         </S.SummaryRow>
         <S.TotalRow>

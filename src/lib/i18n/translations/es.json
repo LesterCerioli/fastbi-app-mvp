@@ -254,7 +254,7 @@
         "name": "Inicial",
         "desc": "Para equipos pequeños que convierten sus primeros dashboards en decisiones.",
         "features": [
-          "Hasta 5 usuarios",
+          "Hasta 10 usuarios",
           "10 fuentes de datos conectadas",
           "Dashboards ilimitados",
           "Actualización diaria",
@@ -285,6 +285,10 @@
           "Registros de auditoría",
           "Gerente de éxito dedicado"
         ]
+      },
+      "limits": {
+        "upTo": "Hasta {limit} usuarios",
+        "unlimited": "Usuarios ilimitados"
       }
     },
     "enterprise": {

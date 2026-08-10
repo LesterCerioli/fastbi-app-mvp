@@ -257,7 +257,7 @@
         "name": "Starter",
         "desc": "For small teams turning their first dashboards into decisions.",
         "features": [
-          "Up to 5 users",
+          "Up to 10 users",
           "10 connected data sources",
           "Unlimited dashboards",
           "Daily data refresh",
@@ -288,6 +288,10 @@
           "Audit logs & data lineage",
           "Dedicated success manager"
         ]
+      },
+      "limits": {
+        "upTo": "Up to {limit} users",
+        "unlimited": "Unlimited users"
       }
     },
     "enterprise": {
@@ -589,8 +593,15 @@
         "processing": "Creating subscription...",
         "errors": {
           "createFailed": "Failed to create subscription",
-          "generic": "An error occurred. Please try again."
-        }
+          "generic": "An error occurred. Please try again.",
+          "usersRequired": "Please enter a valid number of users",
+          "limitExceeded": "This plan supports up to {limit} users"
+        },
+        "unlimitedUsers": "Unlimited users",
+        "usersLimit": "Up to {limit} users",
+        "users": "Number of Users",
+        "usersHint": "Choose how many users you need (up to {limit})",
+        "unlimitedHint": "Unlimited users on this plan"
       },
       "payment": {
         "title": "Complete Your Payment",
@@ -618,7 +629,8 @@
           "cardholderNameRequired": "Cardholder name is required",
           "paymentFailed": "Payment failed. Please try again.",
           "generic": "An error occurred. Please try again."
-        }
+        },
+        "users": "Number of Users"
       }
     }
   },

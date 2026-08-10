@@ -254,7 +254,7 @@
         "name": "Starter",
         "desc": "Per piccoli team che trasformano i loro primi dashboard in decisioni.",
         "features": [
-          "Fino a 5 utenti",
+          "Fino a 10 utenti",
           "10 fonti dati connesse",
           "Dashboard illimitati",
           "Aggiornamento giornaliero",
@@ -285,6 +285,10 @@
           "Log di audit e data lineage",
           "Manager del successo dedicato"
         ]
+      },
+      "limits": {
+        "upTo": "Fino a {limit} utenti",
+        "unlimited": "Utenti illimitati"
       }
     },
     "enterprise": {
