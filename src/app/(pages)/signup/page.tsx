@@ -168,6 +168,16 @@ export default function SignUpPage() {
           if (loginData.user) {
             sessionStorage.setItem("user", JSON.stringify(loginData.user));
             sessionStorage.setItem("organization_name", orgData.organizationName);
+            if (loginData.user.organization_id) {
+              await fetch("/api/session/init", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${jwtToken}`,
+                },
+                body: JSON.stringify({ organization_id: loginData.user.organization_id }),
+              });
+            }
           }
         }
       }

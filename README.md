@@ -123,6 +123,34 @@ curl -X POST "https://api-m.sandbox.paypal.com/v1/oauth2/token" \
 
 The response contains the `access_token` (Bearer, valid for `expires_in` seconds, ~9h). To persist it for the app, update the `PAYPAL_ACCESS_TOKEN` variable in `.env` with the new value, then restart the dev server.
 
+### Sandbox test cards
+
+Official PayPal sandbox test card numbers (CVV `123`, any **future** expiration date; Amex uses CVV `1234`):
+
+| Card | Number |
+| --- | --- |
+| Visa | `4111111111111111` |
+| Mastercard | `5555555555554444` |
+| American Express | `378282246310005` |
+| Discover | `6011111111111117` |
+| JCB | `3530111333300000` |
+| Diners Club | `30569309025904` |
+
+Other numbers are **rejected** by the sandbox (e.g. `VALIDATION_ERROR: Invalid card number`). A full list is available at [developer.paypal.com](https://developer.paypal.com) → Sandbox → Card testing, which also includes a test card generator.
+
+### Where payment data is stored
+
+PayPal payment data is persisted in **DynamoDB** (NoSQL) via the **LocalStack** endpoint defined by `LOCALSTACK_ENDPOINT` in `.env` — **not** in PostgreSQL. Four tables are used (created by `src/services/dynamodb/paypalTablesSetup.ts`):
+
+| Table | Content | Written by |
+| --- | --- | --- |
+| `FastBI_PayPal_orders` | Payment order (status COMPLETED/FAILED, plan, amount, paypal_order_id) | `savePayPalOrder()` — `paypalOrders.ts` |
+| `FastBI_PayPal_captures` | Payment capture (capture_id, net amount, fees) | `savePayPalCapture()` — `paypalCaptures.ts` |
+| `FastBI_PayPal_customers` | Customer (email → payer_id) | `findOrCreatePayPalCustomer()` — `paypalCustomers.ts` |
+| `FastBI_PayPal_payment_methods` | Card used (last digits, brand) | `savePayPalPaymentMethod()` — `paypalPaymentMethods.ts` |
+
+Persistence happens in `src/app/api/paypal/orders/route.js` (lines 129, 185, 230) using the AWS SDK v3 DynamoDB client pointed at LocalStack. PostgreSQL (Supabase) stores users/auth only — payments never go there.
+
 ## Running Tests
 
 ```bash
