@@ -75,6 +75,20 @@ export const StripeElement = styled.div`
   }
 `;
 
+export const NativeInput = styled.input`
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  color: #f1f5f9;
+  font-size: 14px;
+  font-family: "Inter", system-ui, sans-serif;
+
+  &::placeholder {
+    color: #475569;
+  }
+`;
+
 export const CardRow = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;

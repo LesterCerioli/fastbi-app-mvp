@@ -13,7 +13,7 @@ Built with [Next.js](https://nextjs.org) and bootstrapped with [`create-next-app
 - **AI-Powered Insights** — Anomaly detection, root cause analysis, recommendation engine, and natural language reporting
 - **Multi-Tenant** — Organization management with Brazilian CNPJ and US EIN tax ID support
 - **White-Label Branding** — Per-organization brand configuration (logo, colors, report templates)
-- **External Integrations** — Connect to external databases, Stripe billing, RabbitMQ message queues, email notifications
+- **External Integrations** — Connect to external databases, PayPal billing, RabbitMQ message queues, email notifications
 
 ## Tech Stack
 
@@ -22,7 +22,7 @@ Built with [Next.js](https://nextjs.org) and bootstrapped with [`create-next-app
 - **Database:** PostgreSQL
 - **Queue:** RabbitMQ (CloudAMQP)
 - **Auth:** JWT (client credentials flow)
-- **Payments:** Stripe
+- **Payments:** PayPal
 - **Email:** Nodemailer
 - **Testing:** Jest 30
 
@@ -84,11 +84,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Docker
 
-Build the Docker image (pass the real Stripe key via `--build-arg`):
+Build the Docker image (pass the real PayPal credentials via `--build-arg`):
 
 ```bash
 docker build \
-  --build-arg NEXT_PUBLIC_STRIPE_API_KEY=ssssssssss_...
+  --build-arg NEXT_PUBLIC_PAYPAL_CLIENT_ID=xxxxxxxxxx_...
   -t ltservices/fastapp:1.0.3 .
 ```
 
@@ -102,6 +102,55 @@ docker run -d \
   ltservices/fastapp:1.0.3
 ```
 
+## PayPal — Generating an Access Token
+
+The PayPal OAuth access token is used by the app's PayPal integration (`/api/paypal/orders`). Generate it with a `curl` request to the PayPal base URL defined in `PAYPAL_BASE_URL` (`.env`), using the app's sandbox credentials `PAYPAL_CLIENT_ID` and `PAYPAL_SECRET` (same names as in `.env`):
+
+```bash
+curl -X POST "$PAYPAL_BASE_URL/v1/oauth2/token" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -H "Authorization: Basic $(printf '%s' "$PAYPAL_CLIENT_ID:$PAYPAL_SECRET" | base64 -w0)" \
+  -d "grant_type=client_credentials"
+```
+
+With values inline (do not commit real values):
+
+```bash
+curl -X POST "https://api-m.sandbox.paypal.com/v1/oauth2/token" \
+  -u "CLIENT_ID:SECRET" \
+  -d "grant_type=client_credentials"
+```
+
+The response contains the `access_token` (Bearer, valid for `expires_in` seconds, ~9h). To persist it for the app, update the `PAYPAL_ACCESS_TOKEN` variable in `.env` with the new value, then restart the dev server.
+
+### Sandbox test cards
+
+Official PayPal sandbox test card numbers (CVV `123`, any **future** expiration date; Amex uses CVV `1234`):
+
+| Card | Number |
+| --- | --- |
+| Visa | `4111111111111111` |
+| Mastercard | `5555555555554444` |
+| American Express | `378282246310005` |
+| Discover | `6011111111111117` |
+| JCB | `3530111333300000` |
+| Diners Club | `30569309025904` |
+
+Other numbers are **rejected** by the sandbox (e.g. `VALIDATION_ERROR: Invalid card number`). A full list is available at [developer.paypal.com](https://developer.paypal.com) → Sandbox → Card testing, which also includes a test card generator.
+
+### Where payment data is stored
+
+PayPal payment data is persisted in **DynamoDB** (NoSQL) via the **LocalStack** endpoint defined by `LOCALSTACK_ENDPOINT` in `.env` — **not** in PostgreSQL. Four tables are used (created by `src/services/dynamodb/paypalTablesSetup.ts`):
+
+| Table | Content | Written by |
+| --- | --- | --- |
+| `FastBI_PayPal_orders` | Payment order (status COMPLETED/FAILED, plan, amount, paypal_order_id) | `savePayPalOrder()` — `paypalOrders.ts` |
+| `FastBI_PayPal_captures` | Payment capture (capture_id, net amount, fees) | `savePayPalCapture()` — `paypalCaptures.ts` |
+| `FastBI_PayPal_customers` | Customer (email → payer_id) | `findOrCreatePayPalCustomer()` — `paypalCustomers.ts` |
+| `FastBI_PayPal_payment_methods` | Card used (last digits, brand) | `savePayPalPaymentMethod()` — `paypalPaymentMethods.ts` |
+
+Persistence happens in `src/app/api/paypal/orders/route.js` (lines 129, 185, 230) using the AWS SDK v3 DynamoDB client pointed at LocalStack. PostgreSQL (Supabase) stores users/auth only — payments never go there.
+
 ## Running Tests
 
 ```bash
@@ -112,6 +161,11 @@ The project uses [Jest](https://jestjs.io) with `ts-jest` for TypeScript support
 
 ####tttt
 
+### Card tests
 
 
+#### Card Name: TEST STORE 
+#### Card number: 4032037269250094
+#### Expire date: 04/31
 
+ 

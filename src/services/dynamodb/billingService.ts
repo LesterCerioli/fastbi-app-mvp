@@ -18,9 +18,9 @@ const docClient = DynamoDBDocumentClient.from(client);
 
 const ORGANIZATIONS_TABLE =
   process.env.DYNAMODB_ORGANIZATIONS_TABLE || "FASTBI_ORGANIZATIONS";
-const CUSTOMERS_TABLE = "FASTBI_stripe_customers";
-const SUBSCRIPTIONS_TABLE = "FASTBI_stripe_subscriptions";
-const INTENTS_TABLE = "FASTBI_payment_intents";
+const CUSTOMERS_TABLE = "FastBI_PayPal_customers";
+const SUBSCRIPTIONS_TABLE = "FastBI_PayPal_orders";
+const INTENTS_TABLE = "FastBI_PayPal_captures";
 
 export class BillingOrganizationNotFoundError extends Error {
   constructor(organizationName: string) {
@@ -131,9 +131,10 @@ async function getPaidIntentsByPaymentMethodIds(
     const result = await docClient.send(
       new QueryCommand({
         TableName: INTENTS_TABLE,
-        IndexName: "idx_processing_status",
-        KeyConditionExpression: "processing_status = :status",
-        ExpressionAttributeValues: { ":status": "paid" },
+        IndexName: "idx_status",
+        KeyConditionExpression: "#status = :status",
+        ExpressionAttributeNames: { "#status": "status" },
+        ExpressionAttributeValues: { ":status": "COMPLETED" },
         ExclusiveStartKey: lastEvaluatedKey,
       })
     );
@@ -218,11 +219,11 @@ export async function getBillingOverview(
 
   const payments: PaymentSummary[] = intentItems.map((item) => ({
     id: String(item.id || ""),
-    payment_intent_id: String(item.payment_intent_id || ""),
+    payment_intent_id: String(item.capture_id || item.payment_intent_id || ""),
     payment_method_id: String(item.payment_method_id || ""),
     amount: Number(item.amount || 0),
     currency: String(item.currency || "usd"),
-    status: String(item.status || "succeeded"),
+    status: String(item.status || "COMPLETED"),
     created_at: String(item.created_at || ""),
   }));
   payments.sort((a, b) => b.created_at.localeCompare(a.created_at));
@@ -230,21 +231,17 @@ export async function getBillingOverview(
   let next_charge: NextCharge | null = null;
   if (subscriptions.length > 0) {
     const sub = subscriptions[0];
-    const billingAnchorUnix = Number(sub.billing_anchor_unix || 0);
-    const quantity = Number(sub.quantity || 1);
+    const quantity = Number(sub.user_quantity || sub.quantity || 1);
     next_charge = {
       subscription_id: String(sub.id || ""),
-      stripe_subscription_id: String(sub.stripe_subscription_id || ""),
+      stripe_subscription_id: String(sub.paypal_order_id || ""),
       plan_key: String(sub.plan_key || ""),
       billing_cycle: String(sub.billing_cycle || ""),
-      amount_cents: Number(sub.amount_cents || 0) * quantity,
+      amount_cents: Math.round(Number(sub.amount || 0) * 100) * quantity,
       currency: String(sub.currency || "usd"),
       status: String(sub.status || ""),
-      cancel_at_period_end: Boolean(sub.cancel_at_period_end),
-      next_charge_at:
-        billingAnchorUnix > 0
-          ? new Date(billingAnchorUnix * 1000).toISOString()
-          : null,
+      cancel_at_period_end: false,
+      next_charge_at: null,
     };
   }
 
