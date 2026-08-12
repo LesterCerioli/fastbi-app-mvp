@@ -31,7 +31,7 @@ interface SubscriptionData {
 
 interface PaymentData {
   cardholderName: string;
-  stripeToken: string;
+  paypalOrderId: string;
 }
 
 type Step = 1 | 2 | 3 | 4;
@@ -76,7 +76,7 @@ export default function SignUpPage() {
     setStep(4);
   }, [locale]);
 
-  const handlePaymentComplete = useCallback(async (data: { cardholderName: string; stripeToken: string }) => {
+  const handlePaymentComplete = useCallback(async (data: { cardholderName: string; paypalOrderId: string }) => {
     setPaymentData(data);
     setPaymentError(null);
 
