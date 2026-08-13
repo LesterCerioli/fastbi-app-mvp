@@ -5,6 +5,8 @@ import { capturePayPalOrder } from "@/services/paypal/orders";
 import { savePayPalCapture } from "@/services/dynamodb/paypalCaptures";
 import { getPayPalOrderById, updateOrderStatus } from "@/services/dynamodb/paypalOrders";
 
+const PAYPAL_GENERIC_ERROR = "An internal error occurred. We are working to resolve this error. Please try again later.";
+
 function extractCaptureFromResponse(data) {
   const purchaseUnits = data && data.purchase_units;
   if (!Array.isArray(purchaseUnits) || purchaseUnits.length === 0) return null;
@@ -40,7 +42,8 @@ export async function POST(request, { params }) {
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       await updateOrderStatus(orderId, "FAILED", "failed");
-      return NextResponse.json({ error: message }, { status: 400 });
+      console.error(`[paypal] Capture failed for order ${orderId}: ${message}`);
+      return NextResponse.json({ error: PAYPAL_GENERIC_ERROR }, { status: 400 });
     }
 
     const orderStatus = String(data.status || "");
