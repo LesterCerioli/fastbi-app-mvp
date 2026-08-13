@@ -185,6 +185,28 @@ export default function SignUpPage() {
       // auto-login failure should not block redirect
     }
 
+    // After the first invoice is paid, request the PayPal recurring-billing
+    // approval: the customer approves the billing agreement once (same
+    // moment of the signup) and PayPal charges the card automatically on
+    // every cycle from then on. On failure or missing link, fall back to the
+    // dashboard.
+    if (orgData) {
+      try {
+        const approvalRes = await fetch(
+          `/api/billing/approval?organization_name=${encodeURIComponent(orgData.organizationName)}`,
+        );
+        if (approvalRes.ok) {
+          const approval = await approvalRes.json();
+          if (approval.approve_link) {
+            window.location.href = approval.approve_link;
+            return;
+          }
+        }
+      } catch {
+        // approval is optional: fall back to the dashboard
+      }
+    }
+
     router.push("/dashboard");
   }, [orgData, adminData, subscriptionData, router]);
 
