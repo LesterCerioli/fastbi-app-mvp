@@ -12,6 +12,7 @@ interface UserData {
   name?: string;
   email?: string;
   role?: string;
+  organization_id?: string;
 }
 
 interface PaymentSummary {
@@ -127,7 +128,7 @@ export default function Profile() {
   const loadBilling = useCallback(async () => {
     setBillingLoading(true);
     try {
-      let storedUser: { email?: string } | null = null;
+      let storedUser: { email?: string; organization_id?: string } | null = null;
       try {
         storedUser = JSON.parse(sessionStorage.getItem("user") || "null");
       } catch {
@@ -137,6 +138,13 @@ export default function Profile() {
       const token = await getFreshToken();
       const headers: Record<string, string> = {};
       if (token) headers["Authorization"] = `Bearer ${token}`;
+      if (token && storedUser?.organization_id) {
+        await fetch("/api/session/init", {
+          method: "POST",
+          headers,
+          body: JSON.stringify({ organization_id: storedUser.organization_id }),
+        });
+      }
       const r = await fetch(
         `/api/billing/overview?email=${encodeURIComponent(customerEmail)}`,
         { headers }

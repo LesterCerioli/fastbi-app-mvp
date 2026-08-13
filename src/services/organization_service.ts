@@ -179,14 +179,6 @@ export class OrganizationService {
         throw new Error("cannot delete organization with associated users");
       }
 
-      const patients = await q(
-        `SELECT COUNT(*) FROM public.patients WHERE organization_id = $1 AND deleted_at IS NULL`,
-        [organizationID]
-      );
-      if (parseInt(patients.rows[0]?.count || "0", 10) > 0) {
-        throw new Error("cannot delete organization with associated patients");
-      }
-
       await q(
         `UPDATE public.organizations SET deleted_at = $1 WHERE id = $2 AND deleted_at IS NULL`,
         [new Date(), organizationID]
@@ -350,24 +342,9 @@ export class OrganizationService {
       `SELECT COUNT(*) FROM public.users WHERE organization_id = $1 AND deleted_at IS NULL`,
       [organizationID]
     );
-    const doctorCount = await query(
-      `SELECT COUNT(*) FROM public.doctors WHERE organization_id = $1 AND deleted_at IS NULL`,
-      [organizationID]
-    );
-    const patientCount = await query(
-      `SELECT COUNT(*) FROM public.patients WHERE organization_id = $1 AND deleted_at IS NULL`,
-      [organizationID]
-    );
-    const appointmentCount = await query(
-      `SELECT COUNT(*) FROM public.appointments WHERE organization_id = $1 AND deleted_at IS NULL`,
-      [organizationID]
-    );
 
     return {
       user_count: parseInt(userCount.rows[0]?.count || "0", 10),
-      doctor_count: parseInt(doctorCount.rows[0]?.count || "0", 10),
-      patient_count: parseInt(patientCount.rows[0]?.count || "0", 10),
-      appointment_count: parseInt(appointmentCount.rows[0]?.count || "0", 10),
     };
   }
 }

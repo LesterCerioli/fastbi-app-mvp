@@ -257,7 +257,7 @@ function PaymentForm({
 
       <S.ButtonRow>
         <S.Button type="submit" disabled={processing} $loading={processing}>
-          {processing && <S.Spinner />}
+          <S.Spinner $visible={processing} />
           {processing
             ? t("subscriptions.signUp.payment.processing")
             : t("subscriptions.signUp.payment.buyNow")}

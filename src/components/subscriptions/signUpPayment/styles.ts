@@ -198,13 +198,14 @@ export const Button = styled.button<{ $loading?: boolean }>`
   }
 `;
 
-export const Spinner = styled.div`
+export const Spinner = styled.div<{ $visible?: boolean }>`
   width: 16px;
   height: 16px;
   border: 2px solid rgba(4, 33, 15, 0.3);
   border-top-color: #04210f;
   border-radius: 50%;
   animation: ${spin} 0.6s linear infinite;
+  display: ${({ $visible }) => ($visible ? "inline-block" : "none")};
 `;
 
 export const ErrorMessage = styled.div`

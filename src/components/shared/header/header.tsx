@@ -67,7 +67,7 @@ export default function Header() {
         {navLinks.map((link) => (
           <S.NavItem
             key={link.path}
-            active={isActive(link.path)}
+            $active={isActive(link.path)}
             onClick={() => handleNavigation(link.path)}
           >
             {t(`header.nav.${link.key}`)}
@@ -78,7 +78,7 @@ export default function Header() {
       <S.RightSection>
         <S.HideMobile>
           <S.Button 
-            variant="primary"
+            $variant="primary"
             onClick={() => handleNavigation('/signup')}
           >
             {t("header.buttons.getStarted")}
@@ -98,7 +98,7 @@ export default function Header() {
         ) : (
           <S.HideMobile>
             <S.Button 
-              variant="secondary"
+              $variant="secondary"
               onClick={() => handleNavigation('/login')}
             >
               {t("header.buttons.login")}
@@ -122,16 +122,16 @@ export default function Header() {
           </S.MobileNavItem>
         ))}
         <S.MobileButtons>
-          <S.Button variant="primary" onClick={() => handleNavigation('/signup')}>
+          <S.Button $variant="primary" onClick={() => handleNavigation('/signup')}>
             {t("header.buttons.getStarted")}
           </S.Button>
           {user ? (
-            <S.Button variant="secondary" onClick={handleLogout}>
+            <S.Button $variant="secondary" onClick={handleLogout}>
               <LogOut size={16} />
               {t("header.buttons.logout")}
             </S.Button>
           ) : (
-            <S.Button variant="secondary" onClick={() => handleNavigation('/login')}>
+            <S.Button $variant="secondary" onClick={() => handleNavigation('/login')}>
               {t("header.buttons.login")}
             </S.Button>
           )}

@@ -231,9 +231,6 @@ function buildSpec() {
                   type: "object",
                   properties: {
                     user_count: { type: "integer" },
-                    doctor_count: { type: "integer" },
-                    patient_count: { type: "integer" },
-                    appointment_count: { type: "integer" },
                   },
                 },
               },

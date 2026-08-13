@@ -454,11 +454,11 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
 
       <S.Main>
         <S.Sidebar>
-          <S.MenuItem active={activeMenu === 'overview'} onClick={() => handleMenuClick('overview')}>Overview</S.MenuItem>
-          <S.MenuItem active={activeMenu === 'forecasts'} onClick={() => handleMenuClick('forecasts')}>Forecasts</S.MenuItem>
-          <S.MenuItem active={activeMenu === 'analytics'} onClick={() => handleMenuClick('analytics')}>Analytics</S.MenuItem>
-          <S.MenuItem active={activeMenu === 'reports'} onClick={() => handleMenuClick('reports')}>Reports</S.MenuItem>
-          <S.MenuItem active={activeMenu === 'settings'} onClick={() => handleMenuClick('settings')}>Settings</S.MenuItem>
+          <S.MenuItem $active={activeMenu === 'overview'} onClick={() => handleMenuClick('overview')}>Overview</S.MenuItem>
+          <S.MenuItem $active={activeMenu === 'forecasts'} onClick={() => handleMenuClick('forecasts')}>Forecasts</S.MenuItem>
+          <S.MenuItem $active={activeMenu === 'analytics'} onClick={() => handleMenuClick('analytics')}>Analytics</S.MenuItem>
+          <S.MenuItem $active={activeMenu === 'reports'} onClick={() => handleMenuClick('reports')}>Reports</S.MenuItem>
+          <S.MenuItem $active={activeMenu === 'settings'} onClick={() => handleMenuClick('settings')}>Settings</S.MenuItem>
         </S.Sidebar>
 
         {renderContent()}
