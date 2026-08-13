@@ -9,6 +9,8 @@ import { findOrCreatePayPalCustomer } from "@/services/dynamodb/paypalCustomers"
 import { savePayPalPaymentMethod } from "@/services/dynamodb/paypalPaymentMethods";
 import { ensurePayPalTables } from "@/services/dynamodb/paypalTablesSetup";
 
+const PAYPAL_GENERIC_ERROR = "An internal error occurred. We are working to resolve this error. Please try again later.";
+
 function normalizeExpiry(expiry) {
   const trimmed = (expiry || "").trim();
   const match = trimmed.match(/^(\d{4})-(\d{2})$/);
@@ -143,7 +145,7 @@ export async function POST(request) {
         created_at: now,
         updated_at: now,
       });
-      return NextResponse.json({ error: message }, { status: 400 });
+      return NextResponse.json({ error: PAYPAL_GENERIC_ERROR }, { status: 400 });
     }
 
     const orderStatus = String(data.status || "");
