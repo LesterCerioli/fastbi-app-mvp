@@ -77,12 +77,12 @@ export const Nav = styled.nav`
   }
 `;
 
-export const NavItem = styled.a<{ active?: boolean }>`
-  color: ${({ active }) => active ? '#00D4FF' : 'white'};
+export const NavItem = styled.a<{ $active?: boolean }>`
+  color: ${({ $active }) => $active ? '#00D4FF' : 'white'};
   text-decoration: none;
   cursor: pointer;
   font-size: 14px;
-  font-weight: ${({ active }) => active ? '600' : '500'};
+  font-weight: ${({ $active }) => $active ? '600' : '500'};
   transition: all 0.3s ease;
   position: relative;
   padding-bottom: 4px;
@@ -92,7 +92,7 @@ export const NavItem = styled.a<{ active?: boolean }>`
     position: absolute;
     bottom: -2px;
     left: 0;
-    width: ${({ active }) => active ? '100%' : '0'};
+    width: ${({ $active }) => $active ? '100%' : '0'};
     height: 2px;
     background: linear-gradient(90deg, #00D4FF, #22c55e);
     transition: width 0.3s ease;
@@ -190,7 +190,7 @@ export const LangOption = styled.button<{ $active?: boolean }>`
   }
 `;
 
-export const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
+export const Button = styled.button<{ $variant?: 'primary' | 'secondary' }>`
   border: none;
   padding: 10px 20px;
   border-radius: 8px;
@@ -199,8 +199,8 @@ export const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
   cursor: pointer;
   transition: all 0.3s ease;
 
-  ${({ variant = 'primary' }) => 
-    variant === 'primary' 
+  ${({ $variant = 'primary' }) => 
+    $variant === 'primary' 
       ? `
         background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
         color: white;
