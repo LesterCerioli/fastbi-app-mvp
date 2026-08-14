@@ -31,7 +31,7 @@ interface SubscriptionData {
 
 interface PaymentData {
   cardholderName: string;
-  stripeToken: string;
+  paypalOrderId: string;
 }
 
 type Step = 1 | 2 | 3 | 4;
@@ -76,7 +76,7 @@ export default function SignUpPage() {
     setStep(4);
   }, [locale]);
 
-  const handlePaymentComplete = useCallback(async (data: { cardholderName: string; stripeToken: string }) => {
+  const handlePaymentComplete = useCallback(async (data: { cardholderName: string; paypalOrderId: string }) => {
     setPaymentData(data);
     setPaymentError(null);
 
@@ -168,6 +168,16 @@ export default function SignUpPage() {
           if (loginData.user) {
             sessionStorage.setItem("user", JSON.stringify(loginData.user));
             sessionStorage.setItem("organization_name", orgData.organizationName);
+            if (loginData.user.organization_id) {
+              await fetch("/api/session/init", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${jwtToken}`,
+                },
+                body: JSON.stringify({ organization_id: loginData.user.organization_id }),
+              });
+            }
           }
         }
       }
@@ -322,7 +332,7 @@ export default function SignUpPage() {
                       <P.SummaryLabel>
                         {t("subscriptions.signUp.subscription.totalAmount")}
                       </P.SummaryLabel>
-                      <P.SummaryValue>${subscriptionData.amount}</P.SummaryValue>
+                      <P.SummaryValue>{locale === "en" ? "$" : "R$"}{subscriptionData.amount}</P.SummaryValue>
                     </P.SummaryLine>
                   </P.SummaryBlock>
                 </>

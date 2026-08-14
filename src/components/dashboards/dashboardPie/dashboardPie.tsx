@@ -278,9 +278,9 @@ const DashboardPie: React.FC<Props> = ({ organizationName, productMix }) => {
 
       <S.Main>
         <S.Sidebar>
-          <S.MenuItem active={activeMenu === 'overview'} onClick={() => handleMenuClick('overview')}>Overview</S.MenuItem>
-          <S.MenuItem active={activeMenu === 'forecasts'} onClick={() => handleMenuClick('forecasts')}>Forecasts</S.MenuItem>
-          <S.MenuItem active={activeMenu === 'analytics'} onClick={() => handleMenuClick('analytics')}>Analytics</S.MenuItem>
+          <S.MenuItem $active={activeMenu === 'overview'} onClick={() => handleMenuClick('overview')}>Overview</S.MenuItem>
+          <S.MenuItem $active={activeMenu === 'forecasts'} onClick={() => handleMenuClick('forecasts')}>Forecasts</S.MenuItem>
+          <S.MenuItem $active={activeMenu === 'analytics'} onClick={() => handleMenuClick('analytics')}>Analytics</S.MenuItem>
         </S.Sidebar>
 
         {renderContent()}

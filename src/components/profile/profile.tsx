@@ -12,6 +12,7 @@ interface UserData {
   name?: string;
   email?: string;
   role?: string;
+  organization_id?: string;
 }
 
 interface PaymentSummary {
@@ -127,7 +128,7 @@ export default function Profile() {
   const loadBilling = useCallback(async () => {
     setBillingLoading(true);
     try {
-      let storedUser: { email?: string } | null = null;
+      let storedUser: { email?: string; organization_id?: string } | null = null;
       try {
         storedUser = JSON.parse(sessionStorage.getItem("user") || "null");
       } catch {
@@ -137,6 +138,13 @@ export default function Profile() {
       const token = await getFreshToken();
       const headers: Record<string, string> = {};
       if (token) headers["Authorization"] = `Bearer ${token}`;
+      if (token && storedUser?.organization_id) {
+        await fetch("/api/session/init", {
+          method: "POST",
+          headers,
+          body: JSON.stringify({ organization_id: storedUser.organization_id }),
+        });
+      }
       const r = await fetch(
         `/api/billing/overview?email=${encodeURIComponent(customerEmail)}`,
         { headers }
@@ -216,7 +224,7 @@ export default function Profile() {
       [t("profile.organization"), organizationNameFallback || "-"],
       [t("profile.billing.date"), payment.created_at ? formatDate(payment.created_at) : "-"],
       [t("profile.billing.status"), t("profile.billing.paid")],
-      [t("profile.billing.amount"), formatCurrency(payment.amount / 100, payment.currency)],
+      [t("profile.billing.amount"), formatCurrency(payment.amount, payment.currency)],
     ];
 
     let y = 60;
@@ -337,7 +345,7 @@ export default function Profile() {
               {billing.payments.map((p) => (
                 <S.InvoiceRow key={p.id}>
                   <span>{formatDate(p.created_at)}</span>
-                  <span>{formatCurrency(p.amount / 100, p.currency)}</span>
+                  <span>{formatCurrency(p.amount, p.currency)}</span>
                   <S.StatusBadge>{t("profile.billing.paid")}</S.StatusBadge>
                   <S.DownloadBtn onClick={() => handleDownloadInvoice(p, billing.organization_name)}>
                     <Download size={14} />

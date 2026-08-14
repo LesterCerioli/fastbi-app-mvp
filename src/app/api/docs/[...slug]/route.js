@@ -231,9 +231,6 @@ function buildSpec() {
                   type: "object",
                   properties: {
                     user_count: { type: "integer" },
-                    doctor_count: { type: "integer" },
-                    patient_count: { type: "integer" },
-                    appointment_count: { type: "integer" },
                   },
                 },
               },
@@ -3579,80 +3576,6 @@ function buildSpec() {
           responses: {
             "201": { description: "KPI created" },
             "404": { description: "Organization not found" },
-          },
-        },
-      },
-      "/stripe/payment-tokens": {
-        get: {
-          tags: ["Stripe"],
-          summary: "Get Stripe payment tokens",
-          description: "Retrieves a payment token by ID or lists tokens by status.",
-          security: [{ BearerAuth: [] }],
-          parameters: [
-            { $ref: "#/components/parameters/AuthorizationHeader" },
-            { name: "id", in: "query", schema: { type: "string" } },
-            { name: "status", in: "query", schema: { type: "string" } },
-          ],
-          responses: {
-            "200": { description: "Payment token(s)" },
-            "400": { description: "Specify id or status" },
-            "404": { description: "Token not found" },
-          },
-        },
-        post: {
-          tags: ["Stripe"],
-          summary: "Create Stripe payment token",
-          description: "Stores a Stripe payment token for later processing.",
-          security: [{ BearerAuth: [] }],
-          parameters: [{ $ref: "#/components/parameters/AuthorizationHeader" }],
-          requestBody: {
-            required: true,
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  required: ["stripe_token_id"],
-                  properties: {
-                    stripe_token_id: { type: "string" },
-                    status: { type: "string", default: "pending" },
-                  },
-                },
-              },
-            },
-          },
-          responses: {
-            "201": { description: "Token created" },
-          },
-        },
-      },
-      "/stripe/process-pending-payments": {
-        post: {
-          tags: ["Stripe"],
-          summary: "Process pending payment token",
-          description: "Converts a Stripe token to a payment method and optionally creates a payment intent.",
-          security: [{ BearerAuth: [] }],
-          parameters: [{ $ref: "#/components/parameters/AuthorizationHeader" }],
-          requestBody: {
-            required: true,
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  required: ["stripe_token_id", "user_name", "user_email"],
-                  properties: {
-                    stripe_token_id: { type: "string" },
-                    user_name: { type: "string" },
-                    user_email: { type: "string", format: "email" },
-                    amount: { type: "number" },
-                    currency: { type: "string" },
-                  },
-                },
-              },
-            },
-          },
-          responses: {
-            "200": { description: "Payment processed" },
-            "400": { description: "Missing fields or processing failed" },
           },
         },
       },

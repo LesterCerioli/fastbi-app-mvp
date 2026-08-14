@@ -69,12 +69,12 @@ export const Sidebar = styled.aside`
   border-right: 1px solid #1E2A44;
 `;
 
-export const MenuItem = styled.div<{ active?: boolean }>`
+export const MenuItem = styled.div<{ $active?: boolean }>`
   padding: 14px 20px;
   border-radius: 8px;
   cursor: pointer;
-  background: ${({ active }) => (active ? '#1E2A44' : 'transparent')};
-  color: ${({ active }) => (active ? '#00D4FF' : '#E0F2FF')};
+  background: ${({ $active }) => ($active ? '#1E2A44' : 'transparent')};
+  color: ${({ $active }) => ($active ? '#00D4FF' : '#E0F2FF')};
   font-weight: 500;
   transition: all 0.2s;
 

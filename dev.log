@@ -1,0 +1,251 @@
+
+> fastbi-app@0.1.0 dev
+> next dev -p 9092
+
+▲ Next.js 16.2.1 (Turbopack)
+- Local:         http://localhost:9092
+- Network:       http://192.168.1.6:9092
+- Environments: .env
+✓ Ready in 740ms
+⚠ `images.domains` is deprecated in favor of `images.remotePatterns`. Please update next.config.ts to protect your application from malicious users.
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+styled-components: it looks like an unknown prop "active" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+Received `false` for a non-boolean attribute `active`.
+
+If you want to write it to the DOM, pass a string instead: active="false" or active={value.toString()}.
+
+If you used to conditionally omit it with active={condition && value}, pass active={condition ? value : undefined} instead.
+styled-components: it looks like an unknown prop "variant" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+ GET /kpis 200 in 3.0s (next.js: 1842ms, application-code: 1123ms)
+ GET /kpis 200 in 144ms (next.js: 15ms, application-code: 129ms)
+ POST /api/auth/token 201 in 988ms (next.js: 170ms, application-code: 819ms)
+ GET /api/analytics/traffic?organization_name=GCico%20LTDA 401 in 470ms (next.js: 465ms, application-code: 5ms)
+ GET /api/analytics/system-health?organization_name=GCico%20LTDA 401 in 285ms (next.js: 279ms, application-code: 6ms)
+ GET /api/analytics/traffic 400 in 492ms (next.js: 7ms, application-code: 485ms)
+ GET /api/analytics/traffic?organization_name=OrgQueNaoExiste 404 in 1007ms (next.js: 6ms, application-code: 1001ms)
+ GET /api/analytics/traffic?organization_name=GCico%20LTDA 200 in 745ms (next.js: 3ms, application-code: 742ms)
+ GET /api/analytics/system-health?organization_name=GCico%20LTDA 200 in 572ms (next.js: 4ms, application-code: 568ms)
+ POST /api/auth/token 500 in 10.0s (next.js: 7ms, application-code: 10.0s)
+ GET /api/analytics/traffic?organization_name=GCico%20LTDA 401 in 12ms (next.js: 6ms, application-code: 6ms)
+ GET /api/analytics/system-health?organization_name=GCico%20LTDA 401 in 11ms (next.js: 5ms, application-code: 6ms)
+ POST /api/auth/token 500 in 14ms (next.js: 1826µs, application-code: 12ms)
+ POST /api/auth/token 201 in 722ms (next.js: 5ms, application-code: 717ms)
+ GET /api/analytics/traffic?organization_name=GCico%20LTDA 200 in 1618ms (next.js: 4ms, application-code: 1614ms)
+ GET /api/analytics/system-health?organization_name=GCico%20LTDA 200 in 585ms (next.js: 4ms, application-code: 581ms)
+ GET /api/analytics/traffic?organization_name=GCico%20LTDA 401 in 14ms (next.js: 5ms, application-code: 9ms)
+ GET /api/analytics/system-health?organization_name=GCico%20LTDA 401 in 12ms (next.js: 5ms, application-code: 7ms)
+ POST /api/auth/token 201 in 738ms (next.js: 5ms, application-code: 733ms)
+ POST /api/session/init 200 in 1195ms (next.js: 281ms, application-code: 914ms)
+ GET /api/dashboard/live-metrics 401 in 164ms (next.js: 145ms, application-code: 19ms)
+ GET /api/analytics/traffic?organization_name=GCico%20LTDA 401 in 12ms (next.js: 6ms, application-code: 6ms)
+ GET /api/analytics/system-health?organization_name=GCico%20LTDA 401 in 14ms (next.js: 6ms, application-code: 7ms)
+ POST /api/auth/token 201 in 845ms (next.js: 7ms, application-code: 838ms)
+ POST /api/session/init 200 in 293ms (next.js: 3ms, application-code: 291ms)
+ GET /api/dashboard/live-metrics 401 in 13ms (next.js: 5ms, application-code: 8ms)
+ GET /api/analytics/traffic?organization_name=GCico%20LTDA 401 in 14ms (next.js: 7ms, application-code: 8ms)
+ GET /api/analytics/system-health?organization_name=GCico%20LTDA 401 in 18ms (next.js: 10ms, application-code: 8ms)
+ POST /api/auth/token 201 in 151ms (next.js: 4ms, application-code: 147ms)
+ GET /api/dashboard/live-metrics 400 in 150ms (next.js: 2ms, application-code: 148ms)
+ GET /api/analytics/traffic?organization_name=GCico%20LTDA 200 in 688ms (next.js: 4ms, application-code: 684ms)
+ GET /api/analytics/system-health?organization_name=GCico%20LTDA 200 in 556ms (next.js: 4ms, application-code: 552ms)
+ POST /api/auth/token 201 in 153ms (next.js: 5ms, application-code: 148ms)
+ POST /api/session/init 200 in 281ms (next.js: 3ms, application-code: 278ms)
+ GET /api/dashboard/live-metrics 200 in 1793ms (next.js: 2ms, application-code: 1791ms)
+[?25h
+
+> fastbi-app@0.1.0 dev
+> next dev -p 9094
+
+▲ Next.js 16.2.1 (Turbopack)
+- Local:         http://localhost:9094
+- Network:       http://192.168.1.6:9094
+- Environments: .env
+✓ Ready in 489ms
+⚠ `images.domains` is deprecated in favor of `images.remotePatterns`. Please update next.config.ts to protect your application from malicious users.
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+styled-components: it looks like an unknown prop "active" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+Received `false` for a non-boolean attribute `active`.
+
+If you want to write it to the DOM, pass a string instead: active="false" or active={value.toString()}.
+
+If you used to conditionally omit it with active={condition && value}, pass active={condition ? value : undefined} instead.
+styled-components: it looks like an unknown prop "variant" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+styled-components: it looks like an unknown prop "animate" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+Received `true` for a non-boolean attribute `animate`.
+
+If you want to write it to the DOM, pass a string instead: animate="true" or animate={value.toString()}.
+styled-components: it looks like an unknown prop "confidence" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+ GET /dashboards 200 in 1647ms (next.js: 609ms, proxy.ts: 259ms, application-code: 778ms)
+[browser] styled-components: it looks like an unknown prop "active" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+[browser] Received `false` for a non-boolean attribute `active`.
+
+If you want to write it to the DOM, pass a string instead: active="false" or active={value.toString()}.
+
+If you used to conditionally omit it with active={condition && value}, pass active={condition ? value : undefined} instead. 
+[browser] styled-components: it looks like an unknown prop "variant" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+[browser] styled-components: it looks like an unknown prop "animate" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+[browser] Received `true` for a non-boolean attribute `animate`.
+
+If you want to write it to the DOM, pass a string instead: animate="true" or animate={value.toString()}. 
+[browser] styled-components: it looks like an unknown prop "confidence" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+ POST /api/auth/token 201 in 1065ms (next.js: 214ms, application-code: 851ms)
+ POST /api/auth/token 201 in 1073ms (next.js: 216ms, application-code: 858ms)
+ POST /api/session/init 200 in 953ms (next.js: 105ms, application-code: 848ms)
+Image with src "/_next/static/media/dashboard.0csqv8vgt~isn.jpeg" is using quality "85" which is not configured in images.qualities [75]. Please update your config to [75, 85].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+Image with src "/_next/static/media/dashboard2.14npy8ng6g-0h.jpeg" is using quality "85" which is not configured in images.qualities [75]. Please update your config to [75, 85].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+Image with src "/_next/static/media/dashboard3.0350u9vl9000v.jpg" is using quality "85" which is not configured in images.qualities [75]. Please update your config to [75, 85].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+Image with src "/_next/static/media/dashboard4.04t-zsi.fdxa3.jpg" is using quality "85" which is not configured in images.qualities [75]. Please update your config to [75, 85].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+ GET / 200 in 212ms (next.js: 24ms, application-code: 188ms)
+ GET /api/dashboard/live-metrics 200 in 1913ms (next.js: 36ms, application-code: 1877ms)
+ GET /api/analytics/system-health?organization_name=Lucas+Technology+ 200 in 673ms (next.js: 108ms, application-code: 565ms)
+ GET /api/analytics/traffic?organization_name=Lucas+Technology+ 200 in 752ms (next.js: 53ms, application-code: 699ms)
+ GET /api/dashboard/overview 200 in 4.5s (next.js: 63ms, application-code: 4.4s)
+ GET /dashboards 200 in 164ms (next.js: 4ms, proxy.ts: 11ms, application-code: 149ms)
+[browser] styled-components: it looks like an unknown prop "active" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+[browser] Received `false` for a non-boolean attribute `active`.
+
+If you want to write it to the DOM, pass a string instead: active="false" or active={value.toString()}.
+
+If you used to conditionally omit it with active={condition && value}, pass active={condition ? value : undefined} instead. 
+[browser] styled-components: it looks like an unknown prop "variant" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+[browser] styled-components: it looks like an unknown prop "animate" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+[browser] Received `true` for a non-boolean attribute `animate`.
+
+If you want to write it to the DOM, pass a string instead: animate="true" or animate={value.toString()}. 
+[browser] styled-components: it looks like an unknown prop "confidence" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+ POST /api/auth/token 201 in 150ms (next.js: 5ms, application-code: 145ms)
+ POST /api/auth/token 201 in 168ms (next.js: 13ms, application-code: 156ms)
+ POST /api/session/init 200 in 285ms (next.js: 3ms, application-code: 282ms)
+ GET /api/dashboard/live-metrics 200 in 1783ms (next.js: 3ms, application-code: 1780ms)
+ GET /api/analytics/system-health?organization_name=Lucas+Technology+ 200 in 567ms (next.js: 8ms, application-code: 559ms)
+ GET /api/analytics/traffic?organization_name=Lucas+Technology+ 200 in 683ms (next.js: 3ms, application-code: 680ms)
+ GET /api/dashboard/overview 200 in 3.1s (next.js: 3ms, application-code: 3.1s)
+ GET /dashboards 200 in 137ms (next.js: 3ms, proxy.ts: 5ms, application-code: 128ms)
+[browser] styled-components: it looks like an unknown prop "active" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+[browser] Received `false` for a non-boolean attribute `active`.
+
+If you want to write it to the DOM, pass a string instead: active="false" or active={value.toString()}.
+
+If you used to conditionally omit it with active={condition && value}, pass active={condition ? value : undefined} instead. 
+[browser] styled-components: it looks like an unknown prop "variant" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+[browser] styled-components: it looks like an unknown prop "animate" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+[browser] Received `true` for a non-boolean attribute `animate`.
+
+If you want to write it to the DOM, pass a string instead: animate="true" or animate={value.toString()}. 
+[browser] styled-components: it looks like an unknown prop "confidence" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+ POST /api/auth/token 201 in 160ms (next.js: 6ms, application-code: 155ms)
+ POST /api/auth/token 201 in 163ms (next.js: 10ms, application-code: 153ms)
+ POST /api/session/init 200 in 285ms (next.js: 5ms, application-code: 280ms)
+ GET /api/dashboard/live-metrics 200 in 1763ms (next.js: 3ms, application-code: 1760ms)
+ GET /api/analytics/system-health?organization_name=Lucas+Technology+ 200 in 563ms (next.js: 8ms, application-code: 556ms)
+ GET /api/analytics/traffic?organization_name=Lucas+Technology+ 200 in 686ms (next.js: 4ms, application-code: 682ms)
+ GET /api/dashboard/overview 200 in 3.9s (next.js: 7ms, application-code: 3.9s)
+ GET /dashboards 200 in 574ms (next.js: 229ms, proxy.ts: 71ms, application-code: 274ms)
+ GET /dashboards 200 in 121ms (next.js: 14ms, proxy.ts: 12ms, application-code: 95ms)
+styled-components: it looks like an unknown prop "active" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+styled-components: it looks like an unknown prop "variant" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+styled-components: it looks like an unknown prop "animate" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+styled-components: it looks like an unknown prop "confidence" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+ GET /dashboards 200 in 574ms (next.js: 5ms, proxy.ts: 6ms, application-code: 564ms)
+[browser] styled-components: it looks like an unknown prop "active" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+[browser] Received `false` for a non-boolean attribute `active`.
+
+If you want to write it to the DOM, pass a string instead: active="false" or active={value.toString()}.
+
+If you used to conditionally omit it with active={condition && value}, pass active={condition ? value : undefined} instead. 
+[browser] styled-components: it looks like an unknown prop "variant" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+[browser] styled-components: it looks like an unknown prop "animate" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+[browser] Received `true` for a non-boolean attribute `animate`.
+
+If you want to write it to the DOM, pass a string instead: animate="true" or animate={value.toString()}. 
+[browser] styled-components: it looks like an unknown prop "confidence" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)
+ POST /api/auth/token 201 in 887ms (next.js: 119ms, application-code: 768ms)
+ POST /api/auth/token 201 in 911ms (next.js: 137ms, application-code: 774ms)
+ POST /api/session/init 200 in 916ms (next.js: 39ms, application-code: 877ms)
+ GET /api/dashboard/live-metrics 200 in 3.1s (next.js: 99ms, application-code: 3.0s)
+ GET /api/analytics/traffic?organization_name=Lucas+Technology+ 200 in 756ms (next.js: 51ms, application-code: 705ms)
+ GET /api/dashboard/overview 200 in 4.8s (next.js: 51ms, application-code: 4.7s)
+ GET /api/analytics/system-health?organization_name=Lucas+Technology+ 200 in 1307ms (next.js: 95ms, application-code: 1212ms)
+ POST /api/auth/token 500 in 10.0s (next.js: 3ms, application-code: 10.0s)
+ POST /api/auth/token 500 in 10.0s (next.js: 5ms, application-code: 10.0s)
+ POST /api/auth/token 500 in 10.0s (next.js: 3ms, application-code: 10.0s)
+ GET /dashboard 200 in 52ms (next.js: 23ms, application-code: 29ms)
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+ POST /api/auth/token 201 in 743ms (next.js: 8ms, application-code: 736ms)
+ POST /api/auth/token 201 in 778ms (next.js: 5ms, application-code: 774ms)
+ GET /kpis 200 in 45ms (next.js: 18ms, application-code: 26ms)
+ POST /api/auth/token 201 in 150ms (next.js: 4ms, application-code: 147ms)
+ POST /api/auth/token 201 in 203ms (next.js: 14ms, application-code: 189ms)
+ GET /api/kpis?organization_name=Lucas+Technology+&order_by=created_at&order_dir=DESC&limit=100 200 in 1716ms (next.js: 45ms, application-code: 1671ms)
+[browser] Each child in a list should have a unique "key" prop.
+
+Check the render method of `styles__Grid`. It was passed a child from ListKpis. See https://react.dev/link/warning-keys for more information. 
+ POST /api/auth/token 201 in 156ms (next.js: 9ms, application-code: 148ms)
+ POST /api/auth/token 201 in 159ms (next.js: 15ms, application-code: 144ms)
+ POST /api/auth/token 201 in 150ms (next.js: 4ms, application-code: 146ms)
+ POST /api/auth/token 201 in 153ms (next.js: 9ms, application-code: 145ms)
+ GET /api/dashboard/overview 200 in 4.7s (next.js: 3ms, application-code: 4.6s)
+ GET /api/kpis?organization_name=Lucas+Technology+&order_by=created_at&order_dir=DESC&limit=100 200 in 578ms (next.js: 4ms, application-code: 574ms)
+ POST /api/auth/token 201 in 156ms (next.js: 14ms, application-code: 143ms)
+ POST /api/auth/token 201 in 145ms (next.js: 4ms, application-code: 141ms)
+ POST /api/auth/token 201 in 149ms (next.js: 2ms, application-code: 147ms)
+ POST /api/auth/token 201 in 147ms (next.js: 2ms, application-code: 144ms)
+ POST /api/auth/token 201 in 146ms (next.js: 2ms, application-code: 144ms)
+ POST /api/auth/token 201 in 152ms (next.js: 3ms, application-code: 149ms)
+ POST /api/auth/token 201 in 805ms (next.js: 21ms, application-code: 784ms)
+ POST /api/auth/token 201 in 807ms (next.js: 26ms, application-code: 781ms)
+ POST /api/auth/token 201 in 147ms (next.js: 3ms, application-code: 145ms)
+ POST /api/auth/token 201 in 151ms (next.js: 3ms, application-code: 149ms)
+ POST /api/auth/token 201 in 143ms (next.js: 3ms, application-code: 140ms)
+ POST /api/auth/token 201 in 150ms (next.js: 3ms, application-code: 147ms)
+ POST /api/auth/token 201 in 164ms (next.js: 1816µs, application-code: 162ms)
+ POST /api/auth/token 201 in 150ms (next.js: 2ms, application-code: 147ms)
+ POST /api/auth/token 201 in 777ms (next.js: 7ms, application-code: 770ms)
+ POST /api/auth/token 201 in 775ms (next.js: 2ms, application-code: 773ms)
+ GET /api/kpis/revenue_total/values?organization_name=Lucas%20Technology%20 200 in 1800ms (next.js: 816ms, application-code: 984ms)
+ GET /api/kpis/nrr/values?organization_name=Lucas%20Technology%20 200 in 899ms (next.js: 87ms, application-code: 812ms)
+ GET /api/kpis/ltv/values?organization_name=Lucas%20Technology%20 200 in 2.9s (next.js: 701ms, application-code: 2.2s)
+ GET /api/kpis/cac/values?organization_name=Lucas%20Technology%20 200 in 2.9s (next.js: 700ms, application-code: 2.2s)
+ GET /api/kpis/retention_rate/values?organization_name=Lucas%20Technology%20 200 in 2.8s (next.js: 569ms, application-code: 2.2s)
+ GET /api/kpis/gross_margin/values?organization_name=Lucas%20Technology%20 200 in 3.0s (next.js: 718ms, application-code: 2.3s)
+ GET /api/kpis/ebitda/values?organization_name=Lucas%20Technology%20 200 in 1005ms (next.js: 53ms, application-code: 953ms)
+ GET /api/kpis/cash_flow/values?organization_name=Lucas%20Technology%20 200 in 851ms (next.js: 6ms, application-code: 845ms)
+ GET /api/kpis/revenue_growth_rate/values?organization_name=Lucas%20Technology%20 200 in 962ms (next.js: 2ms, application-code: 960ms)
+ GET /api/dashboard/overview 200 in 3.9s (next.js: 2ms, application-code: 3.9s)
+ GET /api/kpis/business_health_score/values?organization_name=Lucas%20Technology%20 200 in 986ms (next.js: 10ms, application-code: 976ms)
+ GET /api/kpis/revenue_total/values?organization_name=Lucas%20Technology%20 200 in 964ms (next.js: 5ms, application-code: 960ms)
+ GET /api/kpis/nrr/values?organization_name=Lucas%20Technology%20 200 in 861ms (next.js: 46ms, application-code: 815ms)
+ GET /api/kpis/ltv/values?organization_name=Lucas%20Technology%20 200 in 860ms (next.js: 8ms, application-code: 852ms)
+ GET /api/kpis/cac/values?organization_name=Lucas%20Technology%20 200 in 853ms (next.js: 4ms, application-code: 849ms)
+ GET /api/kpis/retention_rate/values?organization_name=Lucas%20Technology%20 200 in 850ms (next.js: 4ms, application-code: 846ms)
+ GET /api/kpis/gross_margin/values?organization_name=Lucas%20Technology%20 200 in 987ms (next.js: 2ms, application-code: 985ms)
+ GET /api/kpis/ebitda/values?organization_name=Lucas%20Technology%20 200 in 1365ms (next.js: 4ms, application-code: 1361ms)
+ GET /api/kpis/cash_flow/values?organization_name=Lucas%20Technology%20 200 in 891ms (next.js: 48ms, application-code: 843ms)
+ GET /api/kpis/revenue_growth_rate/values?organization_name=Lucas%20Technology%20 200 in 959ms (next.js: 3ms, application-code: 956ms)
+ GET /api/kpis/business_health_score/values?organization_name=Lucas%20Technology%20 200 in 951ms (next.js: 3ms, application-code: 948ms)
+ GET /dashboard 200 in 30ms (next.js: 3ms, application-code: 27ms)
+ POST /api/auth/token 500 in 10.0s (next.js: 3ms, application-code: 10.0s)
+ GET /api/dashboard/overview 401 in 5ms (next.js: 2ms, application-code: 3ms)
+ POST /api/auth/token 500 in 10.0s (next.js: 6ms, application-code: 10.0s)
+ GET /api/dashboard/overview 401 in 4ms (next.js: 1649µs, application-code: 3ms)
+ GET /home 200 in 62ms (next.js: 28ms, application-code: 34ms)
+[browser] Image with src "/_next/static/media/dashboard.0csqv8vgt~isn.jpeg" is using quality "85" which is not configured in images.qualities [75]. Please update your config to [75, 85].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[browser] Image with src "/_next/static/media/dashboard2.14npy8ng6g-0h.jpeg" is using quality "85" which is not configured in images.qualities [75]. Please update your config to [75, 85].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[browser] Image with src "/_next/static/media/dashboard3.0350u9vl9000v.jpg" is using quality "85" which is not configured in images.qualities [75]. Please update your config to [75, 85].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[browser] Image with src "/_next/static/media/dashboard4.04t-zsi.fdxa3.jpg" is using quality "85" which is not configured in images.qualities [75]. Please update your config to [75, 85].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[browser] Image with src "/_next/static/media/dashboard.0csqv8vgt~isn.jpeg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "/_next/static/media/dashboard2.14npy8ng6g-0h.jpeg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "/_next/static/media/dashboard3.0350u9vl9000v.jpg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "/_next/static/media/dashboard4.04t-zsi.fdxa3.jpg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+⚠ The "images.domains" configuration is deprecated. Please use "images.remotePatterns" configuration instead.
+[browser] Image with src "/_next/static/media/peple_analysing_data.07y95jrbfdot5.jpeg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.

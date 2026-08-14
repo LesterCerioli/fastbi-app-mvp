@@ -18,8 +18,8 @@ const docClient = DynamoDBDocumentClient.from(client);
 
 const ORGANIZATIONS_TABLE =
   process.env.DYNAMODB_ORGANIZATIONS_TABLE || "FASTBI_ORGANIZATIONS";
-const SUBSCRIPTIONS_TABLE = "FASTBI_stripe_subscriptions";
-const INTENTS_TABLE = "FASTBI_payment_intents";
+const SUBSCRIPTIONS_TABLE = "FastBI_PayPal_orders";
+const INTENTS_TABLE = "FastBI_PayPal_captures";
 
 export interface AdminLastPayment {
   amount: number;
@@ -90,9 +90,10 @@ async function getPaidIntentsByPaymentMethodIds(
     const result = await docClient.send(
       new QueryCommand({
         TableName: INTENTS_TABLE,
-        IndexName: "idx_processing_status",
-        KeyConditionExpression: "processing_status = :status",
-        ExpressionAttributeValues: { ":status": "paid" },
+        IndexName: "idx_status",
+        KeyConditionExpression: "#status = :status",
+        ExpressionAttributeNames: { "#status": "status" },
+        ExpressionAttributeValues: { ":status": "COMPLETED" },
         ExclusiveStartKey: lastEvaluatedKey,
       })
     );
@@ -109,6 +110,19 @@ async function getPaidIntentsByPaymentMethodIds(
       | undefined);
   } while (lastEvaluatedKey);
   return intents;
+}
+
+function deriveNextChargeAt(item: Record<string, unknown>): string | null {
+  if (typeof item.next_charge_at === "string" && item.next_charge_at) {
+    return item.next_charge_at;
+  }
+  const createdAt = String(item.created_at || "");
+  if (!createdAt || createdAt === "0001-01-01T00:00:00Z") return null;
+  const created = new Date(createdAt);
+  if (Number.isNaN(created.getTime())) return null;
+  const days = String(item.billing_cycle || "").toLowerCase() === "annual" ? 365 : 30;
+  created.setUTCDate(created.getUTCDate() + days);
+  return created.toISOString();
 }
 
 export async function getAdminSubscriptionsOverview(): Promise<AdminSubscriptionsOverview> {
@@ -144,22 +158,14 @@ export async function getAdminSubscriptionsOverview(): Promise<AdminSubscription
     const existing = latestPaymentByPm.get(pmId);
     if (!existing || (createdAt && createdAt > existing.created_at)) {
       latestPaymentByPm.set(pmId, {
-        amount: Number(intent.amount || 0),
+        amount: Math.round(Number(intent.amount || 0) * 100),
         currency: String(intent.currency || "usd"),
         created_at: createdAt,
       });
     }
   }
 
-  const nowIso = new Date().toISOString();
-
   const subscriptions: AdminSubscription[] = activeSubscriptions.map((s) => {
-    const billingAnchorUnix = Number(s.billing_anchor_unix || 0);
-    const nextChargeAt =
-      billingAnchorUnix > 0
-        ? new Date(billingAnchorUnix * 1000).toISOString()
-        : null;
-
     const paymentMethodId = String(s.payment_method_id || "");
     const lastPayment = paymentMethodId
       ? latestPaymentByPm.get(paymentMethodId) || null
@@ -170,25 +176,23 @@ export async function getAdminSubscriptionsOverview(): Promise<AdminSubscription
       String(s.status || "") === "unpaid" ||
       String(s.status || "") === "incomplete";
 
-    const chargePassedWithoutPayment =
-      nextChargeAt !== null &&
-      nextChargeAt < nowIso &&
-      (!lastPayment || lastPayment.created_at < nextChargeAt);
+    const nextChargeAt = deriveNextChargeAt(s);
+    const chargePassedWithoutPayment = false;
 
     const isOverdue = hasOverdueStatus || chargePassedWithoutPayment;
 
     return {
       id: String(s.id || ""),
-      stripe_subscription_id: String(s.stripe_subscription_id || ""),
+      stripe_subscription_id: String(s.paypal_order_id || ""),
       organization_id: String(s.organization_id || ""),
       organization_name:
         organizationNameById.get(String(s.organization_id || "")) || "-",
       plan_key: String(s.plan_key || ""),
       billing_cycle: String(s.billing_cycle || ""),
-      amount_cents: Number(s.amount_cents || 0),
+      amount_cents: Math.round(Number(s.amount || 0) * 100),
       currency: String(s.currency || "usd"),
       status: String(s.status || ""),
-      cancel_at_period_end: Boolean(s.cancel_at_period_end),
+      cancel_at_period_end: false,
       next_charge_at: nextChargeAt,
       created_at: String(s.created_at || ""),
       last_payment: lastPayment,

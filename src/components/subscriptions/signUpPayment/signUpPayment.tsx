@@ -1,46 +1,32 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import {
-  Elements,
-  CardNumberElement,
-  CardExpiryElement,
-  CardCvcElement,
-  useStripe,
-  useElements,
-} from "@stripe/react-stripe-js";
-import type { Stripe } from "@stripe/stripe-js";
+import { useState } from "react";
 import * as S from "./styles";
 import { useTranslations } from "@/lib/i18n/useTranslations";
 import type { SubscriptionData } from "@/components/subscriptions/signUp/signUp";
-import { getStripe } from "@/lib/stripe";
 
 interface Props {
   subscriptionData: SubscriptionData | null;
   processing: boolean;
   error: string | null;
   onProcessingChange: (v: boolean) => void;
-  onComplete: (data: { cardholderName: string; stripeToken: string }) => void;
+  onComplete: (data: { cardholderName: string; paypalOrderId: string }) => void;
   onError: (msg: string) => void;
 }
 
 const ACCEPTED_CARDS = ["Visa", "Mastercard", "American Express", "Discover"];
 
-const CARD_ELEMENT_OPTIONS = {
-  style: {
-    base: {
-      fontSize: "14px",
-      color: "#f1f5f9",
-      fontFamily: '"Inter", system-ui, sans-serif',
-      "::placeholder": {
-        color: "#475569",
-      },
-    },
-    invalid: {
-      color: "#fca5a5",
-    },
-  },
-};
+function formatExpiryInput(value: string): string {
+  const digits = value.replace(/\D/g, "").slice(0, 4);
+  if (digits.length <= 2) return digits;
+  return `${digits.slice(0, 2)}/${digits.slice(2)}`;
+}
+
+function expiryToPayPal(value: string): string {
+  const digits = value.replace(/\D/g, "");
+  if (digits.length !== 4) return value;
+  return `20${digits.slice(2)}-${digits.slice(0, 2)}`;
+}
 
 function PaymentForm({
   subscriptionData,
@@ -50,10 +36,11 @@ function PaymentForm({
   onComplete,
   onError,
 }: Props) {
-  const stripe = useStripe();
-  const elements = useElements();
   const { t, locale } = useTranslations();
   const [cardholderName, setCardholderName] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [cardExpiry, setCardExpiry] = useState("");
+  const [cardCvc, setCardCvc] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -64,32 +51,33 @@ function PaymentForm({
       return;
     }
 
-    if (!stripe || !elements) {
-      onError("Payment system not ready. Please try again.");
+    if (!cardNumber.trim() || cardNumber.replace(/\s/g, "").length < 12) {
+      onError(t("subscriptions.signUp.payment.errors.generic"));
+      return;
+    }
+
+    const expiryDigits = cardExpiry.replace(/\D/g, "");
+    if (expiryDigits.length !== 4) {
+      onError(t("subscriptions.signUp.payment.errors.generic"));
+      return;
+    }
+
+    if (!cardCvc.trim() || cardCvc.length < 3) {
+      onError(t("subscriptions.signUp.payment.errors.generic"));
       return;
     }
 
     onProcessingChange(true);
 
-    const cardNumberElement = elements.getElement(CardNumberElement);
-    if (!cardNumberElement) {
-      onError("Card element not found.");
-      onProcessingChange(false);
-      return;
-    }
-
-    const { token, error: stripeError } = await stripe.createToken(
-      cardNumberElement,
-      { name: cardholderName.trim() }
-    );
-
-    if (stripeError) {
-      onError(stripeError.message ?? "Payment error");
-      onProcessingChange(false);
-      return;
-    }
-
     try {
+      const signupUserName = sessionStorage.getItem("signup_user_name") || "";
+      const signupUserEmail = sessionStorage.getItem("signup_user_email") || "";
+      const signupAmount = sessionStorage.getItem("signup_subscription_amount") || "0";
+      const signupCurrency = sessionStorage.getItem("signup_subscription_currency") || "usd";
+      const signupPlanKey = sessionStorage.getItem("signup_subscription_plan_key") || "";
+      const signupBillingCycle = sessionStorage.getItem("signup_subscription_billing_cycle") || "";
+      const signupUserCount = sessionStorage.getItem("signup_subscription_user_count") || "";
+
       const authRes = await fetch("/api/auth/token", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -102,36 +90,17 @@ function PaymentForm({
 
       const { token: jwtToken } = await authRes.json();
 
-      const saveRes = await fetch("/api/stripe/payment-tokens", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jwtToken}`,
-        },
-        body: JSON.stringify({ stripe_token_id: token.id }),
-      });
-
-      if (!saveRes.ok) {
-        const err = await saveRes.json().catch(() => ({}));
-        throw new Error(err.error || "Failed to save payment token");
-      }
-
-      const signupUserName = sessionStorage.getItem("signup_user_name") || "";
-      const signupUserEmail = sessionStorage.getItem("signup_user_email") || "";
-      const signupAmount = sessionStorage.getItem("signup_subscription_amount") || "0";
-      const signupCurrency = sessionStorage.getItem("signup_subscription_currency") || "usd";
-      const signupPlanKey = sessionStorage.getItem("signup_subscription_plan_key") || "";
-      const signupBillingCycle = sessionStorage.getItem("signup_subscription_billing_cycle") || "";
-      const signupUserCount = sessionStorage.getItem("signup_subscription_user_count") || "";
-
-      await fetch("/api/stripe/process-pending-payments", {
+      const orderRes = await fetch("/api/paypal/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${jwtToken}`,
         },
         body: JSON.stringify({
-          stripe_token_id: token.id,
+          card_number: cardNumber.replace(/\s/g, ""),
+          card_expiry: expiryToPayPal(cardExpiry),
+          card_security_code: cardCvc,
+          cardholder_name: cardholderName.trim(),
           user_name: signupUserName,
           user_email: signupUserEmail,
           plan_key: signupPlanKey,
@@ -142,9 +111,17 @@ function PaymentForm({
         }),
       });
 
+      const result = await orderRes.json().catch(() => ({}));
+
+      if (!orderRes.ok) {
+        onError(result.error || "Payment processing failed");
+        onProcessingChange(false);
+        return;
+      }
+
       onComplete({
         cardholderName: cardholderName.trim(),
-        stripeToken: token.id,
+        paypalOrderId: result.paypal_order_id,
       });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Payment processing failed";
@@ -189,7 +166,13 @@ function PaymentForm({
             {t("subscriptions.signUp.payment.fields.cardNumber")}
           </S.Label>
           <S.StripeElement>
-            <CardNumberElement options={CARD_ELEMENT_OPTIONS} />
+            <S.NativeInput
+              inputMode="numeric"
+              autoComplete="cc-number"
+              placeholder="1234 1234 1234 1234"
+              value={cardNumber}
+              onChange={(e) => setCardNumber(e.target.value)}
+            />
           </S.StripeElement>
         </S.Field>
       </div>
@@ -200,7 +183,13 @@ function PaymentForm({
             {t("subscriptions.signUp.payment.fields.expirationDate")}
           </S.Label>
           <S.StripeElement>
-            <CardExpiryElement options={CARD_ELEMENT_OPTIONS} />
+            <S.NativeInput
+              inputMode="numeric"
+              autoComplete="cc-exp"
+              placeholder="MM/YY"
+              value={cardExpiry}
+              onChange={(e) => setCardExpiry(formatExpiryInput(e.target.value))}
+            />
           </S.StripeElement>
         </S.Field>
         <S.Field>
@@ -208,7 +197,13 @@ function PaymentForm({
             {t("subscriptions.signUp.payment.fields.securityCode")}
           </S.Label>
           <S.StripeElement>
-            <CardCvcElement options={CARD_ELEMENT_OPTIONS} />
+            <S.NativeInput
+              inputMode="numeric"
+              autoComplete="cc-csc"
+              placeholder="CVC"
+              value={cardCvc}
+              onChange={(e) => setCardCvc(e.target.value)}
+            />
           </S.StripeElement>
         </S.Field>
       </S.CardRow>
@@ -261,8 +256,8 @@ function PaymentForm({
       </S.SummaryCard>
 
       <S.ButtonRow>
-        <S.Button type="submit" disabled={processing || !stripe} $loading={processing}>
-          {processing && <S.Spinner />}
+        <S.Button type="submit" disabled={processing} $loading={processing}>
+          <S.Spinner $visible={processing} />
           {processing
             ? t("subscriptions.signUp.payment.processing")
             : t("subscriptions.signUp.payment.buyNow")}
@@ -273,23 +268,5 @@ function PaymentForm({
 }
 
 export default function SignUpPayment(props: Props) {
-  const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
-
-  useEffect(() => {
-    setStripePromise(getStripe());
-  }, []);
-
-  if (!stripePromise) {
-    return (
-      <div>
-        <S.Title>Loading payment...</S.Title>
-      </div>
-    );
-  }
-
-  return (
-    <Elements stripe={stripePromise}>
-      <PaymentForm {...props} />
-    </Elements>
-  );
+  return <PaymentForm {...props} />;
 }
