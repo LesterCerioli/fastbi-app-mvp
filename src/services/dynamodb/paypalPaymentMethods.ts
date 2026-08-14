@@ -28,6 +28,8 @@ export interface PayPalPaymentMethod {
   card_expiry?: string;
   cardholder_name?: string;
   billing_address?: string;
+  vault_id?: string;
+  vault_status?: string;
   response_json?: string;
   created_at: string;
   updated_at: string;

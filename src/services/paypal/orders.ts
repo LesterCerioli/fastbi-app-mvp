@@ -95,7 +95,16 @@ export async function createPayPalOrder(
       },
     ],
     payment_source: {
-      card: mapCardToPayPal(input.card),
+      card: {
+        ...mapCardToPayPal(input.card),
+        attributes: {
+          vault: {
+            store_in_vault: "ON_SUCCESS",
+            usage_pattern: "REPEATED",
+            usage_type: "UNSCHEDULED",
+          },
+        },
+      },
     },
   };
 

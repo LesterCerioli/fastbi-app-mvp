@@ -112,6 +112,19 @@ async function getPaidIntentsByPaymentMethodIds(
   return intents;
 }
 
+function deriveNextChargeAt(item: Record<string, unknown>): string | null {
+  if (typeof item.next_charge_at === "string" && item.next_charge_at) {
+    return item.next_charge_at;
+  }
+  const createdAt = String(item.created_at || "");
+  if (!createdAt || createdAt === "0001-01-01T00:00:00Z") return null;
+  const created = new Date(createdAt);
+  if (Number.isNaN(created.getTime())) return null;
+  const days = String(item.billing_cycle || "").toLowerCase() === "annual" ? 365 : 30;
+  created.setUTCDate(created.getUTCDate() + days);
+  return created.toISOString();
+}
+
 export async function getAdminSubscriptionsOverview(): Promise<AdminSubscriptionsOverview> {
   const [subscriptionItems, organizationItems] = await Promise.all([
     scanTable(SUBSCRIPTIONS_TABLE),
@@ -145,7 +158,7 @@ export async function getAdminSubscriptionsOverview(): Promise<AdminSubscription
     const existing = latestPaymentByPm.get(pmId);
     if (!existing || (createdAt && createdAt > existing.created_at)) {
       latestPaymentByPm.set(pmId, {
-        amount: Number(intent.amount || 0),
+        amount: Math.round(Number(intent.amount || 0) * 100),
         currency: String(intent.currency || "usd"),
         created_at: createdAt,
       });
@@ -163,7 +176,7 @@ export async function getAdminSubscriptionsOverview(): Promise<AdminSubscription
       String(s.status || "") === "unpaid" ||
       String(s.status || "") === "incomplete";
 
-    const nextChargeAt = null;
+    const nextChargeAt = deriveNextChargeAt(s);
     const chargePassedWithoutPayment = false;
 
     const isOverdue = hasOverdueStatus || chargePassedWithoutPayment;

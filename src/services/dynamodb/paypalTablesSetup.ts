@@ -20,6 +20,7 @@ const client = new DynamoDBClient({
 
 const PAYPAL_CUSTOMERS_TABLE = "FastBI_PayPal_customers";
 const PAYPAL_PAYMENT_METHODS_TABLE = "FastBI_PayPal_payment_methods";
+const PAYPAL_RECURRENCY_TABLE = "FastBI_PayPal_payments_recurrency_identifies";
 
 const TABLES: Array<{
   name: string;
@@ -107,6 +108,21 @@ const TABLES: Array<{
       {
         IndexName: "idx_paypal_order_id",
         KeySchema: [{ AttributeName: "paypal_order_id", KeyType: "HASH" }],
+        Projection: { ProjectionType: "ALL" },
+      },
+    ],
+  },
+  {
+    name: PAYPAL_RECURRENCY_TABLE,
+    keys: [{ AttributeName: "id", KeyType: "HASH" }],
+    attributes: [
+      { AttributeName: "id", AttributeType: "S" },
+      { AttributeName: "organization_id", AttributeType: "S" },
+    ],
+    gsis: [
+      {
+        IndexName: "idx_organization_id",
+        KeySchema: [{ AttributeName: "organization_id", KeyType: "HASH" }],
         Projection: { ProjectionType: "ALL" },
       },
     ],

@@ -37,6 +37,13 @@ Never delete existing code. This is a production project.
 
 * Do only what was asked—no "extras" or unsolicited improvements.
 
+## Legacy Data — Migrations Required
+
+* **Never** say or implement a solution as "not applicable to existing/legacy customers." Production data must always be supported.
+* Every implementation (frontend or backend) that changes how data is stored, charged, or displayed **must** include a migration/backfill strategy that also covers records already in production.
+* This applies to data fields (e.g. `vault_id`, `next_charge_at`, `currency`) and business rules (e.g. recurring billing amounts and currencies).
+* If a field or value cannot be derived for a legacy record, design a progressive recovery flow (e.g. backfill via API, or re-creation on next interaction) instead of excluding the customer.
+
 ## Skills
 
 * For UI/design tasks (styling, layouts, visual improvements), load the `frontend-design` skill for visual direction and `web-design-guidelines` for accessibility/UX auditing before implementing.
