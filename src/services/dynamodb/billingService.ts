@@ -181,6 +181,19 @@ async function getOrganizationIdsByCustomerEmail(
   return Array.from(new Set(matchedIds));
 }
 
+function deriveNextChargeAt(item: Record<string, unknown>): string | null {
+  if (typeof item.next_charge_at === "string" && item.next_charge_at) {
+    return item.next_charge_at;
+  }
+  const createdAt = String(item.created_at || "");
+  if (!createdAt || createdAt === "0001-01-01T00:00:00Z") return null;
+  const created = new Date(createdAt);
+  if (Number.isNaN(created.getTime())) return null;
+  const days = String(item.billing_cycle || "").toLowerCase() === "annual" ? 365 : 30;
+  created.setUTCDate(created.getUTCDate() + days);
+  return created.toISOString();
+}
+
 export async function getBillingOverview(
   organizationName: string,
   customerEmail?: string
@@ -229,8 +242,11 @@ export async function getBillingOverview(
   payments.sort((a, b) => b.created_at.localeCompare(a.created_at));
 
   let next_charge: NextCharge | null = null;
-  if (subscriptions.length > 0) {
-    const sub = subscriptions[0];
+  const sortedSubscriptions = [...subscriptions].sort((a, b) =>
+    String(b.created_at || "").localeCompare(String(a.created_at || ""))
+  );
+  if (sortedSubscriptions.length > 0) {
+    const sub = sortedSubscriptions[0];
     const quantity = Number(sub.user_quantity || sub.quantity || 1);
     next_charge = {
       subscription_id: String(sub.id || ""),
@@ -241,7 +257,7 @@ export async function getBillingOverview(
       currency: String(sub.currency || "usd"),
       status: String(sub.status || ""),
       cancel_at_period_end: false,
-      next_charge_at: null,
+      next_charge_at: deriveNextChargeAt(sub),
     };
   }
 

@@ -165,6 +165,7 @@ export async function POST(request) {
     let paymentMethodId = null;
     const card = extractCardFromResponse(data);
     if (card) {
+      const vault = (card.attributes && card.attributes.vault) || null;
       const paymentMethod = {
         id: uuidv4(),
         paypal_order_id: String(data.id || ""),
@@ -176,6 +177,8 @@ export async function POST(request) {
         billing_address: card.billing_address
           ? JSON.stringify(card.billing_address)
           : undefined,
+        vault_id: vault ? String(vault.id || "") : undefined,
+        vault_status: vault ? String(vault.status || "") : undefined,
         response_json: JSON.stringify(card),
         created_at: now,
         updated_at: now,
@@ -218,7 +221,7 @@ export async function POST(request) {
         payment_method_id: paymentMethodId || undefined,
         amount: Number((capture.amount && capture.amount.value) || 0),
         currency: String(
-          (capture.amount && capture.amount.currency_code) || body.currency || "USD"
+          body.currency || (capture.amount && capture.amount.currency_code) || "USD"
         ),
         status: String(capture.status || ""),
         final_capture: Boolean(capture.final_capture),

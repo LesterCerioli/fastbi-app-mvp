@@ -224,7 +224,7 @@ export default function Profile() {
       [t("profile.organization"), organizationNameFallback || "-"],
       [t("profile.billing.date"), payment.created_at ? formatDate(payment.created_at) : "-"],
       [t("profile.billing.status"), t("profile.billing.paid")],
-      [t("profile.billing.amount"), formatCurrency(payment.amount / 100, payment.currency)],
+      [t("profile.billing.amount"), formatCurrency(payment.amount, payment.currency)],
     ];
 
     let y = 60;
@@ -345,7 +345,7 @@ export default function Profile() {
               {billing.payments.map((p) => (
                 <S.InvoiceRow key={p.id}>
                   <span>{formatDate(p.created_at)}</span>
-                  <span>{formatCurrency(p.amount / 100, p.currency)}</span>
+                  <span>{formatCurrency(p.amount, p.currency)}</span>
                   <S.StatusBadge>{t("profile.billing.paid")}</S.StatusBadge>
                   <S.DownloadBtn onClick={() => handleDownloadInvoice(p, billing.organization_name)}>
                     <Download size={14} />
