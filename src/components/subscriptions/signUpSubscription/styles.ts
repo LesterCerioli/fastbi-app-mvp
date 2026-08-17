@@ -249,6 +249,25 @@ export const Button = styled.button`
   }
 `;
 
+export const BackButton = styled.button`
+  border: 1px solid #334155;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: "Inter", system-ui, sans-serif;
+  background: transparent;
+  color: #94a3b8;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: #475569;
+    color: #f1f5f9;
+  }
+`;
+
 export const ErrorMessage = styled.div`
   background: rgba(239, 68, 68, 0.1);
   border: 1px solid rgba(239, 68, 68, 0.3);
@@ -257,6 +276,32 @@ export const ErrorMessage = styled.div`
   color: #fca5a5;
   font-size: 13px;
   margin-bottom: 20px;
+`;
+
+export const BillingNotice = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  background: rgba(234, 179, 8, 0.12);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 10px;
+  margin-bottom: 24px;
+`;
+
+export const BillingNoticeIcon = styled.div`
+  flex-shrink: 0;
+  color: #eab308;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+`;
+
+export const BillingNoticeText = styled.div`
+  font-size: 13px;
+  color: #fde047;
+  line-height: 1.5;
 `;
 
 export const UserField = styled.div`
