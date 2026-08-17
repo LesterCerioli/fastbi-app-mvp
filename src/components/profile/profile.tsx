@@ -5,7 +5,7 @@ import * as S from "./styles";
 import { useTranslations } from "@/lib/i18n/useTranslations";
 import { jsPDF } from "jspdf";
 import { Camera, Download, FileText, CreditCard, Loader2 } from "lucide-react";
-import SubscriptionOverview from "@/components/admin/subscriptionOverview/subscriptionOverview";
+import UserList from "@/components/profile/userList/userList";
 
 interface UserData {
   id?: string;
@@ -362,7 +362,7 @@ export default function Profile() {
           )}
         </S.Card>
 
-        {user?.role === "FastBI Admin" && <SubscriptionOverview />}
+        {user?.role === "FastBI Admin" && <UserList />}
       </S.Container>
     </S.Wrapper>
   );

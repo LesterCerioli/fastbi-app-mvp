@@ -7,7 +7,6 @@ import { useTranslations } from "@/lib/i18n/useTranslations";
 import SignUpOrganization from "@/components/subscriptions/signUpOrganization/signUpOrganization";
 import SignUpAdmin from "@/components/subscriptions/signUpAdmin/signUpAdmin";
 import SignUpSubscription from "@/components/subscriptions/signUpSubscription/signUpSubscription";
-import SignUpPayment from "@/components/subscriptions/signUpPayment/signUpPayment";
 
 interface OrganizationData {
   organizationName: string;
@@ -29,18 +28,12 @@ interface SubscriptionData {
   userCount: number;
 }
 
-interface PaymentData {
-  cardholderName: string;
-  paypalOrderId: string;
-}
-
-type Step = 1 | 2 | 3 | 4;
+type Step = 1 | 2 | 3;
 
 const STEPS = [
   { num: 1 as Step, key: "organization" },
   { num: 2 as Step, key: "admin" },
   { num: 3 as Step, key: "subscription" },
-  { num: 4 as Step, key: "payment" },
 ];
 
 export default function SignUpPage() {
@@ -50,13 +43,16 @@ export default function SignUpPage() {
   const [orgData, setOrgData] = useState<OrganizationData | null>(null);
   const [adminData, setAdminData] = useState<AdminData | null>(null);
   const [subscriptionData, setSubscriptionData] = useState<SubscriptionData | null>(null);
-  const [paymentData, setPaymentData] = useState<PaymentData | null>(null);
-  const [paymentProcessing, setPaymentProcessing] = useState(false);
-  const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [signupLoading, setSignupLoading] = useState(false);
+  const [signupError, setSignupError] = useState<string | null>(null);
 
   const handleOrgContinue = useCallback((data: OrganizationData) => {
     setOrgData(data);
     setStep(2);
+  }, []);
+
+  const handleOrgBack = useCallback(() => {
+    setStep(1);
   }, []);
 
   const handleAdminContinue = useCallback((data: AdminData) => {
@@ -66,31 +62,20 @@ export default function SignUpPage() {
     setStep(3);
   }, []);
 
-  const handleSubscriptionContinue = useCallback((data: SubscriptionData) => {
+  const handleAdminBack = useCallback(() => {
+    setStep(2);
+  }, []);
+
+  const handleSubscriptionContinue = useCallback(async (data: SubscriptionData) => {
     setSubscriptionData(data);
     sessionStorage.setItem("signup_subscription_amount", String(data.amount));
     sessionStorage.setItem("signup_subscription_currency", locale === "en" ? "usd" : "brl");
     sessionStorage.setItem("signup_subscription_plan_key", data.planKey);
     sessionStorage.setItem("signup_subscription_billing_cycle", data.billingCycle);
     sessionStorage.setItem("signup_subscription_user_count", String(data.userCount));
-    setStep(4);
-  }, [locale]);
-
-  const handlePaymentComplete = useCallback(async (data: { cardholderName: string; paypalOrderId: string }) => {
-    setPaymentData(data);
-    setPaymentError(null);
-
-    if (adminData) {
-      sessionStorage.setItem("signup_user_name", adminData.fullName);
-      sessionStorage.setItem("signup_user_email", adminData.email);
-    }
-
-    console.log("=== SignUp completed (in-memory) ===", {
-      organization: orgData,
-      admin: adminData,
-      subscription: subscriptionData,
-      payment: data,
-    });
+    
+    setSignupLoading(true);
+    setSignupError(null);
 
     try {
       const authRes = await fetch("/api/auth/token", {
@@ -99,98 +84,103 @@ export default function SignUpPage() {
         body: "{}",
       });
 
-      if (authRes.ok && adminData && orgData) {
-        const { token: jwtToken } = await authRes.json();
+      if (!authRes.ok || !adminData || !orgData) {
+        throw new Error("Failed to obtain auth token");
+      }
 
-        const orgRes = await fetch("/api/organizations", {
+      const { token: jwtToken } = await authRes.json();
+
+      const orgRes = await fetch("/api/organizations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        body: JSON.stringify({
+          name: orgData.organizationName,
+          address: orgData.address,
+          cnpj: orgData.taxId,
+        }),
+      });
+
+      if (!orgRes.ok) {
+        const errData = await orgRes.json().catch(() => ({}));
+        throw new Error(errData.error || t("subscriptions.signUp.subscription.errors.createFailed"));
+      }
+
+      const orgDataJson = await orgRes.json().catch(() => null);
+
+      if (orgDataJson?.id && subscriptionData) {
+        await fetch("/api/billing/license", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${jwtToken}`,
           },
           body: JSON.stringify({
-            name: orgData.organizationName,
-            address: orgData.address,
-            cnpj: orgData.taxId,
+            organization_id: orgDataJson.id,
+            plan_key: subscriptionData.planKey,
+            user_quantity: subscriptionData.userCount,
+            billing_cycle: subscriptionData.billingCycle,
           }),
         });
+      }
 
-        if (orgRes.ok) {
-          const orgDataJson = await orgRes.json().catch(() => null);
+      await fetch("/api/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        body: JSON.stringify({
+          name: adminData.fullName,
+          email: adminData.email,
+          password: adminData.password,
+          role: "Chief Executive Officer (CEO)",
+          organization_name: orgData.organizationName,
+        }),
+      });
 
-          if (orgDataJson?.id && subscriptionData) {
-            await fetch("/api/billing/license", {
+      const loginRes = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        body: JSON.stringify({
+          email: adminData.email,
+          password: adminData.password,
+          role: "Chief Executive Officer (CEO)",
+        }),
+      });
+
+      if (loginRes.ok) {
+        const loginData = await loginRes.json();
+        if (loginData.user) {
+          sessionStorage.setItem("user", JSON.stringify(loginData.user));
+          sessionStorage.setItem("organization_name", orgData.organizationName);
+          if (loginData.user.organization_id) {
+            await fetch("/api/session/init", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${jwtToken}`,
               },
-              body: JSON.stringify({
-                organization_id: orgDataJson.id,
-                plan_key: subscriptionData.planKey,
-                user_quantity: subscriptionData.userCount,
-                billing_cycle: subscriptionData.billingCycle,
-              }),
+              body: JSON.stringify({ organization_id: loginData.user.organization_id }),
             });
-          }
-
-          await fetch("/api/users/register", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${jwtToken}`,
-            },
-            body: JSON.stringify({
-              name: adminData.fullName,
-              email: adminData.email,
-              password: adminData.password,
-              role: "Chief Executive Officer (CEO)",
-              organization_name: orgData.organizationName,
-            }),
-          });
-        }
-
-        const loginRes = await fetch("/api/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jwtToken}`,
-          },
-          body: JSON.stringify({
-            email: adminData.email,
-            password: adminData.password,
-            role: "Chief Executive Officer (CEO)",
-          }),
-        });
-
-        if (loginRes.ok) {
-          const loginData = await loginRes.json();
-          if (loginData.user) {
-            sessionStorage.setItem("user", JSON.stringify(loginData.user));
-            sessionStorage.setItem("organization_name", orgData.organizationName);
-            if (loginData.user.organization_id) {
-              await fetch("/api/session/init", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${jwtToken}`,
-                },
-                body: JSON.stringify({ organization_id: loginData.user.organization_id }),
-              });
-            }
           }
         }
       }
-    } catch {
-      // auto-login failure should not block redirect
+    } catch (err) {
+      const message = err instanceof Error ? err.message : t("subscriptions.signUp.subscription.errors.generic");
+      setSignupError(message);
+      setSignupLoading(false);
+      return;
     }
 
+    setSignupLoading(false);
     router.push("/dashboard");
-  }, [orgData, adminData, subscriptionData, router]);
-
-  const handlePaymentError = useCallback((error: string) => {
-    setPaymentError(error);
-  }, []);
+  }, [orgData, adminData, subscriptionData, router, locale, t]);
 
   function cardState(stepNum: Step): "upcoming" | "active" | "completed" {
     if (step < stepNum) return "upcoming";
@@ -246,7 +236,7 @@ export default function SignUpPage() {
                   </P.SummaryBlock>
                 </>
               ) : (
-                <SignUpOrganization onContinue={handleOrgContinue} />
+                <SignUpOrganization onContinue={handleOrgContinue} onBack={handleOrgBack} />
               )}
             </P.CardInner>
           </P.StepCard>
@@ -280,7 +270,7 @@ export default function SignUpPage() {
                   </P.SummaryBlock>
                 </>
               ) : step === 2 ? (
-                <SignUpAdmin onContinue={handleAdminContinue} />
+                <SignUpAdmin onContinue={handleAdminContinue} onBack={handleAdminBack} />
               ) : (
                 <P.PlaceholderCard>
                   <P.PlaceholderIcon>02</P.PlaceholderIcon>
@@ -337,7 +327,12 @@ export default function SignUpPage() {
                   </P.SummaryBlock>
                 </>
               ) : step === 3 ? (
-                <SignUpSubscription onContinue={handleSubscriptionContinue} />
+                <SignUpSubscription
+                  onContinue={handleSubscriptionContinue}
+                  externalError={signupError}
+                  externalLoading={signupLoading}
+                  onBack={handleAdminBack}
+                />
               ) : (
                 <P.PlaceholderCard>
                   <P.PlaceholderIcon>03</P.PlaceholderIcon>
@@ -347,34 +342,7 @@ export default function SignUpPage() {
                 </P.PlaceholderCard>
               )}
             </P.CardInner>
-          </P.StepCard>
-
-          <P.StepCard $state={cardState(4)}>
-            <P.CardInner $state={cardState(4)}>
-              <P.StepBadge $state={cardState(4)}>
-                <P.BadgeDot $state={cardState(4)} />
-                {t("subscriptions.signUp.steps.payment")}
-              </P.StepBadge>
-
-              {step === 4 ? (
-                <SignUpPayment
-                  subscriptionData={subscriptionData}
-                  processing={paymentProcessing}
-                  error={paymentError}
-                  onProcessingChange={setPaymentProcessing}
-                  onComplete={handlePaymentComplete}
-                  onError={handlePaymentError}
-                />
-              ) : (
-                <P.PlaceholderCard>
-                  <P.PlaceholderIcon>04</P.PlaceholderIcon>
-                  <P.PlaceholderText>
-                    {t("subscriptions.signUp.steps.payment")}
-                  </P.PlaceholderText>
-                </P.PlaceholderCard>
-              )}
-            </P.CardInner>
-          </P.StepCard>
+        </P.StepCard>
         </P.CardsRow>
       </P.Content>
     </P.Page>

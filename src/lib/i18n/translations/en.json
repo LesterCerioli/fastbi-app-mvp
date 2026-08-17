@@ -14,6 +14,9 @@
       "logout": "Log Out"
     }
   },
+  "common": {
+    "back": "Back"
+  },
   "footer": {
     "logoText": "FastBI",
     "nav": {
@@ -582,7 +585,7 @@
       },
       "subscription": {
         "title": "Choose Your Subscription",
-        "subtitle": "Select the plan that best fits your needs",
+        "subtitle": "Select the plan and number of licenses that best fits your needs",
         "billingCycle": "Billing Cycle",
         "monthly": "Monthly",
         "annual": "Annual",
@@ -591,6 +594,8 @@
         "totalAmount": "Total Amount",
         "continue": "Continue to Payment",
         "processing": "Creating subscription...",
+        "completeSignup": "Complete Signup",
+        "billingNotice": "Billing is temporarily inactive. You can test FastBI for free, but you still need to choose a plan and number of licenses.",
         "errors": {
           "createFailed": "Failed to create subscription",
           "generic": "An error occurred. Please try again.",
@@ -864,6 +869,22 @@
       "noInvoices": "No invoices found",
       "noSubscription": "No active subscription",
       "loading": "Loading..."
+    },
+    "userList": {
+      "title": "All Users",
+      "name": "Name",
+      "email": "Email",
+      "organization": "Organization",
+      "status": "Status",
+      "online": "Online",
+      "offline": "Offline",
+      "loading": "Loading users...",
+      "noUsers": "No users found",
+      "error": "Failed to load users",
+      "retry": "Retry",
+      "previous": "Previous",
+      "next": "Next",
+      "pageInfo": "Page {current} of {total}"
     }
   },
   "adminSubscriptions": {

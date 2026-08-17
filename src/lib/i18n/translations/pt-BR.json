@@ -14,6 +14,9 @@
       "logout": "Sair"
     }
   },
+  "common": {
+    "back": "Voltar"
+  },
   "footer": {
     "logoText": "FastBI",
     "nav": {
@@ -519,7 +522,7 @@
       },
       "subscription": {
         "title": "Escolha sua Assinatura",
-        "subtitle": "Selecione o plano ideal para suas necessidades",
+        "subtitle": "Selecione o plano e o número de licenças ideais para suas necessidades",
         "billingCycle": "Ciclo de Cobrança",
         "monthly": "Mensal",
         "annual": "Anual",
@@ -528,6 +531,8 @@
         "totalAmount": "Valor Total",
         "continue": "Continuar para Pagamento",
         "processing": "Criando assinatura...",
+        "completeSignup": "Concluir Cadastro",
+        "billingNotice": "A cobrança está temporariamente inativa. Você pode testar o FastBI gratuitamente, mas ainda é necessário escolher o plano e o número de licenças.",
         "errors": {
           "createFailed": "Falha ao criar assinatura",
           "generic": "Ocorreu um erro. Tente novamente.",
@@ -864,6 +869,22 @@
       "noInvoices": "Nenhuma fatura encontrada",
       "noSubscription": "Nenhuma assinatura ativa",
       "loading": "Carregando..."
+    },
+    "userList": {
+      "title": "Todos os Usuários",
+      "name": "Nome",
+      "email": "E-mail",
+      "organization": "Organização",
+      "status": "Status",
+      "online": "Online",
+      "offline": "Offline",
+      "loading": "Carregando usuários...",
+      "noUsers": "Nenhum usuário encontrado",
+      "error": "Falha ao carregar usuários",
+      "retry": "Tentar novamente",
+      "previous": "Anterior",
+      "next": "Próximo",
+      "pageInfo": "Página {current} de {total}"
     }
   },
   "adminSubscriptions": {

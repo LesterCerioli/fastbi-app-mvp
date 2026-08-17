@@ -8,9 +8,12 @@ import { PLANS, getPlanByKey, annualUnitAmount } from "@/lib/planLimits";
 
 interface Props {
   onContinue: (data: SubscriptionData) => void;
+  externalError?: string | null;
+  externalLoading?: boolean;
+  onBack?: () => void;
 }
 
-export default function SignUpSubscription({ onContinue }: Props) {
+export default function SignUpSubscription({ onContinue, externalError, externalLoading, onBack }: Props) {
   const { t, locale } = useTranslations();
   const [annual, setAnnual] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<string>("professional");
@@ -90,7 +93,20 @@ export default function SignUpSubscription({ onContinue }: Props) {
         {t("subscriptions.signUp.subscription.subtitle")}
       </S.Subtitle>
 
-      {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
+      <S.BillingNotice>
+        <S.BillingNoticeIcon>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+        </S.BillingNoticeIcon>
+        <S.BillingNoticeText>
+          {t("subscriptions.signUp.subscription.billingNotice")}
+        </S.BillingNoticeText>
+      </S.BillingNotice>
+
+      {(error || externalError) && <S.ErrorMessage>{error || externalError}</S.ErrorMessage>}
 
       <S.SectionLabel>
         {t("subscriptions.signUp.subscription.billingCycle")}
@@ -216,10 +232,15 @@ export default function SignUpSubscription({ onContinue }: Props) {
       </S.SummaryCard>
 
       <S.ButtonRow>
-        <S.Button type="button" onClick={handleContinue} disabled={loading}>
-          {loading
+        {onBack && (
+          <S.BackButton type="button" onClick={onBack}>
+            {t("common.back")}
+          </S.BackButton>
+        )}
+        <S.Button type="button" onClick={handleContinue} disabled={loading || externalLoading}>
+          {loading || externalLoading
             ? t("subscriptions.signUp.subscription.processing")
-            : t("subscriptions.signUp.subscription.continue")}
+            : t("subscriptions.signUp.subscription.completeSignup")}
         </S.Button>
       </S.ButtonRow>
     </div>

@@ -7,9 +7,10 @@ import type { AdminData } from "@/components/subscriptions/signUp/signUp";
 
 interface Props {
   onContinue: (data: AdminData) => void;
+  onBack?: () => void;
 }
 
-export default function SignUpAdmin({ onContinue }: Props) {
+export default function SignUpAdmin({ onContinue, onBack }: Props) {
   const { t } = useTranslations();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -115,6 +116,11 @@ export default function SignUpAdmin({ onContinue }: Props) {
       </S.Form>
 
       <S.ButtonRow>
+        {onBack && (
+          <S.BackButton type="button" onClick={onBack}>
+            {t("common.back")}
+          </S.BackButton>
+        )}
         <S.Button type="submit">
           {t("subscriptions.signUp.admin.continue")}
         </S.Button>
