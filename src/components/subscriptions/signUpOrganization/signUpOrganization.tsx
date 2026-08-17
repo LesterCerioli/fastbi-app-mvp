@@ -7,9 +7,10 @@ import type { OrganizationData } from "@/components/subscriptions/signUp/signUp"
 
 interface Props {
   onContinue: (data: OrganizationData) => void;
+  onBack?: () => void;
 }
 
-export default function SignUpOrganization({ onContinue }: Props) {
+export default function SignUpOrganization({ onContinue, onBack }: Props) {
   const { t } = useTranslations();
   const [organizationName, setOrganizationName] = useState("");
   const [taxId, setTaxId] = useState("");
@@ -93,6 +94,11 @@ export default function SignUpOrganization({ onContinue }: Props) {
       </S.Form>
 
       <S.ButtonRow>
+        {onBack && (
+          <S.BackButton type="button" onClick={onBack}>
+            {t("common.back")}
+          </S.BackButton>
+        )}
         <S.Button type="submit">
           {t("subscriptions.signUp.organization.continue")}
         </S.Button>

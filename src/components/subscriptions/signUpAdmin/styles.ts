@@ -89,6 +89,25 @@ export const Button = styled.button`
   }
 `;
 
+export const BackButton = styled.button`
+  border: 1px solid #334155;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: "Inter", system-ui, sans-serif;
+  background: transparent;
+  color: #94a3b8;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: #475569;
+    color: #f1f5f9;
+  }
+`;
+
 export const ErrorMessage = styled.div`
   background: rgba(239, 68, 68, 0.1);
   border: 1px solid rgba(239, 68, 68, 0.3);
