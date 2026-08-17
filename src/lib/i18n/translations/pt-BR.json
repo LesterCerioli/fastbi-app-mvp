@@ -869,6 +869,22 @@
       "noInvoices": "Nenhuma fatura encontrada",
       "noSubscription": "Nenhuma assinatura ativa",
       "loading": "Carregando..."
+    },
+    "userList": {
+      "title": "Todos os Usuários",
+      "name": "Nome",
+      "email": "E-mail",
+      "organization": "Organização",
+      "status": "Status",
+      "online": "Online",
+      "offline": "Offline",
+      "loading": "Carregando usuários...",
+      "noUsers": "Nenhum usuário encontrado",
+      "error": "Falha ao carregar usuários",
+      "retry": "Tentar novamente",
+      "previous": "Anterior",
+      "next": "Próximo",
+      "pageInfo": "Página {current} de {total}"
     }
   },
   "adminSubscriptions": {
