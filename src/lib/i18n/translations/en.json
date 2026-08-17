@@ -869,6 +869,22 @@
       "noInvoices": "No invoices found",
       "noSubscription": "No active subscription",
       "loading": "Loading..."
+    },
+    "userList": {
+      "title": "All Users",
+      "name": "Name",
+      "email": "Email",
+      "organization": "Organization",
+      "status": "Status",
+      "online": "Online",
+      "offline": "Offline",
+      "loading": "Loading users...",
+      "noUsers": "No users found",
+      "error": "Failed to load users",
+      "retry": "Retry",
+      "previous": "Previous",
+      "next": "Next",
+      "pageInfo": "Page {current} of {total}"
     }
   },
   "adminSubscriptions": {

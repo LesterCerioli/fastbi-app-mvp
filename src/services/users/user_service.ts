@@ -1,5 +1,4 @@
 import * as bcrypt from "bcryptjs";
-import { v4 as uuidv4 } from "uuid";
 import { query } from "../db";
 import { EmailSenderService } from "../email_sender_service";
 
@@ -18,6 +17,10 @@ export interface UserDTO {
 export interface OrganizationDTO {
   id: string;
   name: string;
+}
+
+export interface UserWithOrganizationDTO extends UserDTO {
+  organization_name: string;
 }
 
 interface UserWithPassword extends UserDTO {
@@ -622,7 +625,7 @@ export class UserService {
     );
     if (!result.rows[0]) throw new Error("user not found");
 
-    const { email, name, password: hashedPassword } = result.rows[0];
+    const { password: hashedPassword } = result.rows[0];
     if (!verifyPassword(oldPassword, hashedPassword)) {
       throw new Error("invalid current password");
     }
@@ -657,5 +660,18 @@ export class UserService {
       [orgId]
     );
     return parseInt(result.rows[0]?.count || "0", 10);
+  }
+
+  async getAllUsersWithOrganization(limit = 100, offset = 0): Promise<UserWithOrganizationDTO[]> {
+    const result = await query(
+      `SELECT u.id, u.name, u.email, u.role, u.organization_id, u.created_at, u.updated_at, u.deleted_at, o.name as organization_name
+       FROM public.users u
+       LEFT JOIN public.organizations o ON u.organization_id = o.id
+       WHERE u.deleted_at IS NULL
+       ORDER BY u.created_at DESC
+       LIMIT $1 OFFSET $2`,
+      [limit, offset]
+    );
+    return result.rows as UserWithOrganizationDTO[];
   }
 }
