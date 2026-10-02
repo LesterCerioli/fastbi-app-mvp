@@ -14,10 +14,8 @@ import {
   Area,
   BarChart,
   Bar,
-  PieChart,
-  Pie,
-  Cell,
 } from 'recharts';
+import { ChevronLeft, ChevronRight, LayoutDashboard, Activity, BarChart2, FileText, Settings } from 'lucide-react';
 
 interface ForecastItem {
   month: string;
@@ -43,6 +41,8 @@ interface Props {
   organizationName: string | null;
   forecastData: Record<string, unknown> | null;
   executiveSummary: Record<string, unknown> | null;
+  /** Define qual menu inicia ativo (ex: 'analytics' na página de Analytics) */
+  initialMenu?: MenuItem;
 }
 
 type MenuItem = 'overview' | 'forecasts' | 'analytics' | 'reports' | 'settings';
@@ -77,13 +77,11 @@ async function getFreshToken(): Promise<string> {
 
 function buildChartData(hist: HistoricalItem[] | null, forecast: ForecastItem[] | null) {
   const data: { month: string; historical: number | null; forecast: number | null }[] = [];
-
   if (hist) {
     for (const item of hist) {
       data.push({ month: formatMonth(item.month), historical: item.revenue, forecast: null });
     }
   }
-
   if (forecast) {
     for (const item of forecast) {
       const formatted = formatMonth(item.month);
@@ -95,21 +93,21 @@ function buildChartData(hist: HistoricalItem[] | null, forecast: ForecastItem[] 
       }
     }
   }
-
   return data;
 }
 
-const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastData, executiveSummary }) => {
-  const [activeMenu, setActiveMenu] = useState<MenuItem>('overview');
+const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastData, executiveSummary, initialMenu = 'overview' }) => {
+  const [activeMenu, setActiveMenu] = useState<MenuItem>(initialMenu);
   const [fetchedData, setFetchedData] = useState<Record<string, unknown> | null>(null);
   const [reportData, setReportData] = useState<Record<string, unknown> | null>(null);
   const [loading, setLoading] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
 
   const hist = forecastData?.historical_data as HistoricalItem[] | undefined;
   const forecast = forecastData?.forecast as ForecastItem[] | undefined;
   const chartData = buildChartData(hist ?? null, forecast ?? null);
-
   const summary = executiveSummary as KPIData | null;
+
   const kpis = [
     {
       title: 'Forecasted Revenue',
@@ -136,6 +134,14 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
       color: '#00FF9F',
     },
   ];
+
+  const menuIcons: Record<MenuItem, React.ReactNode> = {
+    overview: <LayoutDashboard size={20} />,
+    forecasts: <Activity size={20} />,
+    analytics: <BarChart2 size={20} />,
+    reports: <FileText size={20} />,
+    settings: <Settings size={20} />,
+  };
 
   const handleMenuClick = useCallback(async (item: MenuItem) => {
     if (item === 'overview') {
@@ -186,43 +192,43 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
     }
   }, [organizationName]);
 
-   const renderContent = () => {
-     if (activeMenu !== 'overview' && loading) {
-       return (
-         <S.Content>
-           <S.KpisGrid>
-             {[1, 2, 3, 4].map((i) => (
-               <S.KpiCard key={i}>
-                 <S.KpiTitle>Loading...</S.KpiTitle>
-                 <S.KpiValue color="#1E2A44">────</S.KpiValue>
-               </S.KpiCard>
-             ))}
-           </S.KpisGrid>
-           <S.ChartCard>
-             <S.ChartTitle>Loading chart...</S.ChartTitle>
-             <div style={{ height: 320, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(90deg, #11223D 25%, #1A3050 50%, #11223D 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite', borderRadius: 8 }}>
-               <span style={{ color: '#64748B', fontSize: 14 }}>Carregando dados...</span>
-             </div>
-           </S.ChartCard>
-           <S.ChartCard>
-             <S.ChartTitle>Loading trend...</S.ChartTitle>
-             <div style={{ height: 320, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(90deg, #11223D 25%, #1A3050 50%, #11223D 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite', borderRadius: 8 }}>
-               <span style={{ color: '#64748B', fontSize: 14 }}>Carregando tendência...</span>
-             </div>
-           </S.ChartCard>
-           <style>{`
-             @keyframes shimmer {
-               0% { background-position: 200% 0; }
-               100% { background-position: -200% 0; }
-             }
-           `}</style>
-         </S.Content>
-       );
-     }
+  const renderContent = () => {
+    if (activeMenu !== 'overview' && loading) {
+      return (
+        <S.Content>
+          <S.KpisGrid>
+            {[1, 2, 3, 4].map((i) => (
+              <S.KpiCard key={i}>
+                <S.KpiTitle>Loading...</S.KpiTitle>
+                <S.KpiValue color="#1E2A44">────</S.KpiValue>
+              </S.KpiCard>
+            ))}
+          </S.KpisGrid>
+          <S.ChartCard>
+            <S.ChartTitle>Loading chart...</S.ChartTitle>
+            <div style={{ height: 320, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(90deg, #11223D 25%, #1A3050 50%, #11223D 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite', borderRadius: 8 }}>
+              <span style={{ color: '#64748B', fontSize: 14 }}>Carregando dados...</span>
+            </div>
+          </S.ChartCard>
+          <S.ChartCard>
+            <S.ChartTitle>Loading trend...</S.ChartTitle>
+            <div style={{ height: 320, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(90deg, #11223D 25%, #1A3050 50%, #11223D 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite', borderRadius: 8 }}>
+              <span style={{ color: '#64748B', fontSize: 14 }}>Carregando tendência...</span>
+            </div>
+          </S.ChartCard>
+          <style>{`
+            @keyframes shimmer {
+              0% { background-position: 200% 0; }
+              100% { background-position: -200% 0; }
+            }
+          `}</style>
+        </S.Content>
+      );
+    }
 
     if (activeMenu === 'overview') {
       return (
-        <>
+        <S.Content>
           <S.KpisGrid>
             {kpis.map((kpi, i) => (
               <S.KpiCard key={i}>
@@ -232,24 +238,25 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
               </S.KpiCard>
             ))}
           </S.KpisGrid>
-
           <S.ChartCard>
             <S.ChartTitle>Historical Evolution + Revenue Forecast</S.ChartTitle>
             <ResponsiveContainer width="100%" height={420}>
               <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1E2A44" />
                 <XAxis dataKey="month" stroke="#64748B" />
-                <YAxis 
-                  stroke="#64748B" 
-                  tickFormatter={(v: number) => `$${(v / 1000000).toFixed(1)}M`} 
+                <YAxis
+                  stroke="#64748B"
+                  tickFormatter={(v: number) => `$${(v / 1000000).toFixed(1)}M`}
                 />
-                <Tooltip 
-                    formatter={(value: any) => {
-                        if (value === undefined || value === null) return ['N/A', 'Value'];
-                        return [`$${(value / 1000).toFixed(0)}k`, 'Value'];
-                    }}
-                    contentStyle={{ backgroundColor: '#11223D', borderColor: '#1E2A44' }}
-                    labelStyle={{ color: '#E0F2FF' }}
+                <Tooltip
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  formatter={(value: any) => {
+                    if (value === undefined || value === null) return ['N/A', 'Value'];
+                    const numValue = typeof value === 'string' ? parseFloat(value) : value;
+                    return [`$${(numValue / 1000).toFixed(0)}k`, 'Value'];
+                  }}
+                  contentStyle={{ backgroundColor: '#11223D', borderColor: '#1E2A44' }}
+                  labelStyle={{ color: '#E0F2FF' }}
                 />
                 <Legend wrapperStyle={{ color: '#E0F2FF' }} />
                 <Line type="monotone" dataKey="historical" stroke="#00D4FF" strokeWidth={3} dot={false} name="Historical" />
@@ -258,7 +265,6 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
               </LineChart>
             </ResponsiveContainer>
           </S.ChartCard>
-
           <S.TableContainer>
             <S.TableTitle>Detailed Forecasts</S.TableTitle>
             <S.Table>
@@ -285,7 +291,7 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
               </tbody>
             </S.Table>
           </S.TableContainer>
-        </>
+        </S.Content>
       );
     }
 
@@ -300,7 +306,12 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
                 <CartesianGrid strokeDasharray="3 3" stroke="#1E2A44" />
                 <XAxis dataKey="month" stroke="#64748B" />
                 <YAxis stroke="#64748B" tickFormatter={(v: number) => `$${(v / 1000000).toFixed(1)}M`} />
-                <Tooltip formatter={(value: any) => value != null ? [`$${(Number(value) / 1000).toFixed(0)}k`, 'Value'] : ['N/A', 'Value']} contentStyle={{ backgroundColor: '#11223D', borderColor: '#1E2A44' }} labelStyle={{ color: '#E0F2FF' }} />
+                <Tooltip
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  formatter={(value: any) => value != null ? [`$${((typeof value === 'string' ? parseFloat(value) : Number(value)) / 1000).toFixed(0)}k`, 'Value'] : ['N/A', 'Value']}
+                  contentStyle={{ backgroundColor: '#11223D', borderColor: '#1E2A44' }}
+                  labelStyle={{ color: '#E0F2FF' }}
+                />
                 <Legend wrapperStyle={{ color: '#E0F2FF' }} />
                 <Line type="monotone" dataKey="historical" stroke="#00D4FF" strokeWidth={3} dot={false} name="Historical" />
                 <Line type="monotone" dataKey="forecast" stroke="#00FF9F" strokeWidth={3} strokeDasharray="5 5" dot={false} name="Forecast" />
@@ -326,7 +337,6 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
       const metrics = fetchedData?.key_metrics as Record<string, number> | undefined;
       const seasonality = fetchedData?.seasonality as Record<string, unknown> | undefined;
       const seasons = seasonality?.periods as { name: string; revenue: number; growth: number }[] | undefined;
-
       return (
         <S.Content>
           <S.KpisGrid>
@@ -335,7 +345,6 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
             <S.KpiCard><S.KpiTitle>Avg Transaction</S.KpiTitle><S.KpiValue color="#FF9F00">{metrics?.avg_transaction_value != null ? fmtCurrency(metrics.avg_transaction_value) : "—"}</S.KpiValue></S.KpiCard>
             <S.KpiCard><S.KpiTitle>Transactions</S.KpiTitle><S.KpiValue color="#00FF9F">{metrics?.total_transactions != null ? metrics.total_transactions.toLocaleString() : "—"}</S.KpiValue></S.KpiCard>
           </S.KpisGrid>
-
           {seasons && seasons.length > 0 && (
             <S.TableContainer>
               <S.TableTitle>Seasonality Analysis</S.TableTitle>
@@ -349,20 +358,18 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
               </S.Table>
             </S.TableContainer>
           )}
-
           <ChartsOrganizationKpis organizationName={organizationName} />
         </S.Content>
       );
     }
 
-     if (activeMenu === 'reports') {
+    if (activeMenu === 'reports') {
       const statusDist = reportData?.statusDistribution as Record<string, unknown> | null;
       const failureRates = reportData?.failureRates as Record<string, unknown> | null;
       const activity = reportData?.activityMetrics as Record<string, unknown> | null;
       const statusCounts = (statusDist as Record<string, unknown>)?.statusCounts as Array<{ status: string; count: number }> || [];
       const metrics = (activity as Record<string, unknown>) || {};
       const dailyFailures = (failureRates as Record<string, unknown>)?.daily as Array<{ date: string; failureRatePct: number }> | undefined;
-
       return (
         <S.Content>
           <S.KpisGrid>
@@ -383,7 +390,6 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
               <S.KpiValue color="#00FF9F">{(metrics.successRatePct as number) ?? 0}%</S.KpiValue>
             </S.KpiCard>
           </S.KpisGrid>
-
           {statusCounts.length > 0 && (
             <S.ChartCard>
               <S.ChartTitle>Report Status Distribution</S.ChartTitle>
@@ -404,7 +410,6 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
               </ResponsiveContainer>
             </S.ChartCard>
           )}
-
           {dailyFailures && dailyFailures.length > 0 && (
             <S.ChartCard>
               <S.ChartTitle>Failure Rate Trend (30 days)</S.ChartTitle>
@@ -440,11 +445,21 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
     );
   };
 
+  const pageTitle = 
+    activeMenu === 'overview' ? 'Predictive Dashboards – Sales Forecast' :
+    `Predictive Dashboards – ${activeMenu.charAt(0).toUpperCase() + activeMenu.slice(1)}`;
+
   return (
     <S.Container>
       <S.Navbar>
         <S.Logo>FastBI</S.Logo>
-        <S.Title>Predictive Dashboards – Sales Forecast</S.Title>
+        <S.TitleIcon aria-hidden="true">
+          {menuIcons[activeMenu]}
+        </S.TitleIcon>
+        <S.Title>{pageTitle}</S.Title>
+        <S.SidebarToggle onClick={() => setSidebarCollapsed(!sidebarCollapsed)} aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}>
+          {sidebarCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+        </S.SidebarToggle>
         <S.Filters>
           <S.Filter>{forecast?.[0]?.month ? formatMonth(forecast[0].month) + " – " + formatMonth(forecast[forecast.length - 1].month) : "No data"}</S.Filter>
           <S.Filter>Department: Sales</S.Filter>
@@ -453,12 +468,29 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
       </S.Navbar>
 
       <S.Main>
-        <S.Sidebar>
-          <S.MenuItem $active={activeMenu === 'overview'} onClick={() => handleMenuClick('overview')}>Overview</S.MenuItem>
-          <S.MenuItem $active={activeMenu === 'forecasts'} onClick={() => handleMenuClick('forecasts')}>Forecasts</S.MenuItem>
-          <S.MenuItem $active={activeMenu === 'analytics'} onClick={() => handleMenuClick('analytics')}>Analytics</S.MenuItem>
-          <S.MenuItem $active={activeMenu === 'reports'} onClick={() => handleMenuClick('reports')}>Reports</S.MenuItem>
-          <S.MenuItem $active={activeMenu === 'settings'} onClick={() => handleMenuClick('settings')}>Settings</S.MenuItem>
+        <S.Sidebar $collapsed={sidebarCollapsed} data-collapsed={sidebarCollapsed}>
+          <S.SidebarNav>
+            <S.MenuItem $active={activeMenu === 'overview'} $collapsed={sidebarCollapsed} onClick={() => handleMenuClick('overview')}>
+              <LayoutDashboard size={20} />
+              <span>Overview</span>
+            </S.MenuItem>
+            <S.MenuItem $active={activeMenu === 'forecasts'} $collapsed={sidebarCollapsed} onClick={() => handleMenuClick('forecasts')}>
+              <Activity size={20} />
+              <span>Sales Forecast</span>
+            </S.MenuItem>
+            <S.MenuItem $active={activeMenu === 'analytics'} $collapsed={sidebarCollapsed} onClick={() => handleMenuClick('analytics')}>
+              <BarChart2 size={20} />
+              <span>Analytics</span>
+            </S.MenuItem>
+            <S.MenuItem $active={activeMenu === 'reports'} $collapsed={sidebarCollapsed} onClick={() => handleMenuClick('reports')}>
+              <FileText size={20} />
+              <span>Reports</span>
+            </S.MenuItem>
+            <S.MenuItem $active={activeMenu === 'settings'} $collapsed={sidebarCollapsed} onClick={() => handleMenuClick('settings')}>
+              <Settings size={20} />
+              <span>Settings</span>
+            </S.MenuItem>
+          </S.SidebarNav>
         </S.Sidebar>
 
         {renderContent()}

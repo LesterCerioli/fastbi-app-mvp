@@ -195,7 +195,6 @@
     },
     "controls": {
       "salesForecast": "销售预测",
-      "compositionAnalysis": "组成分析",
       "lastUpdated": "最后更新：{time}",
       "refresh": "刷新",
       "exportReport": "导出报表"
@@ -668,12 +667,12 @@
     "completed": "Completed"
   },
   "businessDashboards": {
-    "title": "Business Dashboards",
-    "subtitle": "Real-time insights for your business",
-    "revenue": "Revenue",
-    "customers": "Customers",
-    "orders": "Orders",
-    "growth": "Growth"
+    "title": "商业仪表板",
+    "subtitle": "为您的业务提供实时洞察",
+    "revenue": "收入",
+    "customers": "客户",
+    "orders": "订单",
+    "growth": "增长"
   },
   "predictiveDashboard": {
     "title": "Predictive Dashboard",
@@ -688,13 +687,6 @@
     "play": "Play",
     "pause": "Pause",
     "speed": "Speed"
-  },
-  "compositionDashboard": {
-    "title": "Composition Dashboard",
-    "subtitle": "Break down your data by category",
-    "byCategory": "By Category",
-    "byRegion": "By Region",
-    "byPeriod": "By Period"
   },
   "pagination": {
     "prev": "上一页",

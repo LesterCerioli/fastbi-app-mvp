@@ -4,6 +4,21 @@ const ALGORITHM = "aes-256-gcm";
 const KEY_LENGTH = 32;
 const IV_LENGTH = 12;
 const TAG_LENGTH = 16;
+const HEX_PATTERN = /^[0-9a-fA-F]+$/;
+
+function decodeMasterKey(masterKey: string): Buffer {
+  const base64Key = Buffer.from(masterKey, "base64");
+  if (base64Key.length === KEY_LENGTH) {
+    return base64Key;
+  }
+  if (masterKey.length % 2 === 0 && HEX_PATTERN.test(masterKey)) {
+    const hexKey = Buffer.from(masterKey, "hex");
+    if (hexKey.length === KEY_LENGTH) {
+      return hexKey;
+    }
+  }
+  throw new Error("MASTER_ENCRYPTION_KEY must be 32 bytes when decoded");
+}
 
 export class EncryptionService {
   private key: Buffer;
@@ -11,10 +26,7 @@ export class EncryptionService {
   constructor() {
     const masterKey = process.env.MASTER_ENCRYPTION_KEY;
     if (masterKey) {
-      this.key = Buffer.from(masterKey, "base64");
-      if (this.key.length !== KEY_LENGTH) {
-        throw new Error("MASTER_ENCRYPTION_KEY must be 32 bytes when decoded");
-      }
+      this.key = decodeMasterKey(masterKey);
     } else {
       this.key = crypto.randomBytes(KEY_LENGTH);
       console.warn(

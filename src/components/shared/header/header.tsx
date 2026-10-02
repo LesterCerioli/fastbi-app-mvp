@@ -63,56 +63,60 @@ export default function Header() {
         <S.LogoText>FastBI</S.LogoText>
       </S.LogoWrapper>
 
-      <S.Nav>
-        {navLinks.map((link) => (
-          <S.NavItem
-            key={link.path}
-            $active={isActive(link.path)}
-            onClick={() => handleNavigation(link.path)}
-          >
-            {t(`header.nav.${link.key}`)}
-          </S.NavItem>
-        ))}
-      </S.Nav>
+      {!user && (
+        <>
+          <S.Nav>
+            {navLinks.map((link) => (
+              <S.NavItem
+                key={link.path}
+                $active={isActive(link.path)}
+                onClick={() => handleNavigation(link.path)}
+              >
+                {t(`header.nav.${link.key}`)}
+              </S.NavItem>
+            ))}
+          </S.Nav>
 
-      <S.RightSection>
-        <S.HideMobile>
-          <S.Button 
-            $variant="primary"
-            onClick={() => handleNavigation('/signup')}
-          >
-            {t("header.buttons.getStarted")}
-          </S.Button>
-        </S.HideMobile>
-        
-        {user ? (
-          <>
-            <S.UserInfo onClick={() => handleNavigation('/profile')}>
-              {user.name || user.email}
-            </S.UserInfo>
-            <S.LogoutButton onClick={handleLogout}>
-              <LogOut size={16} />
-              {t("header.buttons.logout")}
-            </S.LogoutButton>
-          </>
-        ) : (
-          <S.HideMobile>
-            <S.Button 
-              $variant="secondary"
-              onClick={() => handleNavigation('/login')}
-            >
-              {t("header.buttons.login")}
-            </S.Button>
-          </S.HideMobile>
-        )}
-
-        <S.Hamburger onClick={() => setMobileOpen(!mobileOpen)}>
-          {mobileOpen ? "✕" : "☰"}
-        </S.Hamburger>
-      </S.RightSection>
+          <S.RightSection>
+            <S.HideMobile>
+              <S.Button 
+                $variant="primary"
+                onClick={() => handleNavigation('/signup')}
+              >
+                {t("header.buttons.getStarted")}
+              </S.Button>
+            </S.HideMobile>
+            <S.HideMobile>
+              <S.Button 
+                $variant="secondary"
+                onClick={() => handleNavigation('/login')}
+              >
+                {t("header.buttons.login")}
+              </S.Button>
+            </S.HideMobile>
+            <S.Hamburger onClick={() => setMobileOpen(!mobileOpen)}>
+              {mobileOpen ? "✕" : "☰"}
+            </S.Hamburger>
+          </S.RightSection>
+        </>
+      )}
+      {user && (
+        <S.RightSection>
+          <S.UserInfo onClick={() => handleNavigation('/profile')}>
+            {user.name || user.email}
+          </S.UserInfo>
+          <S.LogoutButton onClick={handleLogout}>
+            <LogOut size={16} />
+            {t("header.buttons.logout")}
+          </S.LogoutButton>
+          <S.Hamburger onClick={() => setMobileOpen(!mobileOpen)}>
+            {mobileOpen ? "✕" : "☰"}
+          </S.Hamburger>
+        </S.RightSection>
+      )}
 
       <S.MobileOverlay $open={mobileOpen}>
-        {navLinks.map((link) => (
+        {!user && navLinks.map((link) => (
           <S.MobileNavItem
             key={link.path}
             $active={isActive(link.path)}
@@ -122,9 +126,11 @@ export default function Header() {
           </S.MobileNavItem>
         ))}
         <S.MobileButtons>
-          <S.Button $variant="primary" onClick={() => handleNavigation('/signup')}>
-            {t("header.buttons.getStarted")}
-          </S.Button>
+          {!user && (
+            <S.Button $variant="primary" onClick={() => handleNavigation('/signup')}>
+              {t("header.buttons.getStarted")}
+            </S.Button>
+          )}
           {user ? (
             <S.Button $variant="secondary" onClick={handleLogout}>
               <LogOut size={16} />

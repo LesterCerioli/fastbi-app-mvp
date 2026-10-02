@@ -1,6 +1,7 @@
 "use client";
-import React, { useState, useCallback } from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import React, { useState, useCallback, useEffect } from 'react';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { Menu, X, ChevronLeft, ChevronRight, BarChart2, PieChart as PieChartIcon, Activity, FileText, Settings, LayoutDashboard } from 'lucide-react';
 import * as S from "./styles";
 import ChartsOrganizationKpis from "@/components/kpis/chartsOrganization/chartsOrganization";
 
@@ -20,7 +21,7 @@ interface Props {
   productMix: Record<string, unknown> | null;
 }
 
-type MenuItem = 'overview' | 'forecasts' | 'analytics';
+type MenuItem = 'overview' | 'forecasts' | 'composition' | 'analytics' | 'reports' | 'settings';
 
 function fmtCurrency(value: number): string {
   if (value >= 1000000) return "U$ " + (value / 1000000).toFixed(2) + "M";
@@ -48,6 +49,16 @@ const DashboardPie: React.FC<Props> = ({ organizationName, productMix }) => {
   const [activeMenu, setActiveMenu] = useState<MenuItem>('overview');
   const [fetchedData, setFetchedData] = useState<Record<string, unknown> | null>(null);
   const [loading, setLoading] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const analysis = productMix?.detailed_analysis as ProductCategory[] | undefined;
   const data = (analysis ?? []).map((item, i) => ({
@@ -61,14 +72,23 @@ const DashboardPie: React.FC<Props> = ({ organizationName, productMix }) => {
   const top3 = data.slice(0, 3);
 
   const handleMenuClick = useCallback(async (item: MenuItem) => {
-    if (item === 'overview') {
+    if (item === 'overview' || item === 'composition') {
       setActiveMenu('overview');
       setFetchedData(null);
+      if (isMobile) setSidebarOpen(false);
+      return;
+    }
+
+    if (item === 'reports' || item === 'settings') {
+      setActiveMenu(item);
+      setFetchedData(null);
+      if (isMobile) setSidebarOpen(false);
       return;
     }
 
     setActiveMenu(item);
     setLoading(true);
+    if (isMobile) setSidebarOpen(false);
 
     try {
       const token = await getFreshToken();
@@ -100,7 +120,7 @@ const DashboardPie: React.FC<Props> = ({ organizationName, productMix }) => {
     } finally {
       setLoading(false);
     }
-  }, [organizationName]);
+  }, [organizationName, isMobile]);
 
   const renderContent = () => {
     if (activeMenu !== 'overview' && loading) {
@@ -128,12 +148,12 @@ const DashboardPie: React.FC<Props> = ({ organizationName, productMix }) => {
           <S.ChartsRow>
             <S.ChartCard>
               <S.ChartTitle>Revenue by Category</S.ChartTitle>
-              <ResponsiveContainer width="100%" height={380}>
+              <ResponsiveContainer width="100%" height={isMobile ? 280 : 380}>
                 <PieChart>
                   <Pie
                     data={data}
                     cx="50%" cy="50%"
-                    innerRadius={90} outerRadius={150}
+                    innerRadius={isMobile ? 60 : 90} outerRadius={isMobile ? 110 : 150}
                     dataKey="value" animationDuration={800}
                     label={({ name, percent }) => percent != null ? `${name}: ${(percent * 100).toFixed(0)}%` : name}
                   >
@@ -141,31 +161,47 @@ const DashboardPie: React.FC<Props> = ({ organizationName, productMix }) => {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value: any) => [fmtCurrency(Number(value)), 'Revenue']} contentStyle={{ backgroundColor: '#11223D', borderColor: '#1E2A44' }} labelStyle={{ color: '#E0F2FF' }} />
-                  <Legend wrapperStyle={{ color: '#E0F2FF' }} />
+                  <Tooltip formatter={(value: unknown) => [typeof value === 'number' ? fmtCurrency(value) : '—', 'Revenue']} contentStyle={{ backgroundColor: '#11223D', borderColor: '#1E2A44' }} labelStyle={{ color: '#E0F2FF' }} />
                 </PieChart>
               </ResponsiveContainer>
             </S.ChartCard>
 
             <S.ChartCard>
               <S.ChartTitle>Top Categories Distribution</S.ChartTitle>
-              <ResponsiveContainer width="100%" height={380}>
+              <ResponsiveContainer width="100%" height={isMobile ? 260 : 380}>
                 <PieChart>
                   <Pie
                     data={top3}
                     cx="50%" cy="50%"
-                    innerRadius={60} outerRadius={110}
+                    innerRadius={isMobile ? 40 : 60} outerRadius={isMobile ? 80 : 110}
                     dataKey="value" animationDuration={800}
                   >
                     {top3.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value: any) => [fmtCurrency(Number(value)), 'Revenue']} contentStyle={{ backgroundColor: '#11223D', borderColor: '#1E2A44' }} labelStyle={{ color: '#E0F2FF' }} />
+                  <Tooltip formatter={(value: unknown) => [typeof value === 'number' ? fmtCurrency(value) : '—', 'Revenue']} contentStyle={{ backgroundColor: '#11223D', borderColor: '#1E2A44' }} labelStyle={{ color: '#E0F2FF' }} />
                 </PieChart>
               </ResponsiveContainer>
             </S.ChartCard>
           </S.ChartsRow>
+
+          {data.length > 0 && (
+            <S.LegendContainer>
+              <S.LegendTitle>Categories</S.LegendTitle>
+              <S.LegendList>
+                {data.map((item, index) => (
+                  <S.LegendItem key={index}>
+                    <S.LegendColorDot style={{ backgroundColor: item.color }} />
+                    <S.LegendLabel>
+                      <span>{item.name}</span>
+                      <span>{totalRevenue > 0 ? ` (${((item.value / totalRevenue) * 100).toFixed(1)}%)` : ''}</span>
+                    </S.LegendLabel>
+                  </S.LegendItem>
+                ))}
+              </S.LegendList>
+            </S.LegendContainer>
+          )}
 
           <S.TableContainer>
             <S.TableTitle>Category Breakdown</S.TableTitle>
@@ -273,14 +309,42 @@ const DashboardPie: React.FC<Props> = ({ organizationName, productMix }) => {
     <S.Container>
       <S.Navbar>
         <S.Logo>FastBI</S.Logo>
-        <S.Title>Predictive Composition Analysis</S.Title>
+        
+        <S.SidebarToggle onClick={() => setSidebarCollapsed(!sidebarCollapsed)} aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}>
+          {sidebarCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+        </S.SidebarToggle>
+        <S.MobileMenuButton onClick={() => setSidebarOpen(!sidebarOpen)} aria-label={sidebarOpen ? 'Close menu' : 'Open menu'}>
+          {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+        </S.MobileMenuButton>
       </S.Navbar>
 
+      <S.SidebarOverlay $isOpen={sidebarOpen} onClick={() => setSidebarOpen(false)} />
+
       <S.Main>
-        <S.Sidebar>
-          <S.MenuItem $active={activeMenu === 'overview'} onClick={() => handleMenuClick('overview')}>Overview</S.MenuItem>
-          <S.MenuItem $active={activeMenu === 'forecasts'} onClick={() => handleMenuClick('forecasts')}>Forecasts</S.MenuItem>
-          <S.MenuItem $active={activeMenu === 'analytics'} onClick={() => handleMenuClick('analytics')}>Analytics</S.MenuItem>
+        <S.Sidebar $isOpen={sidebarOpen} $collapsed={sidebarCollapsed} data-collapsed={sidebarCollapsed}>
+          <S.SidebarNav>
+            <S.MenuItem $active={activeMenu === 'overview'} onClick={() => handleMenuClick('overview')}>
+              <LayoutDashboard size={20} />
+              <span>Overview</span>
+            </S.MenuItem>
+            <S.MenuItem $active={activeMenu === 'forecasts'} onClick={() => handleMenuClick('forecasts')}>
+              <Activity size={20} />
+              <span>Sales Forecast</span>
+            </S.MenuItem>
+            
+            <S.MenuItem $active={activeMenu === 'analytics'} onClick={() => handleMenuClick('analytics')}>
+              <BarChart2 size={20} />
+              <span>Analytics</span>
+            </S.MenuItem>
+            <S.MenuItem $active={activeMenu === 'reports'} onClick={() => handleMenuClick('reports')}>
+              <FileText size={20} />
+              <span>Reports</span>
+            </S.MenuItem>
+            <S.MenuItem $active={activeMenu === 'settings'} onClick={() => handleMenuClick('settings')}>
+              <Settings size={20} />
+              <span>Settings</span>
+            </S.MenuItem>
+          </S.SidebarNav>
         </S.Sidebar>
 
         {renderContent()}

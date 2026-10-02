@@ -195,7 +195,6 @@
     },
     "controls": {
       "salesForecast": "Pronóstico de Ventas",
-      "compositionAnalysis": "Análisis de Composición",
       "lastUpdated": "Última actualización: {time}",
       "refresh": "Actualizar",
       "exportReport": "Exportar Informe"
@@ -668,12 +667,12 @@
     "completed": "Completed"
   },
   "businessDashboards": {
-    "title": "Business Dashboards",
-    "subtitle": "Real-time insights for your business",
-    "revenue": "Revenue",
-    "customers": "Customers",
-    "orders": "Orders",
-    "growth": "Growth"
+    "title": "Paneles de Negocio",
+    "subtitle": "Información en tiempo real para tu negocio",
+    "revenue": "Ingresos",
+    "customers": "Clientes",
+    "orders": "Pedidos",
+    "growth": "Crecimiento"
   },
   "predictiveDashboard": {
     "title": "Predictive Dashboard",
@@ -688,13 +687,6 @@
     "play": "Play",
     "pause": "Pause",
     "speed": "Speed"
-  },
-  "compositionDashboard": {
-    "title": "Composition Dashboard",
-    "subtitle": "Break down your data by category",
-    "byCategory": "By Category",
-    "byRegion": "By Region",
-    "byPeriod": "By Period"
   },
   "pagination": {
     "prev": "Anterior",
