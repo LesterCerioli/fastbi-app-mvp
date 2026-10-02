@@ -16,13 +16,12 @@ import {
   Download,
   BarChart2,
   Settings,
-  Filter,
-  PieChart
+  Filter
 } from 'lucide-react';
 import MainPredictiveDashboard from '@/components/dashboards/dashboardPreditivoPrincipal/dashboardPreditivoPrincipal';
 import AnimatedDashboard from '@/components/dashboards/animatedDashboard/animatedDashboard';
 
-type DashboardView = 'sales' | 'composition';
+type DashboardView = 'sales';
 
 function fmtCurrency(value: number): string {
   if (value >= 1000000) return "$" + (value / 1000000).toFixed(1) + "M";
@@ -128,10 +127,7 @@ const DashboardsPage: React.FC = () => {
               <BarChart2 size={20} />
               <span>Sales Forecast</span>
             </S.NavItem>
-            <S.NavItem active={activeView === 'composition'} onClick={() => setActiveView('composition')} className="nav-item">
-              <PieChart size={20} />
-              <span>Composition Analysis</span>
-            </S.NavItem>
+            
           </S.SidebarNav>
           <S.SidebarFooter>
             <S.NavItem className="nav-item">
@@ -204,13 +200,6 @@ const DashboardsPage: React.FC = () => {
                 <LineChartIcon size={18} />
                 {t("dashboards.controls.salesForecast")}
               </S.ToggleButton>
-              <S.ToggleButton 
-                active={activeView === 'composition'}
-                onClick={() => setActiveView('composition')}
-              >
-                <PieChart size={18} />
-                {t("dashboards.controls.compositionAnalysis")}
-              </S.ToggleButton>
             </S.ViewToggle>
             
             <S.ActionsGroup>
@@ -231,21 +220,12 @@ const DashboardsPage: React.FC = () => {
 
           <S.DashboardContainer>
             <S.DashboardCard animate>
-              {activeView === 'sales' ? (
-                <MainPredictiveDashboard
-                  organizationName={overview?.organization_name ?? null}
-                  forecastData={overview?.details?.forecast ?? null}
-                  executiveSummary={overview?.details?.executive_summary ?? null}
-                  initialMenu="forecasts"
-                />
-              ) : (
-                <MainPredictiveDashboard
-                  organizationName={overview?.organization_name ?? null}
-                  forecastData={overview?.details?.forecast ?? null}
-                  executiveSummary={overview?.details?.executive_summary ?? null}
-                  initialMenu="composition"
-                />
-              )}
+              <MainPredictiveDashboard
+                organizationName={overview?.organization_name ?? null}
+                forecastData={overview?.details?.forecast ?? null}
+                executiveSummary={overview?.details?.executive_summary ?? null}
+                initialMenu="forecasts"
+              />
             </S.DashboardCard>
           </S.DashboardContainer>
 

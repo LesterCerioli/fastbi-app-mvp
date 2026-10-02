@@ -195,7 +195,6 @@
     },
     "controls": {
       "salesForecast": "Pronóstico de Ventas",
-      "compositionAnalysis": "Análisis de Composición",
       "lastUpdated": "Última actualización: {time}",
       "refresh": "Actualizar",
       "exportReport": "Exportar Informe"
@@ -688,13 +687,6 @@
     "play": "Play",
     "pause": "Pause",
     "speed": "Speed"
-  },
-  "compositionDashboard": {
-    "title": "Composition Dashboard",
-    "subtitle": "Break down your data by category",
-    "byCategory": "By Category",
-    "byRegion": "By Region",
-    "byPeriod": "By Period"
   },
   "pagination": {
     "prev": "Anterior",

@@ -2,7 +2,6 @@
 import React, { useState, useCallback } from 'react';
 import * as S from "./styles";
 import ChartsOrganizationKpis from "@/components/kpis/chartsOrganization/chartsOrganization";
-import DashboardPie from "@/components/dashboards/dashboardPie/dashboardPie";
 import {
   ResponsiveContainer,
   LineChart,
@@ -16,7 +15,7 @@ import {
   BarChart,
   Bar,
 } from 'recharts';
-import { ChevronLeft, ChevronRight, LayoutDashboard, Activity, BarChart2, FileText, Settings, PieChart } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LayoutDashboard, Activity, BarChart2, FileText, Settings } from 'lucide-react';
 
 interface ForecastItem {
   month: string;
@@ -42,11 +41,11 @@ interface Props {
   organizationName: string | null;
   forecastData: Record<string, unknown> | null;
   executiveSummary: Record<string, unknown> | null;
-  /** Define qual menu inicia ativo (ex: 'composition' na página de Composition Analysis) */
+  /** Define qual menu inicia ativo (ex: 'analytics' na página de Analytics) */
   initialMenu?: MenuItem;
 }
 
-type MenuItem = 'overview' | 'forecasts' | 'composition' | 'analytics' | 'reports' | 'settings';
+type MenuItem = 'overview' | 'forecasts' | 'analytics' | 'reports' | 'settings';
 
 function formatMonth(isoMonth: string): string {
   const d = new Date(isoMonth + "-01");
@@ -101,7 +100,6 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
   const [activeMenu, setActiveMenu] = useState<MenuItem>(initialMenu);
   const [fetchedData, setFetchedData] = useState<Record<string, unknown> | null>(null);
   const [reportData, setReportData] = useState<Record<string, unknown> | null>(null);
-  const [productMixData, setProductMixData] = useState<Record<string, unknown> | null>(null);
   const [loading, setLoading] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
 
@@ -137,11 +135,9 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
     },
   ];
 
-  
   const menuIcons: Record<MenuItem, React.ReactNode> = {
     overview: <LayoutDashboard size={20} />,
     forecasts: <Activity size={20} />,
-    composition: <PieChart size={20} />,
     analytics: <BarChart2 size={20} />,
     reports: <FileText size={20} />,
     settings: <Settings size={20} />,
@@ -152,29 +148,6 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
       setActiveMenu('overview');
       setFetchedData(null);
       setReportData(null);
-      return;
-    }
-
-    
-    if (item === 'composition') {
-      setActiveMenu('composition');
-      setFetchedData(null);
-      setReportData(null);
-      setLoading(true);
-      try {
-        const token = await getFreshToken();
-        const res = await fetch(`/api/analytics/sales/product-mix?organization_name=${encodeURIComponent(organizationName || "")}`, {
-          headers: { "Authorization": `Bearer ${token}` },
-        });
-        if (res.ok) {
-          const data = await res.json();
-          setProductMixData(data);
-        }
-      } catch {
-        setProductMixData(null);
-      } finally {
-        setLoading(false);
-      }
       return;
     }
 
@@ -220,7 +193,7 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
   }, [organizationName]);
 
   const renderContent = () => {
-    if (activeMenu !== 'overview' && activeMenu !== 'composition' && loading) {
+    if (activeMenu !== 'overview' && loading) {
       return (
         <S.Content>
           <S.KpisGrid>
@@ -319,15 +292,6 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
             </S.Table>
           </S.TableContainer>
         </S.Content>
-      );
-    }
-
-    if (activeMenu === 'composition') {
-      return (
-        <DashboardPie
-          organizationName={organizationName}
-          productMix={productMixData}
-        />
       );
     }
 
@@ -483,7 +447,6 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
 
   const pageTitle = 
     activeMenu === 'overview' ? 'Predictive Dashboards – Sales Forecast' :
-    activeMenu === 'composition' ? 'Predictive Composition Analysis' :
     `Predictive Dashboards – ${activeMenu.charAt(0).toUpperCase() + activeMenu.slice(1)}`;
 
   return (
@@ -514,10 +477,6 @@ const MainPredictiveDashboard: React.FC<Props> = ({ organizationName, forecastDa
             <S.MenuItem $active={activeMenu === 'forecasts'} $collapsed={sidebarCollapsed} onClick={() => handleMenuClick('forecasts')}>
               <Activity size={20} />
               <span>Sales Forecast</span>
-            </S.MenuItem>
-            <S.MenuItem $active={activeMenu === 'composition'} $collapsed={sidebarCollapsed} onClick={() => handleMenuClick('composition')}>
-              <PieChart size={20} />
-              <span>Composition Analysis</span>
             </S.MenuItem>
             <S.MenuItem $active={activeMenu === 'analytics'} $collapsed={sidebarCollapsed} onClick={() => handleMenuClick('analytics')}>
               <BarChart2 size={20} />

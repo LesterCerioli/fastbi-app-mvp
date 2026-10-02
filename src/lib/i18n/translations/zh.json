@@ -195,7 +195,6 @@
     },
     "controls": {
       "salesForecast": "销售预测",
-      "compositionAnalysis": "组成分析",
       "lastUpdated": "最后更新：{time}",
       "refresh": "刷新",
       "exportReport": "导出报表"
@@ -688,13 +687,6 @@
     "play": "Play",
     "pause": "Pause",
     "speed": "Speed"
-  },
-  "compositionDashboard": {
-    "title": "Composition Dashboard",
-    "subtitle": "Break down your data by category",
-    "byCategory": "By Category",
-    "byRegion": "By Region",
-    "byPeriod": "By Period"
   },
   "pagination": {
     "prev": "上一页",

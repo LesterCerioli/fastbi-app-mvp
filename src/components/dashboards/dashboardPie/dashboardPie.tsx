@@ -309,7 +309,7 @@ const DashboardPie: React.FC<Props> = ({ organizationName, productMix }) => {
     <S.Container>
       <S.Navbar>
         <S.Logo>FastBI</S.Logo>
-        <S.Title>Predictive Composition Analysis</S.Title>
+        
         <S.SidebarToggle onClick={() => setSidebarCollapsed(!sidebarCollapsed)} aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}>
           {sidebarCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
         </S.SidebarToggle>
@@ -331,10 +331,7 @@ const DashboardPie: React.FC<Props> = ({ organizationName, productMix }) => {
               <Activity size={20} />
               <span>Sales Forecast</span>
             </S.MenuItem>
-            <S.MenuItem $active={activeMenu === 'composition'} onClick={() => handleMenuClick('composition')}>
-              <PieChartIcon size={20} />
-              <span>Composition Analysis</span>
-            </S.MenuItem>
+            
             <S.MenuItem $active={activeMenu === 'analytics'} onClick={() => handleMenuClick('analytics')}>
               <BarChart2 size={20} />
               <span>Analytics</span>
