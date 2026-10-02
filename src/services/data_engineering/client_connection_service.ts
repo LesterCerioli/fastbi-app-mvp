@@ -335,6 +335,10 @@ export class ClientConnectionService {
     const driver = this.getDriver(finalDbType);
     if (!driver) throw new Error(`unsupported database type: ${finalDbType}`);
 
+    await this.assertReachable(driver, {
+      host, port, database_name: databaseName, username, password, ssl_mode: finalSslMode,
+    });
+
     const encryptedPwd = this.encryption.encrypt(password);
 
     const result = await query(`
@@ -349,6 +353,22 @@ export class ClientConnectionService {
     const row = result.rows[0];
     const orgName = await this.getOrganizationNameByID(row.organization_id);
     return { ...row, organization_name: orgName, db_type: finalDbType };
+  }
+
+  private async assertReachable(driver: DBDriver, config: Record<string, unknown>): Promise<void> {
+    let pool: DriverPool | null = null;
+    let client: DriverClient | null = null;
+    try {
+      pool = await driver.createPool(config, { max: 1, connectionTimeoutMillis: 5000 });
+      client = await pool.connect();
+    } catch (err: any) {
+      throw new Error(
+        `Não foi possível conectar em ${config.host}:${config.port}. A conexão não foi salva. Motivo: ${err?.message || String(err)}`
+      );
+    } finally {
+      if (client) { try { client.release(); } catch { /* noop */ } }
+      if (pool) { await pool.end().catch(() => undefined); }
+    }
   }
 
   async getConnectionConfig(connectionID: string): Promise<Record<string, unknown> | null> {

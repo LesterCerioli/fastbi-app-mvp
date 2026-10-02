@@ -4,6 +4,7 @@ import {
   GetCommand,
   ScanCommand,
 } from "@aws-sdk/lib-dynamodb";
+import { query } from "../db";
 
 const client = new DynamoDBClient({
   region: process.env.AWS_DEFAULT_REGION || "us-east-1",
@@ -66,34 +67,16 @@ export class GeneralFileDetailNotFoundError extends Error {
 async function getOrganizationIdsByName(
   organizationName: string
 ): Promise<string[]> {
-  const target = organizationName.trim().toLowerCase();
-  const matchedIds: string[] = [];
-  const legacyIds: string[] = [];
-  let lastEvaluatedKey: Record<string, unknown> | undefined;
-  do {
-    const result = await docClient.send(
-      new ScanCommand({
-        TableName: ORGANIZATIONS_TABLE,
-        ProjectionExpression: "id, #name",
-        ExpressionAttributeNames: { "#name": "name" },
-        ExclusiveStartKey: lastEvaluatedKey,
-      })
-    );
+  const result = await query(
+    "SELECT id FROM public.organizations " +
+      "WHERE LOWER(TRIM(name)) = LOWER(TRIM($1)) OR id::text LIKE 'org-%'",
+    [organizationName]
+  );
 
-    for (const item of result.Items || []) {
-      if (typeof item.id !== "string") continue;
-      if (typeof item.name === "string" && item.name.trim().toLowerCase() === target) {
-        matchedIds.push(item.id);
-      } else if (item.id.startsWith("org-")) {
-        legacyIds.push(item.id);
-      }
-    }
-    lastEvaluatedKey = result.LastEvaluatedKey as
-      | Record<string, unknown>
-      | undefined;
-  } while (lastEvaluatedKey);
+  const allIds = (result.rows as Array<{ id: string }>)
+    .map((row) => row.id)
+    .filter((id): id is string => typeof id === "string");
 
-  const allIds = [...matchedIds, ...legacyIds];
   if (allIds.length === 0) {
     throw new GeneralFileNotFoundError(organizationName);
   }
