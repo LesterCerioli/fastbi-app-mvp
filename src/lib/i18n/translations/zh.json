@@ -668,12 +668,12 @@
     "completed": "Completed"
   },
   "businessDashboards": {
-    "title": "Business Dashboards",
-    "subtitle": "Real-time insights for your business",
-    "revenue": "Revenue",
-    "customers": "Customers",
-    "orders": "Orders",
-    "growth": "Growth"
+    "title": "商业仪表板",
+    "subtitle": "为您的业务提供实时洞察",
+    "revenue": "收入",
+    "customers": "客户",
+    "orders": "订单",
+    "growth": "增长"
   },
   "predictiveDashboard": {
     "title": "Predictive Dashboard",

@@ -668,12 +668,12 @@
     "completed": "Completed"
   },
   "businessDashboards": {
-    "title": "Business Dashboards",
-    "subtitle": "Real-time insights for your business",
-    "revenue": "Revenue",
-    "customers": "Customers",
-    "orders": "Orders",
-    "growth": "Growth"
+    "title": "ビジネスダッシュボード",
+    "subtitle": "あなたのビジネスにリアルタイムのインサイトを提供",
+    "revenue": "収益",
+    "customers": "顧客",
+    "orders": "注文",
+    "growth": "成長"
   },
   "predictiveDashboard": {
     "title": "Predictive Dashboard",

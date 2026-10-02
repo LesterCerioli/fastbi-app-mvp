@@ -10,14 +10,16 @@ import {
   DollarSign, 
   Activity,
   LayoutDashboard,
-  PieChart,
   LineChart as LineChartIcon,
   RefreshCw,
   Calendar,
-  Download
+  Download,
+  BarChart2,
+  Settings,
+  Filter,
+  PieChart
 } from 'lucide-react';
 import MainPredictiveDashboard from '@/components/dashboards/dashboardPreditivoPrincipal/dashboardPreditivoPrincipal';
-import DashboardPie from '@/components/dashboards/dashboardPie/dashboardPie';
 import AnimatedDashboard from '@/components/dashboards/animatedDashboard/animatedDashboard';
 
 type DashboardView = 'sales' | 'composition';
@@ -72,6 +74,8 @@ const DashboardsPage: React.FC = () => {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [overview, setOverview] = useState<DashboardOverview | null>(null);
   const [loadingOverview, setLoadingOverview] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
 
   const fetchOverview = useCallback(async () => {
     try {
@@ -115,8 +119,35 @@ const DashboardsPage: React.FC = () => {
       <S.DashboardWrapper>
         <S.BackgroundGradient />
         
-        <S.ContentContainer>
-          <S.HeroSection>
+        <S.Sidebar $isOpen={sidebarOpen} $collapsed={sidebarCollapsed} data-collapsed={sidebarCollapsed} className="sidebar-collapsed-wrapper">
+          <S.SidebarHeader>
+            <S.SidebarTitle className="sidebar-title">Dashboard</S.SidebarTitle>
+          </S.SidebarHeader>
+          <S.SidebarNav>
+            <S.NavItem active={activeView === 'sales'} onClick={() => setActiveView('sales')} className="nav-item">
+              <BarChart2 size={20} />
+              <span>Sales Forecast</span>
+            </S.NavItem>
+            <S.NavItem active={activeView === 'composition'} onClick={() => setActiveView('composition')} className="nav-item">
+              <PieChart size={20} />
+              <span>Composition Analysis</span>
+            </S.NavItem>
+          </S.SidebarNav>
+          <S.SidebarFooter>
+            <S.NavItem className="nav-item">
+              <Filter size={20} />
+              <span>Filters</span>
+            </S.NavItem>
+            <S.NavItem className="nav-item">
+              <Settings size={20} />
+              <span>Settings</span>
+            </S.NavItem>
+          </S.SidebarFooter>
+        </S.Sidebar>
+
+        <S.MainContent $isSidebarOpen={sidebarOpen} $isSidebarCollapsed={sidebarCollapsed}>
+          <S.ContentContainer>
+            <S.HeroSection>
             <S.HeroContent>
               <S.HeroBadge>
                 <Activity size={16} />
@@ -205,11 +236,14 @@ const DashboardsPage: React.FC = () => {
                   organizationName={overview?.organization_name ?? null}
                   forecastData={overview?.details?.forecast ?? null}
                   executiveSummary={overview?.details?.executive_summary ?? null}
+                  initialMenu="forecasts"
                 />
               ) : (
-                <DashboardPie
+                <MainPredictiveDashboard
                   organizationName={overview?.organization_name ?? null}
-                  productMix={overview?.details?.product_mix ?? null}
+                  forecastData={overview?.details?.forecast ?? null}
+                  executiveSummary={overview?.details?.executive_summary ?? null}
+                  initialMenu="composition"
                 />
               )}
             </S.DashboardCard>
@@ -270,7 +304,8 @@ const DashboardsPage: React.FC = () => {
 
           <AnimatedDashboard />
         </S.ContentContainer>
-      </S.DashboardWrapper>
+      </S.MainContent>
+    </S.DashboardWrapper>
     </S.Container>
   );
 };

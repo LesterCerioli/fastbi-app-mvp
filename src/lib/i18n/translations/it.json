@@ -668,12 +668,12 @@
     "completed": "Completed"
   },
   "businessDashboards": {
-    "title": "Business Dashboards",
-    "subtitle": "Real-time insights for your business",
-    "revenue": "Revenue",
-    "customers": "Customers",
-    "orders": "Orders",
-    "growth": "Growth"
+    "title": "Dashboard Aziendali",
+    "subtitle": "Insight in tempo reale per la tua azienda",
+    "revenue": "Ricavi",
+    "customers": "Clienti",
+    "orders": "Ordini",
+    "growth": "Crescita"
   },
   "predictiveDashboard": {
     "title": "Predictive Dashboard",

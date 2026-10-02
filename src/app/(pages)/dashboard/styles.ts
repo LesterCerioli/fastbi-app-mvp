@@ -26,6 +26,21 @@ export const Content = styled.div`
   padding: 40px 32px;
 `;
 
+export const MainTitle = styled.h1`
+  font-size: 72px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 24px;
+  color: #FFFFFF;
+  letter-spacing: -2px;
+  text-align: center;
+  width: 100%;
+  
+  @media (max-width: 768px) {
+    font-size: 48px;
+  }
+`;
+
 export const TopBar = styled.div`
   display: flex;
   justify-content: space-between;

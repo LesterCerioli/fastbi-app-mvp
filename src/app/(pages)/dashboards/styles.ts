@@ -41,6 +41,140 @@ export const DashboardWrapper = styled.div`
   position: relative;
   min-height: calc(100vh - 70px);
   padding-top: 80px;
+  display: flex;
+`;
+
+export const Sidebar = styled.aside<{ $isOpen: boolean; $collapsed: boolean }>`
+  width: ${({ $collapsed }) => ($collapsed ? '56px' : '280px')};
+  min-width: ${({ $collapsed }) => ($collapsed ? '56px' : '280px')};
+  height: calc(100vh - 70px);
+  background: rgba(17, 34, 61, 0.95);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), min-width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  position: sticky;
+  top: 70px;
+  z-index: 100;
+
+  @media (max-width: 768px) {
+    position: fixed;
+    width: ${({ $isOpen, $collapsed }) => ($isOpen ? ($collapsed ? '56px' : '280px') : '0')};
+    min-width: ${({ $isOpen, $collapsed }) => ($isOpen ? ($collapsed ? '56px' : '280px') : '0')};
+    transform: translateX(${({ $isOpen }) => ($isOpen ? '0' : '-100%')});
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+  }
+
+  &[data-collapsed="true"] .sidebar-title,
+  &[data-collapsed="true"] .nav-item span {
+    opacity: 0;
+    visibility: hidden;
+    width: 0;
+  }
+
+  &[data-collapsed="true"] .nav-item {
+    justify-content: center;
+    padding: 12px;
+  }
+`;
+
+export const SidebarHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  min-height: 60px;
+`;
+
+export const SidebarTitle = styled.h3`
+  font-size: 14px;
+  font-weight: 600;
+  color: #FFFFFF;
+  white-space: nowrap;
+  transition: opacity 0.2s ease, visibility 0.2s ease, width 0.2s ease;
+  margin: 0;
+  overflow: hidden;
+`;
+
+export const SidebarToggle = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94A3B8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    background: rgba(0, 212, 255, 0.1);
+    border-color: rgba(0, 212, 255, 0.3);
+    color: #00D4FF;
+  }
+`;
+
+export const SidebarNav = styled.nav`
+  flex: 1;
+  padding: 16px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+`;
+
+export const NavItem = styled.button<{ active?: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: ${({ active }) => active ? 'rgba(0, 212, 255, 0.1)' : 'transparent'};
+  border: 1px solid ${({ active }) => active ? 'rgba(0, 212, 255, 0.2)' : 'transparent'};
+  color: ${({ active }) => active ? '#00D4FF' : '#94A3B8'};
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  width: 100%;
+  justify-content: flex-start;
+
+  span {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.2s ease, visibility 0.2s ease, width 0.2s ease;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  &:hover {
+    background: rgba(0, 212, 255, 0.05);
+    color: #00D4FF;
+    border-color: rgba(0, 212, 255, 0.1);
+  }
+`;
+
+export const SidebarFooter = styled.div`
+  padding: 16px 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+export const MainContent = styled.main<{ $isSidebarOpen: boolean; $isSidebarCollapsed: boolean }>`
+  flex: 1;
+  margin-left: ${({ $isSidebarOpen, $isSidebarCollapsed }) => {
+    if (!$isSidebarOpen) return '56px';
+    return $isSidebarCollapsed ? '56px' : '280px';
+  }};
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 0;
 `;
 
 export const BackgroundGradient = styled.div`
@@ -108,10 +242,7 @@ export const HeroTitle = styled.h1`
   font-weight: 800;
   line-height: 1.2;
   margin-bottom: 20px;
-  background: linear-gradient(135deg, #FFFFFF 0%, #E0F2FF 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #FFFFFF;
   
   @media (max-width: 768px) {
     font-size: 32px;
