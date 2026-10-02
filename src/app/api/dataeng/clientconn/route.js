@@ -3,12 +3,20 @@ import { authenticate } from "@/lib/api-auth";
 import { ClientConnectionService } from "@/services/data_engineering/client_connection_service";
 import { EncryptionService } from "@/services/data_engineering/encryption_service";
 
-const encryptionService = new EncryptionService();
-const clientConnService = new ClientConnectionService(encryptionService);
+let cachedClientConnService = null;
+
+async function getClientConnService() {
+  if (!cachedClientConnService) {
+    const encryptionService = new EncryptionService();
+    cachedClientConnService = new ClientConnectionService(encryptionService);
+  }
+  return cachedClientConnService;
+}
 
 export async function POST(request) {
   try {
     await authenticate(request);
+    const clientConnService = await getClientConnService();
 
     const body = await request.json().catch(() => ({}));
     const { action, ...data } = body;
@@ -43,6 +51,7 @@ export async function POST(request) {
 export async function GET(request) {
   try {
     await authenticate(request);
+    const clientConnService = await getClientConnService();
 
     const { searchParams } = new URL(request.url);
     const connectionId = searchParams.get("connection_id");
@@ -94,6 +103,7 @@ export async function GET(request) {
 export async function DELETE(request) {
   try {
     await authenticate(request);
+    const clientConnService = await getClientConnService();
 
     const { searchParams } = new URL(request.url);
     const connectionId = searchParams.get("connection_id");
