@@ -73,6 +73,7 @@ export default function DashboardPage() {
   return (
     <S.Container>
       <S.Content>
+        <S.MainTitle>Main Dashboard</S.MainTitle>
         <S.TopBar>
           <S.Greeting>
             <h1>{t("businessDashboards.subtitle")}</h1>

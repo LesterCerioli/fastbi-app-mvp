@@ -195,7 +195,6 @@
     },
     "controls": {
       "salesForecast": "売上予測",
-      "compositionAnalysis": "構成分析",
       "lastUpdated": "最終更新: {time}",
       "refresh": "更新",
       "exportReport": "レポート出力"
@@ -668,12 +667,12 @@
     "completed": "Completed"
   },
   "businessDashboards": {
-    "title": "Business Dashboards",
-    "subtitle": "Real-time insights for your business",
-    "revenue": "Revenue",
-    "customers": "Customers",
-    "orders": "Orders",
-    "growth": "Growth"
+    "title": "ビジネスダッシュボード",
+    "subtitle": "あなたのビジネスにリアルタイムのインサイトを提供",
+    "revenue": "収益",
+    "customers": "顧客",
+    "orders": "注文",
+    "growth": "成長"
   },
   "predictiveDashboard": {
     "title": "Predictive Dashboard",
@@ -688,13 +687,6 @@
     "play": "Play",
     "pause": "Pause",
     "speed": "Speed"
-  },
-  "compositionDashboard": {
-    "title": "Composition Dashboard",
-    "subtitle": "Break down your data by category",
-    "byCategory": "By Category",
-    "byRegion": "By Region",
-    "byPeriod": "By Period"
   },
   "pagination": {
     "prev": "前へ",
