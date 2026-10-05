@@ -3,14 +3,15 @@ import { useState } from "react";
 import { Analytics } from "@vercel/analytics/next";
 
 import * as S from "./styles";
+import DatabaseCard from "@/components/data_eng/databasesCard/databasesCard";
 import CreateClientConnection from "@/components/data_eng/clientconnection/createClientConnection/createClientConnection";
-import ListClientConnection from "@/components/data_eng/clientconnection/listClientConnection/listClientConnection";
 import DataImporting from "@/components/data_eng/dataImporting/dataImporting";
 import GeneralFilesList from "@/components/data_eng/generalFiles/generalFiles";
 import SqlEditor from "@/components/data_eng/sqlEditor/sqlEditor";
 
 export default function DataEngPage() {
   const [refreshKey, setRefreshKey] = useState(0);
+  const [showCreateConnection, setShowCreateConnection] = useState(false);
   const [selectedConnection, setSelectedConnection] = useState<{
     id: string;
     name: string;
@@ -41,19 +42,16 @@ export default function DataEngPage() {
           />
         ) : (
           <>
-            <CreateClientConnection
-              organizationName={organizationName}
-              onSuccess={() => setRefreshKey((k) => k + 1)}
-            />
-            <S.ListSection>
-              <ListClientConnection
+            <DatabaseCard onClick={() => setShowCreateConnection(true)} />
+            {showCreateConnection && (
+              <CreateClientConnection
                 organizationName={organizationName}
                 refreshKey={refreshKey}
-                onSelect={(id, name) =>
-                  setSelectedConnection({ id, name })
-                }
+                onSuccess={() => setRefreshKey((k) => k + 1)}
+                onCancel={() => setShowCreateConnection(false)}
+                onSelect={(id, name) => setSelectedConnection({ id, name })}
               />
-            </S.ListSection>
+            )}
             <DataImporting />
             <S.ListSection>
               <GeneralFilesList organizationName={organizationName} />

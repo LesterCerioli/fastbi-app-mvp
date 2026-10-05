@@ -2,12 +2,15 @@
 
 import { useState, FormEvent } from "react";
 import * as S from "./styles";
+import ListClientConnection from "../listClientConnection/listClientConnection";
 import { useTranslations } from "@/lib/i18n/useTranslations";
 
 interface CreateClientConnectionProps {
   organizationName?: string;
   onSuccess?: () => void;
   onCancel?: () => void;
+  refreshKey?: number;
+  onSelect?: (connectionId: string, connectionName: string) => void;
 }
 
 const DB_TYPES = [
@@ -41,6 +44,8 @@ export default function CreateClientConnection({
   organizationName = "",
   onSuccess,
   onCancel,
+  refreshKey = 0,
+  onSelect,
 }: CreateClientConnectionProps) {
   const [form, setForm] = useState({
     organization_name: organizationName,
@@ -458,6 +463,14 @@ export default function CreateClientConnection({
           </S.Button>
         </S.Actions>
       </S.Card>
+
+      <S.ListWrapper>
+        <ListClientConnection
+          organizationName={organizationName}
+          refreshKey={refreshKey}
+          onSelect={onSelect}
+        />
+      </S.ListWrapper>
     </S.Wrapper>
   );
 }
