@@ -8,9 +8,11 @@ import LanguageBar from "@/components/shared/languageBar/languageBar";
 export default function TopToolbarClient() {
   const pathname = usePathname();
 
+  const hideBackButton = pathname === "/dashboard" || pathname.startsWith("/dataeng");
+
   return (
     <TopToolbar>
-      {pathname !== "/dashboard" && <BackToDashboards />}
+      {!hideBackButton && <BackToDashboards />}
       <LanguageBar />
     </TopToolbar>
   );
