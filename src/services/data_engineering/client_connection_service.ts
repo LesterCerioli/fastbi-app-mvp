@@ -362,9 +362,29 @@ export class ClientConnectionService {
       pool = await driver.createPool(config, { max: 1, connectionTimeoutMillis: 5000 });
       client = await pool.connect();
     } catch (err: any) {
-      throw new Error(
-        `Não foi possível conectar em ${config.host}:${config.port}. A conexão não foi salva. Motivo: ${err?.message || String(err)}`
-      );
+      const errorMessage = err?.message || String(err);
+      let enhancedMessage = `Failed to connect to ${config.host}:${config.port}. Connection not saved. Reason: ${errorMessage}`;
+
+      // Add helpful guidance for SSL errors
+      if (errorMessage.toLowerCase().includes("ssl") || errorMessage.toLowerCase().includes("tls")) {
+        const sslMode = String(config.ssl_mode || "require").toLowerCase();
+        const host = String(config.host || "").toLowerCase();
+        const isLocal = host === "localhost" || host === "127.0.0.1" || host === "::1" ||
+          host.startsWith("192.168.") || host.startsWith("10.") || host.startsWith("172.16.") ||
+          host.startsWith("172.17.") || host.startsWith("172.18.") || host.startsWith("172.19.") ||
+          host.startsWith("172.2") || host.startsWith("172.30.") || host.startsWith("172.31.");
+
+        if (sslMode !== "disable" && isLocal) {
+          enhancedMessage += "\n\nTip: You are connecting to a local address (localhost/private IP) with SSL enabled. " +
+            "Local databases (Docker containers, local PostgreSQL) often don't have SSL configured. " +
+            "Try changing SSL Mode to 'Disable' in the connection settings.";
+        } else if (sslMode === "disable") {
+          enhancedMessage += "\n\nTip: SSL is disabled but the server might require it. " +
+            "Try changing SSL Mode to 'Require' or 'Prefer'.";
+        }
+      }
+
+      throw new Error(enhancedMessage);
     } finally {
       if (client) { try { client.release(); } catch { /* noop */ } }
       if (pool) { await pool.end().catch(() => undefined); }
