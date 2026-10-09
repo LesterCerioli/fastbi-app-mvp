@@ -58,6 +58,9 @@ interface ColumnSchema {
   name: string;
   data_type: string;
   max_length: number | null;
+  numeric_precision: number | null;
+  numeric_scale: number | null;
+  raw_type: string | null;
   nullable: boolean;
   default_value: string | null;
   is_primary_key: boolean;
@@ -81,6 +84,28 @@ const TYPE_MAPPINGS: Record<string, Record<string, string>> = {
   postgresql: {
     'uuid': 'uuid',
     'jsonb': 'jsonb',
+    'varchar': 'varchar',
+    'char': 'char',
+    'int': 'integer',
+    'tinyint': 'smallint',
+    'mediumint': 'integer',
+    'double': 'double precision',
+    'float': 'real',
+    'datetime': 'timestamp',
+    'timestamp': 'timestamp',
+    'longtext': 'text',
+    'mediumtext': 'text',
+    'tinytext': 'text',
+    'blob': 'bytea',
+    'mediumblob': 'bytea',
+    'longblob': 'bytea',
+    'varbinary': 'bytea',
+    'binary': 'bytea',
+    'enum': 'text',
+    'set': 'text',
+    'json': 'json',
+    'year': 'integer',
+    'bit': 'bit',
     'timestamp with time zone': 'timestamptz',
     'timestamp without time zone': 'timestamp',
     'character varying': 'varchar',
@@ -113,6 +138,28 @@ const TYPE_MAPPINGS: Record<string, Record<string, string>> = {
   mysql: {
     'uuid': 'char(36)',
     'jsonb': 'json',
+    'varchar': 'varchar',
+    'char': 'char',
+    'int': 'int',
+    'tinyint': 'tinyint',
+    'mediumint': 'mediumint',
+    'double': 'double',
+    'float': 'float',
+    'datetime': 'datetime',
+    'timestamp': 'timestamp',
+    'longtext': 'longtext',
+    'mediumtext': 'mediumtext',
+    'tinytext': 'tinytext',
+    'blob': 'blob',
+    'mediumblob': 'mediumblob',
+    'longblob': 'longblob',
+    'varbinary': 'varbinary',
+    'binary': 'binary',
+    'enum': 'enum',
+    'set': 'set',
+    'json': 'json',
+    'year': 'year',
+    'bit': 'bit',
     'timestamp with time zone': 'datetime',
     'timestamp without time zone': 'datetime',
     'character varying': 'varchar',
@@ -143,6 +190,28 @@ const TYPE_MAPPINGS: Record<string, Record<string, string>> = {
   mssql: {
     'uuid': 'uniqueidentifier',
     'jsonb': 'nvarchar(max)',
+    'varchar': 'nvarchar',
+    'char': 'nchar',
+    'int': 'int',
+    'tinyint': 'tinyint',
+    'mediumint': 'int',
+    'double': 'float',
+    'float': 'real',
+    'datetime': 'datetime2',
+    'timestamp': 'datetime2',
+    'longtext': 'nvarchar(max)',
+    'mediumtext': 'nvarchar(max)',
+    'tinytext': 'nvarchar(max)',
+    'blob': 'varbinary(max)',
+    'mediumblob': 'varbinary(max)',
+    'longblob': 'varbinary(max)',
+    'varbinary': 'varbinary',
+    'binary': 'binary',
+    'enum': 'nvarchar(max)',
+    'set': 'nvarchar(max)',
+    'json': 'nvarchar(max)',
+    'year': 'int',
+    'bit': 'bit',
     'timestamp with time zone': 'datetimeoffset',
     'timestamp without time zone': 'datetime2',
     'character varying': 'nvarchar',
@@ -173,6 +242,28 @@ const TYPE_MAPPINGS: Record<string, Record<string, string>> = {
   oracle: {
     'uuid': 'raw(16)',
     'jsonb': 'blob',
+    'varchar': 'varchar2',
+    'char': 'char',
+    'int': 'number(10)',
+    'tinyint': 'number(3)',
+    'mediumint': 'number(9)',
+    'double': 'binary_double',
+    'float': 'binary_float',
+    'datetime': 'timestamp',
+    'timestamp': 'timestamp',
+    'longtext': 'clob',
+    'mediumtext': 'clob',
+    'tinytext': 'clob',
+    'blob': 'blob',
+    'mediumblob': 'blob',
+    'longblob': 'blob',
+    'varbinary': 'raw',
+    'binary': 'raw',
+    'enum': 'varchar2',
+    'set': 'varchar2',
+    'json': 'clob',
+    'year': 'number(4)',
+    'bit': 'number(1)',
     'timestamp with time zone': 'timestamp with time zone',
     'timestamp without time zone': 'timestamp',
     'character varying': 'varchar2',
@@ -417,8 +508,7 @@ export class MigrationService {
         await this.updateMigration(migrationId, { tables_total: schema.length });
 
         const failedTables: string[] = [];
-
-        // First pass: Create tables and copy data
+        
         for (let i = 0; i < schema.length; i++) {
           if (signal.aborted) throw new Error('Migration cancelled');
 
@@ -438,7 +528,7 @@ export class MigrationService {
             const errorMessage = tableErr instanceof Error ? tableErr.message : String(tableErr);
             console.error(`[Migration ${migrationId}] Failed to migrate table ${table.name}:`, errorMessage);
             failedTables.push(`${table.name}: ${errorMessage}`);
-            // Continue with next table
+            
           }
 
           await this.updateMigration(migrationId, {
@@ -446,7 +536,7 @@ export class MigrationService {
           });
         }
 
-        // Second pass: Create foreign keys (after all tables exist)
+        
         if (sourceConfig.db_type === 'postgresql' || sourceConfig.db_type === 'postgres') {
           console.log(`[Migration ${migrationId}] Creating foreign keys...`);
           try {
@@ -456,7 +546,7 @@ export class MigrationService {
           }
         }
 
-        // Third pass: Create indexes
+        
         if (sourceConfig.db_type === 'postgresql' || sourceConfig.db_type === 'postgres') {
           console.log(`[Migration ${migrationId}] Creating indexes...`);
           try {
@@ -466,7 +556,7 @@ export class MigrationService {
           }
         }
 
-        const finalStatus = failedTables.length > 0 ? 'completed' : 'completed';
+        const finalStatus = failedTables.length > 0 ? 'failed' : 'completed';
         await this.updateMigration(migrationId, {
           status: finalStatus,
           completed_at: new Date().toISOString(),
@@ -523,6 +613,9 @@ export class MigrationService {
         name: row.column_name as string,
         data_type: row.data_type as string,
         max_length: (row.character_maximum_length as number) ?? null,
+        numeric_precision: (row.numeric_precision as number) ?? null,
+        numeric_scale: (row.numeric_scale as number) ?? null,
+        raw_type: (row.column_type as string) ?? null,
         nullable: row.is_nullable === 'YES',
         default_value: (row.column_default as string) ?? null,
         is_primary_key: Boolean(row.is_primary_key),
@@ -590,6 +683,8 @@ export class MigrationService {
                c.is_nullable,
                c.column_default,
                c.character_maximum_length,
+               c.numeric_precision,
+               c.numeric_scale,
                CASE WHEN pk.column_name IS NOT NULL THEN true ELSE false END AS is_primary_key
         FROM information_schema.tables t
         JOIN information_schema.columns c
@@ -600,6 +695,7 @@ export class MigrationService {
           JOIN information_schema.key_column_usage kcu
             ON tc.constraint_name = kcu.constraint_name
            AND tc.table_schema = kcu.table_schema
+           AND tc.table_name = kcu.table_name
           WHERE tc.constraint_type = 'PRIMARY KEY'
         ) pk
           ON pk.table_schema = t.table_schema AND pk.table_name = t.table_name AND pk.column_name = c.column_name
@@ -610,13 +706,16 @@ export class MigrationService {
     }
     if (['mysql', 'mariadb'].includes(base)) {
       return `
-        SELECT t.table_name,
-               c.column_name,
-               c.ordinal_position,
-               c.data_type,
-               c.is_nullable,
-               c.column_default,
-               c.character_maximum_length,
+        SELECT t.table_name AS table_name,
+               c.column_name AS column_name,
+               c.ordinal_position AS ordinal_position,
+               c.data_type AS data_type,
+               c.is_nullable AS is_nullable,
+               c.column_default AS column_default,
+               c.character_maximum_length AS character_maximum_length,
+               c.numeric_precision AS numeric_precision,
+               c.numeric_scale AS numeric_scale,
+               c.column_type AS column_type,
                CASE WHEN pk.column_name IS NOT NULL THEN true ELSE false END AS is_primary_key
         FROM information_schema.tables t
         JOIN information_schema.columns c
@@ -627,6 +726,7 @@ export class MigrationService {
           JOIN information_schema.key_column_usage kcu
             ON tc.constraint_name = kcu.constraint_name
            AND tc.table_schema = kcu.table_schema
+           AND tc.table_name = kcu.table_name
           WHERE tc.constraint_type = 'PRIMARY KEY'
         ) pk
           ON pk.table_schema = t.table_schema AND pk.table_name = t.table_name AND pk.column_name = c.column_name
@@ -644,6 +744,8 @@ export class MigrationService {
                c.is_nullable,
                c.column_default,
                c.character_maximum_length,
+               c.numeric_precision,
+               c.numeric_scale,
                CASE WHEN pk.column_name IS NOT NULL THEN 1 ELSE 0 END AS is_primary_key
         FROM information_schema.tables t
         JOIN information_schema.columns c
@@ -654,6 +756,7 @@ export class MigrationService {
           JOIN information_schema.key_column_usage kcu
             ON tc.constraint_name = kcu.constraint_name
            AND tc.table_schema = kcu.table_schema
+           AND tc.table_name = kcu.table_name
           WHERE tc.constraint_type = 'PRIMARY KEY'
         ) pk
           ON pk.table_schema = t.table_schema AND pk.table_name = t.table_name AND pk.column_name = c.column_name
@@ -671,6 +774,8 @@ export class MigrationService {
                CASE WHEN tc.nullable = 'Y' THEN 'YES' ELSE 'NO' END AS "is_nullable",
                tc.data_default AS "column_default",
                tc.data_length AS "character_maximum_length",
+               tc.data_precision AS "numeric_precision",
+               tc.data_scale AS "numeric_scale",
                CASE WHEN pk.column_name IS NOT NULL THEN 1 ELSE 0 END AS "is_primary_key"
         FROM all_tab_columns tc
         LEFT JOIN (
@@ -738,9 +843,16 @@ export class MigrationService {
     const quotedTable = this.quoteIdentifier(tableName, dbType);
     const base = dbType.toLowerCase();
 
-    if (['postgresql', 'postgres', 'mysql', 'mariadb'].includes(base)) {
+    if (['postgresql', 'postgres'].includes(base)) {
       return {
         query: `SELECT * FROM ${quotedTable} ORDER BY 1 LIMIT $1 OFFSET $2`,
+        params: [limit, offset],
+      };
+    }
+
+    if (['mysql', 'mariadb'].includes(base)) {
+      return {
+        query: `SELECT * FROM ${quotedTable} ORDER BY 1 LIMIT ? OFFSET ?`,
         params: [limit, offset],
       };
     }
@@ -767,7 +879,7 @@ export class MigrationService {
 
   private buildCreateTableSQL(table: TableSchema, targetDbType: string): string {
     const cols = table.columns.map(col => {
-      const mappedType = this.mapDataType(col.data_type, targetDbType);
+      const mappedType = this.resolveColumnType(col, targetDbType);
       let colDef = `${this.quoteIdentifier(col.name, targetDbType)} ${mappedType}`;
       if (!col.nullable) colDef += ' NOT NULL';
       if (col.default_value && targetDbType !== 'oracle') {
@@ -864,6 +976,35 @@ export class MigrationService {
     }
     
     return mappings[sourceLower] || sourceType;
+  }
+
+  private resolveColumnType(col: ColumnSchema, targetDbType: string): string {
+    const dbType = targetDbType.toLowerCase();
+
+    // MySQL-family target: preserve the original column definition (lengths, enum/set
+    // values, unsigned, precision) extracted from information_schema.COLUMNS.
+    if ((dbType === 'mysql' || dbType === 'mariadb') && col.raw_type) {
+      return col.raw_type;
+    }
+
+    const base = this.mapDataType(col.data_type, targetDbType);
+
+    // Types that require an explicit length in the target database.
+    const lengthTypes = ['char', 'varchar', 'nchar', 'nvarchar', 'varchar2', 'binary', 'varbinary', 'raw'];
+    if (col.max_length && !base.includes('(') && lengthTypes.some(t => base.toLowerCase().startsWith(t))) {
+      return `${base}(${col.max_length})`;
+    }
+
+    // Preserve numeric precision/scale for decimal-like types.
+    const decimalTypes = ['decimal', 'numeric', 'number'];
+    if (col.numeric_precision && !base.includes('(') && decimalTypes.some(t => base.toLowerCase().startsWith(t))) {
+      if (col.numeric_scale) {
+        return `${base}(${col.numeric_precision},${col.numeric_scale})`;
+      }
+      return `${base}(${col.numeric_precision})`;
+    }
+
+    return base;
   }
 
   private quoteIdentifier(name: string, dbType: string): string {

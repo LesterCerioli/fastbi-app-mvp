@@ -128,15 +128,15 @@ class MySQLDriver implements DBDriver {
       end: () => pool.end(),
     };
   }
-  private getSSLMode(sslMode: unknown): string | undefined {
+  private getSSLMode(sslMode: unknown): Record<string, unknown> | undefined {
     const mode = String(sslMode || "").toLowerCase();
     switch (mode) {
-      case "disable": return "DISABLED";
-      case "allow": return "PREFERRED";
-      case "prefer": return "PREFERRED";
-      case "require": return "REQUIRED";
-      case "verify-ca": return "VERIFY_CA";
-      case "verify-full": return "VERIFY_IDENTITY";
+      case "disable": return undefined;
+      case "allow":
+      case "prefer": return { rejectUnauthorized: false };
+      case "require": return { rejectUnauthorized: false };
+      case "verify-ca":
+      case "verify-full": return { rejectUnauthorized: true };
       default: return undefined;
     }
   }
@@ -704,6 +704,7 @@ export class ClientConnectionService {
           JOIN information_schema.key_column_usage kcu
             ON tc.constraint_name = kcu.constraint_name
            AND tc.table_schema = kcu.table_schema
+           AND tc.table_name = kcu.table_name
           WHERE tc.constraint_type = 'PRIMARY KEY'
         ) pk
           ON pk.table_schema = t.table_schema AND pk.table_name = t.table_name AND pk.column_name = c.column_name
@@ -731,6 +732,7 @@ export class ClientConnectionService {
           JOIN information_schema.key_column_usage kcu
             ON tc.constraint_name = kcu.constraint_name
            AND tc.table_schema = kcu.table_schema
+           AND tc.table_name = kcu.table_name
           WHERE tc.constraint_type = 'PRIMARY KEY'
         ) pk
           ON pk.table_schema = t.table_schema AND pk.table_name = t.table_name AND pk.column_name = c.column_name
@@ -758,6 +760,7 @@ export class ClientConnectionService {
           JOIN information_schema.key_column_usage kcu
             ON tc.constraint_name = kcu.constraint_name
            AND tc.table_schema = kcu.table_schema
+           AND tc.table_name = kcu.table_name
           WHERE tc.constraint_type = 'PRIMARY KEY'
         ) pk
           ON pk.table_schema = t.table_schema AND pk.table_name = t.table_name AND pk.column_name = c.column_name
