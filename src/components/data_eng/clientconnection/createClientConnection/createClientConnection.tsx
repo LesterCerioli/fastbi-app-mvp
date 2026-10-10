@@ -2,12 +2,15 @@
 
 import { useState, FormEvent } from "react";
 import * as S from "./styles";
+import ListClientConnection from "../listClientConnection/listClientConnection";
 import { useTranslations } from "@/lib/i18n/useTranslations";
 
 interface CreateClientConnectionProps {
   organizationName?: string;
   onSuccess?: () => void;
   onCancel?: () => void;
+  refreshKey?: number;
+  onSelect?: (connectionId: string, connectionName: string) => void;
 }
 
 const DB_TYPES = [
@@ -20,12 +23,12 @@ const DB_TYPES = [
 ];
 
 const SSL_MODES = [
-  { value: "require", label: "Require" },
-  { value: "prefer", label: "Prefer" },
-  { value: "allow", label: "Allow" },
-  { value: "disable", label: "Disable" },
-  { value: "verify-ca", label: "Verify CA" },
-  { value: "verify-full", label: "Verify Full" },
+  { value: "require", label: "dataeng.createConnection.sslModeRequire" },
+  { value: "prefer", label: "dataeng.createConnection.sslModePrefer" },
+  { value: "allow", label: "dataeng.createConnection.sslModeAllow" },
+  { value: "disable", label: "dataeng.createConnection.sslModeDisable" },
+  { value: "verify-ca", label: "dataeng.createConnection.sslModeVerifyCA" },
+  { value: "verify-full", label: "dataeng.createConnection.sslModeVerifyFull" },
 ];
 
 const DEFAULT_PORTS: Record<string, string> = {
@@ -37,10 +40,35 @@ const DEFAULT_PORTS: Record<string, string> = {
   sqlite: "",
 };
 
+const isLocalHost = (host: string): boolean => {
+  if (!host) return false;
+  const lowerHost = host.toLowerCase().trim();
+  return (
+    lowerHost === "localhost" ||
+    lowerHost === "127.0.0.1" ||
+    lowerHost === "::1" ||
+    lowerHost.startsWith("192.168.") ||
+    lowerHost.startsWith("10.") ||
+    lowerHost.startsWith("172.16.") ||
+    lowerHost.startsWith("172.17.") ||
+    lowerHost.startsWith("172.18.") ||
+    lowerHost.startsWith("172.19.") ||
+    lowerHost.startsWith("172.2") ||
+    lowerHost.startsWith("172.30.") ||
+    lowerHost.startsWith("172.31.")
+  );
+};
+
+const getDefaultSslMode = (host: string): string => {
+  return isLocalHost(host) ? "disable" : "require";
+};
+
 export default function CreateClientConnection({
   organizationName = "",
   onSuccess,
   onCancel,
+  refreshKey = 0,
+  onSelect,
 }: CreateClientConnectionProps) {
   const [form, setForm] = useState({
     organization_name: organizationName,
@@ -55,6 +83,8 @@ export default function CreateClientConnection({
     max_rows_limit: "10000",
     query_timeout_seconds: "30",
   });
+
+  const [showSslHint, setShowSslHint] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isTesting, setIsTesting] = useState(false);
@@ -83,6 +113,17 @@ export default function CreateClientConnection({
             : prev.port,
       };
     });
+    setMessage(null);
+  };
+
+  const handleHostChange = (value: string) => {
+    const newSslMode = getDefaultSslMode(value);
+    setForm((prev) => ({
+      ...prev,
+      host: value,
+      ssl_mode: newSslMode,
+    }));
+    setShowSslHint(isLocalHost(value));
     setMessage(null);
   };
 
@@ -278,14 +319,20 @@ export default function CreateClientConnection({
             <S.Select
               id="ssl_mode"
               value={form.ssl_mode}
-              onChange={(e) => updateField("ssl_mode", e.target.value)}
+              onChange={(e) => {
+                updateField("ssl_mode", e.target.value);
+                setShowSslHint(isLocalHost(form.host) && e.target.value !== "disable");
+              }}
             >
               {SSL_MODES.map((ssl) => (
                 <option key={ssl.value} value={ssl.value}>
-                  {ssl.label}
+                  {t(ssl.label as string)}
                 </option>
               ))}
             </S.Select>
+            {isLocalHost(form.host) && form.ssl_mode !== "disable" && (
+              <S.Hint>{t("dataeng.createConnection.sslModeLocalWarning")}</S.Hint>
+            )}
           </S.Field>
         </S.Row>
 
@@ -299,9 +346,12 @@ export default function CreateClientConnection({
               type="text"
               placeholder={t("dataeng.createConnection.hostPlaceholder")}
               value={form.host}
-              onChange={(e) => updateField("host", e.target.value)}
+              onChange={(e) => handleHostChange(e.target.value)}
               required
             />
+            {showSslHint && (
+              <S.Hint>{t("dataeng.createConnection.sslModeLocalHint")}</S.Hint>
+            )}
           </S.Field>
 
           <S.Field>
@@ -458,6 +508,14 @@ export default function CreateClientConnection({
           </S.Button>
         </S.Actions>
       </S.Card>
+
+      <S.ListWrapper>
+        <ListClientConnection
+          organizationName={organizationName}
+          refreshKey={refreshKey}
+          onSelect={onSelect}
+        />
+      </S.ListWrapper>
     </S.Wrapper>
   );
 }

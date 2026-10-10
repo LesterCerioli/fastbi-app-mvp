@@ -22,6 +22,11 @@ export const Card = styled.form`
   }
 `;
 
+export const ListWrapper = styled.div`
+  width: 100%;
+  margin-top: 24px;
+`;
+
 export const Header = styled.div`
   display: flex;
   flex-direction: column;
