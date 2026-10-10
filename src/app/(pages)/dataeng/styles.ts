@@ -65,3 +65,15 @@ export const ListSection = styled.div`
   margin-top: 48px;
   animation: ${fadeInUp} 0.6s ease-out 0.15s backwards;
 `;
+
+export const CardsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+`;
