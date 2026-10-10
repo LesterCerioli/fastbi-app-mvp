@@ -188,6 +188,24 @@ const TYPE_MAPPINGS: Record<string, Record<string, string>> = {
     'timestamp[]': 'json',
   },
   mssql: {
+    // SQL Server target: native PostgreSQL types that have no 1:1 equivalent
+    // are mapped to storage-safe types so cross-DBMS migrations (PostgreSQL -> SQL Server) work.
+    'bytea': 'varbinary(max)',
+    'interval': 'nvarchar(max)',
+    'inet': 'nvarchar(45)',
+    'cidr': 'nvarchar(45)',
+    'macaddr': 'nvarchar(17)',
+    'money': 'nvarchar(max)',
+    'xml': 'nvarchar(max)',
+    'tsvector': 'nvarchar(max)',
+    'tsquery': 'nvarchar(max)',
+    'point': 'nvarchar(max)',
+    'line': 'nvarchar(max)',
+    'lseg': 'nvarchar(max)',
+    'box': 'nvarchar(max)',
+    'path': 'nvarchar(max)',
+    'polygon': 'nvarchar(max)',
+    'circle': 'nvarchar(max)',
     'uuid': 'uniqueidentifier',
     'jsonb': 'nvarchar(max)',
     'varchar': 'nvarchar',
@@ -813,7 +831,7 @@ export class MigrationService {
 
     if (totalRows === 0) return;
 
-    const batchSize = 1000;
+    const batchSize = this.getBatchSize(table.columns.length, targetDbType);
     let offset = 0;
     let migrated = 0;
 
@@ -889,15 +907,28 @@ export class MigrationService {
       return colDef;
     });
 
-    let sql = `CREATE TABLE IF NOT EXISTS ${this.quoteIdentifier(table.name, targetDbType)} (${cols.join(', ')}`;
+    let body = cols.join(', ');
 
     if (table.primary_keys.length > 0) {
       const pkCols = table.primary_keys.map(c => this.quoteIdentifier(c, targetDbType)).join(', ');
-      sql += `, PRIMARY KEY (${pkCols})`;
+      body += `, PRIMARY KEY (${pkCols})`;
     }
 
-    sql += ')';
-    return sql;
+    const quotedTable = this.quoteIdentifier(table.name, targetDbType);
+
+    // SQL Server does not support `CREATE TABLE IF NOT EXISTS` (only an existence
+    // check wrapped around a plain CREATE TABLE), so build it accordingly.
+    if (this.isSqlServer(targetDbType)) {
+      const escapedName = table.name.replace(/'/g, "''");
+      return (
+        `IF NOT EXISTS (` +
+        `SELECT 1 FROM sys.objects o JOIN sys.schemas s ON o.schema_id = s.schema_id ` +
+        `WHERE o.type = 'U' AND s.name = SCHEMA_NAME() AND o.name = N'${escapedName}'` +
+        `) CREATE TABLE ${quotedTable} (${body})`
+      );
+    }
+
+    return `CREATE TABLE IF NOT EXISTS ${quotedTable} (${body})`;
   }
 
   private sanitizeDefaultValue(defaultValue: string, targetDbType: string): string | null {
@@ -938,6 +969,19 @@ export class MigrationService {
     ];
     
     const upperDv = dv.toUpperCase();
+
+    // SQL Server does not support PostgreSQL default expressions such as
+    // NOW(), CURRENT_DATE, CURRENT_TIME, LOCALTIMESTAMP or LOCALTIME, so
+    // translate them to their T-SQL equivalents.
+    if (this.isSqlServer(targetDbType)) {
+      if (upperDv.startsWith('CURRENT_TIMESTAMP')) return 'CURRENT_TIMESTAMP';
+      if (upperDv.startsWith('CURRENT_DATE')) return 'CAST(GETDATE() AS DATE)';
+      if (upperDv.startsWith('CURRENT_TIME')) return 'CAST(GETDATE() AS TIME)';
+      if (upperDv.startsWith('NOW()')) return 'GETDATE()';
+      if (upperDv.startsWith('LOCALTIMESTAMP')) return 'GETDATE()';
+      if (upperDv.startsWith('LOCALTIME')) return 'CAST(GETDATE() AS TIME)';
+    }
+
     for (const allowed of allowedDefaults) {
       if (upperDv.startsWith(allowed)) {
         return defaultValue;
@@ -1007,6 +1051,37 @@ export class MigrationService {
     return base;
   }
 
+  private isSqlServer(dbType: string): boolean {
+    const base = dbType.toLowerCase();
+    return base === 'mssql' || base === 'sqlserver';
+  }
+
+  private coerceValueForTarget(value: unknown, targetDbType: string): unknown {
+    if (this.isSqlServer(targetDbType)) {
+      if (
+        value !== null && value !== undefined &&
+        typeof value === 'object' &&
+        !Buffer.isBuffer(value) &&
+        !(value instanceof Date)
+      ) {
+        // SQL Server / tedious cannot bind plain objects or arrays. JSONB,
+        // JSON and array columns are returned by the PostgreSQL driver as JS
+        // objects/arrays, so serialize them to a nvarchar-safe JSON string.
+        return JSON.stringify(value);
+      }
+    }
+    return value;
+  }
+
+  private getBatchSize(columnCount: number, targetDbType: string): number {
+    // SQL Server has a hard limit of 2100 parameters per statement, so the
+    // batch must shrink as the column count grows. Other targets keep 1000.
+    if (this.isSqlServer(targetDbType) && columnCount > 0) {
+      return Math.max(1, Math.min(1000, Math.floor(2100 / columnCount)));
+    }
+    return 1000;
+  }
+
   private quoteIdentifier(name: string, dbType: string): string {
     if (dbType === 'mysql' || dbType === 'mariadb') return `\`${name}\``;
     if (dbType === 'mssql' || dbType === 'sqlserver') return `[${name}]`;
@@ -1024,7 +1099,7 @@ export class MigrationService {
       '(' + columns.map((_, j) => this.getPlaceholder(targetDbType, i * columns.length + j + 1)).join(', ') + ')'
     ).join(', ');
 
-    const values = rows.flatMap(row => table.columns.map(c => row[c.name]));
+    const values = rows.flatMap(row => table.columns.map(c => this.coerceValueForTarget(row[c.name], targetDbType)));
     const sql = this.buildUpsertSQL(table.name, columns, pkColumns, placeholders, targetDbType, rowCount);
     
     console.log(`[Migration] Insert SQL: ${sql.substring(0, 500)}...`);
@@ -1061,13 +1136,14 @@ export class MigrationService {
         const matchCols = pkColumns.map(c => `TARGET.${c} = SOURCE.${c}`).join(' AND ');
         const sourceAlias = 'SOURCE';
         const targetAlias = 'TARGET';
+        // SQL Server requires a MERGE statement to be terminated by a semicolon.
         sql = `
           MERGE INTO ${quotedTable} AS ${targetAlias}
           USING (VALUES ${placeholders}) AS ${sourceAlias} (${colList})
           ON ${matchCols}
           WHEN NOT MATCHED THEN
             INSERT (${colList}) VALUES (${colList.split(', ').map(c => `${sourceAlias}.${c.trim()}`).join(', ')})
-        `.trim();
+        `.trim() + ';';
       } else {
         sql = `INSERT INTO ${quotedTable} (${colList}) VALUES ${placeholders}`;
       }
