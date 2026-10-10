@@ -293,7 +293,7 @@ export const CarouselTitle = styled.h2`
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 3rem;
-  color: white;
+  color: #1a202c;
 
   @media (prefers-color-scheme: light) {
     color: black;
@@ -359,7 +359,7 @@ export const SectionTitle = styled.h2`
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color: white;
+  color: #1a202c;
 
   @media (prefers-color-scheme: light) {
     color: black;
