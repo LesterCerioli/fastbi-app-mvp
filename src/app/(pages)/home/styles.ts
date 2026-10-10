@@ -72,14 +72,38 @@ export const SecondaryButton = styled.button`
 `;
 
 /* Features Section */
+const scrollBackAndForth = keyframes`
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+`;
+
 export const Features = styled.section`
-  display: flex;
-  justify-content: center;
-  gap: 24px;
   margin-top: -80px;
   position: relative;
   z-index: 2;
   padding: 0 20px;
+  overflow: hidden;
+  max-width: 928px;
+  margin-left: auto;
+  margin-right: auto;
+`;
+
+export const FeaturesTrack = styled.div`
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  animation: ${scrollBackAndForth} 20s ease-in-out infinite;
+
+  &:hover {
+    animation-play-state: paused;
+  }
 `;
 
 export const Card = styled.div`
@@ -87,6 +111,7 @@ export const Card = styled.div`
   padding: 32px 24px;
   border-radius: 12px;
   width: 280px;
+  flex: 0 0 auto;
   text-align: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 
@@ -268,10 +293,7 @@ export const CarouselTitle = styled.h2`
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 3rem;
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: white;
   
   @media (max-width: 768px) {
     font-size: 1.8rem;
@@ -333,10 +355,7 @@ export const SectionTitle = styled.h2`
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: white;
   
   @media (max-width: 768px) {
     font-size: 1.8rem;
