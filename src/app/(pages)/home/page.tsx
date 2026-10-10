@@ -61,23 +61,43 @@ export default function HomePage() {
       </S.Hero>
 
       <S.Features>
-        <S.Card>
-          <S.IconWrapper><BarChart3 size={48} color="#3b82f6" /></S.IconWrapper>
-          <h3>{t("home.features.intuitiveDashboards.title")}</h3>
-          <p>{t("home.features.intuitiveDashboards.desc")}</p>
-        </S.Card>
+        <S.FeaturesTrack>
+          <S.Card>
+            <S.IconWrapper><BarChart3 size={48} color="#3b82f6" /></S.IconWrapper>
+            <h3>{t("home.features.intuitiveDashboards.title")}</h3>
+            <p>{t("home.features.intuitiveDashboards.desc")}</p>
+          </S.Card>
 
-        <S.Card>
-          <S.IconWrapper><Settings size={48} color="#3b82f6" /></S.IconWrapper>
-          <h3>{t("home.features.reportAutomation.title")}</h3>
-          <p>{t("home.features.reportAutomation.desc")}</p>
-        </S.Card>
+          <S.Card>
+            <S.IconWrapper><Settings size={48} color="#3b82f6" /></S.IconWrapper>
+            <h3>{t("home.features.reportAutomation.title")}</h3>
+            <p>{t("home.features.reportAutomation.desc")}</p>
+          </S.Card>
 
-        <S.Card>
-          <S.IconWrapper><Target size={48} color="#3b82f6" /></S.IconWrapper>
-          <h3>{t("home.features.accurateInsights.title")}</h3>
-          <p>{t("home.features.accurateInsights.desc")}</p>
-        </S.Card>
+          <S.Card>
+            <S.IconWrapper><Target size={48} color="#3b82f6" /></S.IconWrapper>
+            <h3>{t("home.features.accurateInsights.title")}</h3>
+            <p>{t("home.features.accurateInsights.desc")}</p>
+          </S.Card>
+
+          <S.Card aria-hidden="true">
+            <S.IconWrapper><BarChart3 size={48} color="#3b82f6" /></S.IconWrapper>
+            <h3>{t("home.features.intuitiveDashboards.title")}</h3>
+            <p>{t("home.features.intuitiveDashboards.desc")}</p>
+          </S.Card>
+
+          <S.Card aria-hidden="true">
+            <S.IconWrapper><Settings size={48} color="#3b82f6" /></S.IconWrapper>
+            <h3>{t("home.features.reportAutomation.title")}</h3>
+            <p>{t("home.features.reportAutomation.desc")}</p>
+          </S.Card>
+
+          <S.Card aria-hidden="true">
+            <S.IconWrapper><Target size={48} color="#3b82f6" /></S.IconWrapper>
+            <h3>{t("home.features.accurateInsights.title")}</h3>
+            <p>{t("home.features.accurateInsights.desc")}</p>
+          </S.Card>
+        </S.FeaturesTrack>
       </S.Features>
 
       <S.CarouselSection>
