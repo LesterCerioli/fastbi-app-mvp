@@ -3,18 +3,19 @@ import {
   ListTablesCommand,
   CreateTableCommand,
 } from "@aws-sdk/client-dynamodb";
-import { TABLE_NAME } from "./userProfiles";
 
 const client = new DynamoDBClient({
-  region: process.env.AWS_DEFAULT_REGION,
+  region: "us-east-1",
   endpoint: process.env.LOCALSTACK_ENDPOINT,
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+    accessKeyId: "test",
+    secretAccessKey: "test",
   },
 });
 
-export async function ensureUserProfilesTable(): Promise<void> {
+const TABLE_NAME = "FastBI_user_profiles";
+
+async function ensureUserProfilesTable(): Promise<void> {
   try {
     const existing = await client.send(new ListTablesCommand({}));
     if ((existing.TableNames || []).includes(TABLE_NAME)) {
@@ -33,3 +34,5 @@ export async function ensureUserProfilesTable(): Promise<void> {
     })
   );
 }
+
+ensureUserProfilesTable();
