@@ -868,5 +868,16 @@
   },
   "backToDashboards": {
     "label": "Volver a Dashboards"
+  },
+  "buckets": {
+    "title": "Balones",
+    "subtitle": "Administre sus balones de almacenamiento",
+    "fieldBucketName": "Nombre del balón",
+    "fieldBucketNamePlaceholder": "p. ej. my-bucket",
+    "fieldDescription": "Descripción",
+    "fieldDescriptionPlaceholder": "Descripción opcional",
+    "fieldUploadFiles": "Cargar archivos",
+    "buttonCreate": "Crear balón",
+    "buttonCancel": "Cancelar"
   }
 }

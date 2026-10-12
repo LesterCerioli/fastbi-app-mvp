@@ -247,6 +247,11 @@ export const UserInfo = styled.span`
   cursor: pointer;
   transition: color 0.2s;
 
+  @media (max-width: 640px) {
+    font-size: 12px;
+    white-space: normal;
+  }
+
   &:hover {
     color: #00D4FF;
   }

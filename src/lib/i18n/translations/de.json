@@ -868,5 +868,16 @@
   },
   "backToDashboards": {
     "label": "Zurück zu Dashboards"
+  },
+  "buckets": {
+    "title": "Eimer",
+    "subtitle": "Verwalern Sie Ihre Speichereimer",
+    "fieldBucketName": "Eimer-Name",
+    "fieldBucketNamePlaceholder": "z. B. my-bucket",
+    "fieldDescription": "Beschreibung",
+    "fieldDescriptionPlaceholder": "Optional Beschreibung eingeben",
+    "fieldUploadFiles": "Dateiupload",
+    "buttonCreate": "Eimer erstellen",
+    "buttonCancel": "Abbrechen"
   }
 }
