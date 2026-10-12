@@ -67,6 +67,13 @@ export default function DataEngPage() {
       <S.PageBg />
       <S.Content>
         <S.SectionHead>
+          <S.BackLink href="/dashboard">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 12H5" />
+              <path d="M12 19l-7-7 7-7" />  
+            </svg>
+            <span>Back to Main Dashboard</span>
+          </S.BackLink>
           <S.SectionTitle>Data Engineering</S.SectionTitle>
           <S.SectionSubtitle>
             Choose a domain to configure and manage your data infrastructure
