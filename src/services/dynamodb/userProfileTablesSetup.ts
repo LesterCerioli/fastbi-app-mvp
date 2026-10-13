@@ -7,15 +7,15 @@ import {
 const client = new DynamoDBClient({
   region: "us-east-1",
   endpoint: process.env.LOCALSTACK_ENDPOINT,
-  credentials: {
-    accessKeyId: "test",
-    secretAccessKey: "test",
+credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
   },
 });
 
 const TABLE_NAME = "FastBI_user_profiles";
 
-async function ensureUserProfilesTable(): Promise<void> {
+export async function ensureUserProfilesTable(): Promise<void> {
   try {
     const existing = await client.send(new ListTablesCommand({}));
     if ((existing.TableNames || []).includes(TABLE_NAME)) {

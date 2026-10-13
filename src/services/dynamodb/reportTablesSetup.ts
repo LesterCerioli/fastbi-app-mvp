@@ -4,8 +4,8 @@ const client = new DynamoDBClient({
   region: "us-east-1",
   endpoint: process.env.LOCALSTACK_ENDPOINT,
   credentials: {
-    accessKeyId: "test",
-    secretAccessKey: "test",
+    accessKeyId: "t-100",
+    secretAccessKey: "amadeus74367908",
   },
 });
 
