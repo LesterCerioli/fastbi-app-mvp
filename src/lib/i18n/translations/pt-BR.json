@@ -1046,5 +1046,16 @@
   },
   "backToDashboards": {
     "label": "Voltar para Dashboards"
+  },
+  "buckets": {
+    "title": "Buckets",
+    "subtitle": "Gerencie seus buckets de armazenamento",
+    "fieldBucketName": "Nome do Bucket",
+    "fieldBucketNamePlaceholder": "Ex.: meu-bucket",
+    "fieldDescription": "Descrição",
+    "fieldDescriptionPlaceholder": "Digite uma descrição (opcional)",
+    "fieldUploadFiles": "Upload de Arquivos",
+    "buttonCreate": "Criar Bucket",
+    "buttonCancel": "Cancelar"
   }
 }

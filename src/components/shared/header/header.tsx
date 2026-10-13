@@ -102,9 +102,11 @@ export default function Header() {
       )}
       {user && (
         <S.RightSection>
-          <S.UserInfo onClick={() => handleNavigation('/profile')}>
-            {user.name || user.email}
-          </S.UserInfo>
+          <S.HideMobile>
+            <S.UserInfo onClick={() => handleNavigation('/profile')}>
+              {user.name || user.email}
+            </S.UserInfo>
+          </S.HideMobile>
           <S.LogoutButton onClick={handleLogout}>
             <LogOut size={16} />
             {t("header.buttons.logout")}

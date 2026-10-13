@@ -868,5 +868,16 @@
   },
   "backToDashboards": {
     "label": "Torna ai Dashboard"
+  },
+  "buckets": {
+    "title": "Ceste",
+    "subtitle": "Gestisci i tuoi cestelli di stoccaggio",
+    "fieldBucketName": "Nome cestino",
+    "fieldBucketNamePlaceholder": "es. my-bucket",
+    "fieldDescription": "Descrizione",
+    "fieldDescriptionPlaceholder": "Descrizione opzionale",
+    "fieldUploadFiles": "Carica file",
+    "buttonCreate": "Crea cestino",
+    "buttonCancel": "Annulla"
   }
 }
