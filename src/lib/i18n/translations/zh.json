@@ -868,5 +868,19 @@
   },
   "backToDashboards": {
     "label": "返回仪表板"
+  },
+"buckets": {
+    "title": "Buckets",
+    "subtitle": "管理您的存储桶",
+    "fieldBucketName": "存储桶名称",
+    "fieldBucketNamePlaceholder": "例如 my-bucket",
+    "fieldOrganization": "组织",
+    "fieldOrganizationPlaceholder": "选择或输入组织",
+    "fieldDescription": "描述",
+    "fieldDescriptionPlaceholder": "输入描述（可选）",
+    "fieldUploadFiles": "上传文件",
+    "buttonCreate": "创建存储桶",
+    "buttonCancel": "取消",
+    "errorCreate": "创建存储桶失败"
   }
 }

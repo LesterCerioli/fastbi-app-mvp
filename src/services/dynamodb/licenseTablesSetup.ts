@@ -3,16 +3,17 @@ import {
   ListTablesCommand,
   CreateTableCommand,
 } from "@aws-sdk/client-dynamodb";
-import { ORGANIZATION_LICENSES_TABLE } from "./organizationLicenses";
 
 const client = new DynamoDBClient({
-  region: process.env.AWS_DEFAULT_REGION,
+  region: "us-east-1",
   endpoint: process.env.LOCALSTACK_ENDPOINT,
-  credentials: {
+credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
   },
 });
+
+const ORGANIZATION_LICENSES_TABLE = "FASTBI_organization_licenses";
 
 export async function ensureOrganizationLicensesTable(): Promise<void> {
   try {
@@ -43,3 +44,5 @@ export async function ensureOrganizationLicensesTable(): Promise<void> {
     })
   );
 }
+
+ensureOrganizationLicensesTable();

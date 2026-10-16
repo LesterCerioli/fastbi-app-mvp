@@ -1046,5 +1046,19 @@
   },
   "backToDashboards": {
     "label": "Back to Main Dashboard"
+  },
+  "buckets": {
+    "title": "Buckets",
+    "subtitle": "Manage your storage buckets",
+    "fieldBucketName": "Bucket Name",
+    "fieldBucketNamePlaceholder": "e.g. my-bucket",
+    "fieldOrganization": "Organization",
+    "fieldOrganizationPlaceholder": "Select or enter organization",
+    "fieldDescription": "Description",
+    "fieldDescriptionPlaceholder": "Enter a description (optional)",
+    "fieldUploadFiles": "Upload Files",
+    "buttonCreate": "Create Bucket",
+    "buttonCancel": "Cancel",
+    "errorCreate": "Failed to create bucket"
   }
 }
