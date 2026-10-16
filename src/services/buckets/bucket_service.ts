@@ -10,23 +10,38 @@ import {
 } from '@aws-sdk/client-s3';
 import { Pool } from 'pg';
 
-const s3 = new S3Client({
-  region: process.env.AWS_DEFAULT_REGION || 'us-east-1',
-  endpoint: process.env.LOCALSTACK_ENDPOINT,
-  forcePathStyle: true,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-  },
-});
 
-const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-});
+let _s3: S3Client | null = null;
+
+function getS3(): S3Client {
+  if (!_s3) {
+    _s3 = new S3Client({
+      region: process.env.AWS_DEFAULT_REGION || 'us-east-1',
+      endpoint: process.env.LOCALSTACK_ENDPOINT,
+      forcePathStyle: true,
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+      },
+    });
+  }
+  return _s3;
+}
+
+let _pool: Pool | null = null;
+
+function getPool(): Pool {
+  if (!_pool) {
+    _pool = new Pool({
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      database: process.env.DB_NAME,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+    });
+  }
+  return _pool;
+}
 
 export interface Bucket {
   id: string;
@@ -53,22 +68,19 @@ export interface BucketService {
   listBucketsByOrganizationName(orgName: string): Promise<Bucket[]>;
 }
 
-const S3_PART_SIZE = 5 * 1024 * 1024; // 5 MiB — mínimo aceito pelo S3 por parte
+const S3_PART_SIZE = 5 * 1024 * 1024;
 
 export class DefaultBucketService implements BucketService {
   private readonly baseUrl: string;
-  /** URL base da própria aplicação Next.js (para chamar a rota interna /api/auth/token) */
   private readonly internalBaseUrl: string;
 
   constructor() {
-    // Base URL da API Go externa (consumida com Bearer token)
     const baseUrl = process.env.EXTERNAL_GO_API_BASE_URL;
     if (!baseUrl) {
       throw new Error('Variável de ambiente obrigatória não configurada: EXTERNAL_GO_API_BASE_URL');
     }
     this.baseUrl = baseUrl.replace(/\/$/, '');
 
-    // Base URL da própria app Next (para a rota interna de auth).
     const internalBaseUrl =
       process.env.NEXT_PUBLIC_APP_URL ||
       process.env.APP_URL ||
@@ -76,13 +88,8 @@ export class DefaultBucketService implements BucketService {
     this.internalBaseUrl = internalBaseUrl.replace(/\/$/, '');
   }
 
-  /**
-   * Obtém um Bearer token chamando a rota interna do Next.js:
-   *   POST /api/auth/token
-   */
   private async getAuthToken(): Promise<string> {
     const url = `${this.internalBaseUrl}/api/auth/token`;
-
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -111,7 +118,6 @@ export class DefaultBucketService implements BucketService {
     if (!data.token) {
       throw new Error('Resposta de /api/auth/token não contém "token"');
     }
-
     return data.token;
   }
 
@@ -185,12 +191,6 @@ export class DefaultBucketService implements BucketService {
     return (await response.json()) as { id: string };
   }
 
-  /**
-   * Fallback: resolve o organization_id a partir do token/sessão,
-   * chamando GET /organizations/me na API Go.
-   *
-   * Só é usado quando createBucket recebe organizationName vazio/undefined.
-   */
   private async resolveOrganizationIDFromSession(): Promise<{ id: string; error?: string }> {
     try {
       const token = await this.getAuthToken();
@@ -231,10 +231,9 @@ export class DefaultBucketService implements BucketService {
     organizationName?: string
   ): Promise<{ bucket: Bucket; error?: string }> {
     let orgId = '';
+    const pool = getPool(); // lazy init
 
-    // 1. Resolve organization ID
     if (organizationName && organizationName.trim()) {
-      // Caminho A: cliente mandou organization_name
       const trimmedName = organizationName.trim();
 
       const orgResult = await pool.query(
@@ -250,7 +249,6 @@ export class DefaultBucketService implements BucketService {
       }
       orgId = orgRow.id;
     } else {
-      // Caminho B: fallback via sessão (GET /organizations/me)
       const sessionResult = await this.resolveOrganizationIDFromSession();
       if (sessionResult.error || !sessionResult.id) {
         return {
@@ -261,15 +259,15 @@ export class DefaultBucketService implements BucketService {
       orgId = sessionResult.id;
     }
 
-    // 2. Create S3 bucket
     const s3BucketName = `${name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Date.now()}`;
+    const s3 = getS3(); // lazy init
+
     try {
       await s3.send(new CreateBucketCommand({ Bucket: s3BucketName }));
     } catch (err: any) {
       return { bucket: {} as Bucket, error: `Falha ao criar bucket S3: ${err.message}` };
     }
 
-    // 3. Insert metadata into PostgreSQL
     const now = new Date().toISOString();
     let result;
     try {
@@ -293,7 +291,6 @@ export class DefaultBucketService implements BucketService {
       updated_at: result.rows[0].updated_at,
     };
 
-    // 4. Upload file if provided
     if (file) {
       try {
         const key = `${newBucket.id}/${file.name.replace(/[^a-zA-Z0-9._-]/g, '-')}`;
@@ -306,19 +303,14 @@ export class DefaultBucketService implements BucketService {
     return { bucket: newBucket, error: undefined };
   }
 
-  /**
-   * Faz upload de um arquivo para o S3.
-   * - Arquivos <= 5 MiB: PutObject simples.
-   * - Arquivos > 5 MiB: Multipart Upload com partes de 5 MiB.
-   */
   private async uploadFileToS3(bucketName: string, key: string, file: File): Promise<void> {
     const fileSize = file.size;
     const contentType = file.type || 'application/octet-stream';
+    const s3 = getS3(); 
 
     const arrayBuffer = await file.arrayBuffer();
     const fileBytes = new Uint8Array(arrayBuffer);
 
-    // Arquivo pequeno: upload simples
     if (fileSize <= S3_PART_SIZE) {
       await s3.send(
         new PutObjectCommand({
@@ -332,7 +324,6 @@ export class DefaultBucketService implements BucketService {
       return;
     }
 
-    // Arquivo grande: multipart upload
     const createRes = await s3.send(
       new CreateMultipartUploadCommand({
         Bucket: bucketName,
@@ -399,6 +390,7 @@ export class DefaultBucketService implements BucketService {
   }
 
   async listBucketsByOrganizationName(orgName: string): Promise<Bucket[]> {
+    const pool = getPool(); // lazy init
     const trimmed = orgName.trim();
     const result = await pool.query(
       `SELECT id, organization_id, "name", description, s3_bucket_name, created_at, updated_at, deleted_at
