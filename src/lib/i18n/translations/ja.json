@@ -869,15 +869,18 @@
   "backToDashboards": {
     "label": "ダッシュボードに戻る"
   },
-  "buckets": {
-    "title": "バケット",
+"buckets": {
+    "title": "Buckets",
     "subtitle": "ストレージバケットを管理",
     "fieldBucketName": "バケット名",
-    "fieldBucketNamePlaceholder": "例：my-bucket",
+    "fieldBucketNamePlaceholder": "例: my-bucket",
+    "fieldOrganization": "組織",
+    "fieldOrganizationPlaceholder": "組織を選択または入力",
     "fieldDescription": "説明",
-    "fieldDescriptionPlaceholder": "任意の説明を入力",
+    "fieldDescriptionPlaceholder": "説明を入力してください（任意）",
     "fieldUploadFiles": "ファイルのアップロード",
     "buttonCreate": "バケットを作成",
-    "buttonCancel": "キャンセル"
+    "buttonCancel": "キャンセル",
+    "errorCreate": "バケットの作成に失敗"
   }
 }

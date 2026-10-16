@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import * as S from "./styles";
 import { useTranslations } from "@/lib/i18n/useTranslations";
 
-const BUCKETS_API = "/api/dataeng/buckets";
+const BUCKETS_API = "/api/buckets/list";
 
 interface Bucket {
   id: string;

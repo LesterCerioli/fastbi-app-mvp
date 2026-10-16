@@ -1052,10 +1052,13 @@
     "subtitle": "Gerencie seus buckets de armazenamento",
     "fieldBucketName": "Nome do Bucket",
     "fieldBucketNamePlaceholder": "Ex.: meu-bucket",
+    "fieldOrganization": "Organização",
+    "fieldOrganizationPlaceholder": "Nome da organização",
     "fieldDescription": "Descrição",
     "fieldDescriptionPlaceholder": "Digite uma descrição (opcional)",
     "fieldUploadFiles": "Upload de Arquivos",
     "buttonCreate": "Criar Bucket",
-    "buttonCancel": "Cancelar"
+    "buttonCancel": "Cancelar",
+    "errorCreate": "Falha ao criar bucket"
   }
 }

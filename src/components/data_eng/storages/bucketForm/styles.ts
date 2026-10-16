@@ -191,3 +191,33 @@ export const CancelButton = styled.button`
     font-size: 14px;
   }
 `;
+export const StatusTag = styled.div<{ $variant: "success" | "error" }>`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 12px;
+  border: 1px solid transparent;
+
+  ${({ $variant }) =>
+    $variant === "success"
+      ? `
+        background: rgba(34, 197, 94, 0.12);
+        border-color: rgba(34, 197, 94, 0.45);
+        color: #34d399;
+      `
+      : `
+        background: rgba(239, 68, 68, 0.12);
+        border-color: rgba(239, 68, 68, 0.45);
+        color: #f87171;
+      `}
+
+  @media (max-width: 480px) {
+    font-size: 13px;
+    padding: 10px 14px;
+  }
+`;

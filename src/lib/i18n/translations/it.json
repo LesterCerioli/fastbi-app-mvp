@@ -869,15 +869,18 @@
   "backToDashboards": {
     "label": "Torna ai Dashboard"
   },
-  "buckets": {
-    "title": "Ceste",
-    "subtitle": "Gestisci i tuoi cestelli di stoccaggio",
-    "fieldBucketName": "Nome cestino",
+"buckets": {
+    "title": "Buckets",
+    "subtitle": "Gestisci i tuoi bucket di archiviazione",
+    "fieldBucketName": "Nome del Bucket",
     "fieldBucketNamePlaceholder": "es. my-bucket",
+    "fieldOrganization": "Organizzazione",
+    "fieldOrganizationPlaceholder": "Seleziona o inserisci organizzazione",
     "fieldDescription": "Descrizione",
-    "fieldDescriptionPlaceholder": "Descrizione opzionale",
-    "fieldUploadFiles": "Carica file",
-    "buttonCreate": "Crea cestino",
-    "buttonCancel": "Annulla"
+    "fieldDescriptionPlaceholder": "Inserisci una descrizione (opzionale)",
+    "fieldUploadFiles": "Carica File",
+    "buttonCreate": "Crea Bucket",
+    "buttonCancel": "Annulla",
+    "errorCreate": "Impossibile creare il bucket"
   }
 }

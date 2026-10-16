@@ -869,15 +869,18 @@
   "backToDashboards": {
     "label": "Volver a Dashboards"
   },
-  "buckets": {
-    "title": "Balones",
-    "subtitle": "Administre sus balones de almacenamiento",
-    "fieldBucketName": "Nombre del balón",
-    "fieldBucketNamePlaceholder": "p. ej. my-bucket",
-    "fieldDescription": "Descripción",
-    "fieldDescriptionPlaceholder": "Descripción opcional",
-    "fieldUploadFiles": "Cargar archivos",
-    "buttonCreate": "Crear balón",
-    "buttonCancel": "Cancelar"
+"buckets": {
+    "title": "Buckets",
+    "subtitle": "Manage your storage buckets",
+    "fieldBucketName": "Bucket Name",
+    "fieldBucketNamePlaceholder": "e.g. my-bucket",
+    "fieldOrganization": "Organization",
+    "fieldOrganizationPlaceholder": "Select or enter organization",
+    "fieldDescription": "Description",
+    "fieldDescriptionPlaceholder": "Enter a description (optional)",
+    "fieldUploadFiles": "Upload Files",
+    "buttonCreate": "Create Bucket",
+    "buttonCancel": "Cancel",
+    "errorCreate": "Failed to create bucket"
   }
 }
