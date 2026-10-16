@@ -10,7 +10,6 @@ import {
 } from '@aws-sdk/client-s3';
 import { Pool } from 'pg';
 
-
 let _s3: S3Client | null = null;
 
 function getS3(): S3Client {
@@ -71,14 +70,16 @@ export interface BucketService {
 const S3_PART_SIZE = 5 * 1024 * 1024;
 
 export class DefaultBucketService implements BucketService {
+  /**
+   * Armazena a URL base (possivelmente vazia).
+   * A validação é feita em runtime, dentro de getAuthToken(),
+   * para não quebrar o build da Vercel (que não tem todas as envs).
+   */
   private readonly baseUrl: string;
   private readonly internalBaseUrl: string;
 
   constructor() {
-    const baseUrl = process.env.EXTERNAL_GO_API_BASE_URL;
-    if (!baseUrl) {
-      throw new Error('Variável de ambiente obrigatória não configurada: EXTERNAL_GO_API_BASE_URL');
-    }
+    const baseUrl = process.env.EXTERNAL_GO_API_BASE_URL || '';
     this.baseUrl = baseUrl.replace(/\/$/, '');
 
     const internalBaseUrl =
@@ -89,6 +90,14 @@ export class DefaultBucketService implements BucketService {
   }
 
   private async getAuthToken(): Promise<string> {
+    // Validação em runtime — só falha se o método for realmente chamado
+    // sem a env configurada.
+    if (!this.baseUrl) {
+      throw new Error(
+        'Variável de ambiente obrigatória não configurada: EXTERNAL_GO_API_BASE_URL'
+      );
+    }
+
     const url = `${this.internalBaseUrl}/api/auth/token`;
     const response = await fetch(url, {
       method: 'POST',
@@ -231,7 +240,7 @@ export class DefaultBucketService implements BucketService {
     organizationName?: string
   ): Promise<{ bucket: Bucket; error?: string }> {
     let orgId = '';
-    const pool = getPool(); // lazy init
+    const pool = getPool();
 
     if (organizationName && organizationName.trim()) {
       const trimmedName = organizationName.trim();
@@ -260,7 +269,7 @@ export class DefaultBucketService implements BucketService {
     }
 
     const s3BucketName = `${name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Date.now()}`;
-    const s3 = getS3(); // lazy init
+    const s3 = getS3();
 
     try {
       await s3.send(new CreateBucketCommand({ Bucket: s3BucketName }));
@@ -306,7 +315,7 @@ export class DefaultBucketService implements BucketService {
   private async uploadFileToS3(bucketName: string, key: string, file: File): Promise<void> {
     const fileSize = file.size;
     const contentType = file.type || 'application/octet-stream';
-    const s3 = getS3(); 
+    const s3 = getS3();
 
     const arrayBuffer = await file.arrayBuffer();
     const fileBytes = new Uint8Array(arrayBuffer);
@@ -390,7 +399,7 @@ export class DefaultBucketService implements BucketService {
   }
 
   async listBucketsByOrganizationName(orgName: string): Promise<Bucket[]> {
-    const pool = getPool(); // lazy init
+    const pool = getPool();
     const trimmed = orgName.trim();
     const result = await pool.query(
       `SELECT id, organization_id, "name", description, s3_bucket_name, created_at, updated_at, deleted_at
