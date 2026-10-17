@@ -7,9 +7,14 @@ import {
   CompleteMultipartUploadCommand,
   AbortMultipartUploadCommand,
   CompletedPart,
+  HeadBucketCommand,
 } from '@aws-sdk/client-s3';
 import { Pool } from 'pg';
 
+// ---------------------------------------------------------------
+// Lazy init (mantido): evita que o Turbopack da Vercel avalie
+// esses módulos durante o build.
+// ---------------------------------------------------------------
 
 let _s3: S3Client | null = null;
 
@@ -65,12 +70,39 @@ export interface BucketService {
     organizationName?: string
   ): Promise<{ bucket: Bucket; error?: string }>;
   listBucketsByOrganizationName(orgName: string): Promise<Bucket[]>;
+
+  // Operações por nome (organização)
+  updateBucketByName(
+    organizationName: string,
+    currentName: string,
+    newName?: string,
+    newDescription?: string | null
+  ): Promise<{ bucket: Bucket; error?: string }>;
+  deleteBucketByName(
+    organizationName: string,
+    name: string
+  ): Promise<{ bucket: Bucket; error?: string }>;
+  uploadFileToBucketByName(
+    organizationName: string,
+    name: string,
+    file: File
+  ): Promise<{ bucket: Bucket; error?: string }>;
+
+  // Restauração (soft delete → active)
+  listDeletedBucketsByOrganizationName(orgName: string): Promise<Bucket[]>;
+  restoreBucketByName(
+    organizationName: string,
+    name: string
+  ): Promise<{ bucket: Bucket; error?: string }>;
 }
 
 const S3_PART_SIZE = 5 * 1024 * 1024; // 5 MiB
 
 export class DefaultBucketService implements BucketService {
-  
+  // -------------------------------------------------------------
+  // Leitura
+  // -------------------------------------------------------------
+
   async getByOrganization(orgID: string, limit?: number, offset?: number): Promise<Bucket[]> {
     const pool = getPool();
     const params: any[] = [orgID];
@@ -127,6 +159,24 @@ export class DefaultBucketService implements BucketService {
     return (result.rows[0] as Bucket) || null;
   }
 
+  async listBucketsByOrganizationName(orgName: string): Promise<Bucket[]> {
+    const pool = getPool();
+    const trimmed = orgName.trim();
+    const result = await pool.query(
+      `SELECT id, organization_id, "name", description, s3_bucket_name, created_at, updated_at, deleted_at
+       FROM public.buckets
+       WHERE organization_id = (SELECT id FROM public.organizations WHERE "name" = $1)
+       AND deleted_at IS NULL
+       ORDER BY created_at DESC`,
+      [trimmed]
+    );
+    return result.rows as Bucket[];
+  }
+
+  // -------------------------------------------------------------
+  // Criação
+  // -------------------------------------------------------------
+
   async createBucket(
     name: string,
     description?: string | null,
@@ -140,7 +190,6 @@ export class DefaultBucketService implements BucketService {
     const trimmedName = organizationName.trim();
     const pool = getPool();
 
-    
     const orgResult = await pool.query(
       `SELECT id FROM public.organizations WHERE "name" = $1`,
       [trimmedName]
@@ -153,7 +202,7 @@ export class DefaultBucketService implements BucketService {
       };
     }
     const orgId = orgRow.id;
-    
+
     const s3BucketName = `${name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Date.now()}`;
     const s3 = getS3();
     try {
@@ -161,7 +210,7 @@ export class DefaultBucketService implements BucketService {
     } catch (err: any) {
       return { bucket: {} as Bucket, error: `Falha ao criar bucket S3: ${err.message}` };
     }
-    
+
     const now = new Date().toISOString();
     let result;
     try {
@@ -184,7 +233,7 @@ export class DefaultBucketService implements BucketService {
       created_at: result.rows[0].created_at,
       updated_at: result.rows[0].updated_at,
     };
-    
+
     if (file) {
       try {
         const key = `${newBucket.id}/${file.name.replace(/[^a-zA-Z0-9._-]/g, '-')}`;
@@ -196,6 +245,334 @@ export class DefaultBucketService implements BucketService {
 
     return { bucket: newBucket, error: undefined };
   }
+
+  // -------------------------------------------------------------
+  // Operações por NOME (dentro da organização)
+  // -------------------------------------------------------------
+
+  async updateBucketByName(
+    organizationName: string,
+    currentName: string,
+    newName?: string,
+    newDescription?: string | null
+  ): Promise<{ bucket: Bucket; error?: string }> {
+    if (!organizationName || !organizationName.trim()) {
+      return { bucket: {} as Bucket, error: 'organization_name é obrigatório' };
+    }
+    if (!currentName || !currentName.trim()) {
+      return { bucket: {} as Bucket, error: 'name é obrigatório' };
+    }
+
+    const pool = getPool();
+    const trimmedOrg = organizationName.trim();
+    const trimmedCurrent = currentName.trim();
+    const trimmedNew = newName?.trim();
+
+    const orgResult = await pool.query(
+      `SELECT id FROM public.organizations WHERE "name" = $1`,
+      [trimmedOrg]
+    );
+    const orgRow = orgResult.rows[0];
+    if (!orgRow) {
+      return {
+        bucket: {} as Bucket,
+        error: `Organização não encontrada: "${trimmedOrg}"`,
+      };
+    }
+    const orgId = orgRow.id;
+
+    const sets: string[] = [];
+    const params: any[] = [];
+
+    if (trimmedNew !== undefined && trimmedNew !== '') {
+      params.push(trimmedNew);
+      sets.push(`"name" = $${params.length}`);
+    }
+    if (newDescription !== undefined) {
+      params.push(newDescription);
+      sets.push(`description = $${params.length}`);
+    }
+    if (sets.length === 0) {
+      return { bucket: {} as Bucket, error: 'Nada para atualizar' };
+    }
+
+    params.push(new Date().toISOString());
+    sets.push(`updated_at = $${params.length}`);
+
+    params.push(orgId);
+    const orgParamIdx = params.length;
+    params.push(trimmedCurrent);
+    const nameParamIdx = params.length;
+
+    let result;
+    try {
+      result = await pool.query(
+        `UPDATE public.buckets
+           SET ${sets.join(', ')}
+         WHERE organization_id = $${orgParamIdx}
+           AND "name" = $${nameParamIdx}
+           AND deleted_at IS NULL
+         RETURNING id, organization_id, "name", description, s3_bucket_name, created_at, updated_at`,
+        params
+      );
+    } catch (err: any) {
+      // Se houver índice único (org, name), um nome duplicado cai aqui
+      return { bucket: {} as Bucket, error: `Falha ao atualizar bucket: ${err.message}` };
+    }
+
+    if (result.rowCount === 0) {
+      return { bucket: {} as Bucket, error: `Bucket não encontrado: "${trimmedCurrent}"` };
+    }
+
+    return { bucket: result.rows[0] as Bucket, error: undefined };
+  }
+
+  async deleteBucketByName(
+    organizationName: string,
+    name: string
+  ): Promise<{ bucket: Bucket; error?: string }> {
+    if (!organizationName || !organizationName.trim()) {
+      return { bucket: {} as Bucket, error: 'organization_name é obrigatório' };
+    }
+    if (!name || !name.trim()) {
+      return { bucket: {} as Bucket, error: 'name é obrigatório' };
+    }
+
+    const pool = getPool();
+    const trimmedOrg = organizationName.trim();
+    const trimmedName = name.trim();
+
+    const orgResult = await pool.query(
+      `SELECT id FROM public.organizations WHERE "name" = $1`,
+      [trimmedOrg]
+    );
+    const orgRow = orgResult.rows[0];
+    if (!orgRow) {
+      return {
+        bucket: {} as Bucket,
+        error: `Organização não encontrada: "${trimmedOrg}"`,
+      };
+    }
+    const orgId = orgRow.id;
+
+    let result;
+    try {
+      result = await pool.query(
+        `UPDATE public.buckets
+           SET deleted_at = NOW(), updated_at = NOW()
+         WHERE organization_id = $1
+           AND "name" = $2
+           AND deleted_at IS NULL
+         RETURNING id, organization_id, "name", description, s3_bucket_name, created_at, updated_at, deleted_at`,
+        [orgId, trimmedName]
+      );
+    } catch (err: any) {
+      return { bucket: {} as Bucket, error: `Falha ao deletar bucket: ${err.message}` };
+    }
+
+    if (result.rowCount === 0) {
+      return { bucket: {} as Bucket, error: `Bucket não encontrado: "${trimmedName}"` };
+    }
+
+    return { bucket: result.rows[0] as Bucket, error: undefined };
+  }
+
+  async uploadFileToBucketByName(
+    organizationName: string,
+    name: string,
+    file: File
+  ): Promise<{ bucket: Bucket; error?: string }> {
+    if (!organizationName || !organizationName.trim()) {
+      return { bucket: {} as Bucket, error: 'organization_name é obrigatório' };
+    }
+    if (!name || !name.trim()) {
+      return { bucket: {} as Bucket, error: 'name é obrigatório' };
+    }
+    if (!file) {
+      return { bucket: {} as Bucket, error: 'file é obrigatório' };
+    }
+
+    const pool = getPool();
+    const trimmedOrg = organizationName.trim();
+    const trimmedName = name.trim();
+
+    const orgResult = await pool.query(
+      `SELECT id FROM public.organizations WHERE "name" = $1`,
+      [trimmedOrg]
+    );
+    const orgRow = orgResult.rows[0];
+    if (!orgRow) {
+      return {
+        bucket: {} as Bucket,
+        error: `Organização não encontrada: "${trimmedOrg}"`,
+      };
+    }
+    const orgId = orgRow.id;
+
+    const bucketResult = await pool.query(
+      `SELECT id, organization_id, "name", description, s3_bucket_name, created_at, updated_at, deleted_at
+         FROM public.buckets
+        WHERE organization_id = $1 AND "name" = $2 AND deleted_at IS NULL
+        LIMIT 1`,
+      [orgId, trimmedName]
+    );
+    const bucketRow = bucketResult.rows[0] as Bucket | undefined;
+    if (!bucketRow) {
+      return { bucket: {} as Bucket, error: `Bucket não encontrado: "${trimmedName}"` };
+    }
+
+    try {
+      const key = `${bucketRow.id}/${file.name.replace(/[^a-zA-Z0-9._-]/g, '-')}`;
+      await this.uploadFileToS3(bucketRow.s3_bucket_name, key, file);
+
+      await pool.query(
+        `UPDATE public.buckets SET updated_at = NOW() WHERE id = $1`,
+        [bucketRow.id]
+      );
+
+      return { bucket: bucketRow, error: undefined };
+    } catch (err: any) {
+      return { bucket: bucketRow, error: `Falha no upload: ${err.message}` };
+    }
+  }
+
+  // -------------------------------------------------------------
+  // Restauração (soft delete → active)
+  // -------------------------------------------------------------
+
+  /**
+   * Lista buckets que foram soft-deleted (deleted_at IS NOT NULL)
+   * de uma organização, para o usuário ver o que pode restaurar.
+   */
+  async listDeletedBucketsByOrganizationName(
+    orgName: string
+  ): Promise<Bucket[]> {
+    const pool = getPool();
+    const trimmed = orgName.trim();
+    const result = await pool.query(
+      `SELECT id, organization_id, "name", description, s3_bucket_name,
+              created_at, updated_at, deleted_at
+         FROM public.buckets
+        WHERE organization_id = (
+                SELECT id FROM public.organizations WHERE "name" = $1
+              )
+          AND deleted_at IS NOT NULL
+        ORDER BY deleted_at DESC`,
+      [trimmed]
+    );
+    return result.rows as Bucket[];
+  }
+
+  /**
+   * Restaura um bucket soft-deleted, identificado por
+   * (organization_name, name).
+   *
+   * Antes de reativar no banco, verifica se o bucket ainda existe no S3
+   * (usando o s3_bucket_name preservado na linha). Se não existir,
+   * retorna erro sem reativar — evita "bucket fantasma".
+   */
+  async restoreBucketByName(
+    organizationName: string,
+    name: string
+  ): Promise<{ bucket: Bucket; error?: string }> {
+    if (!organizationName || !organizationName.trim()) {
+      return { bucket: {} as Bucket, error: 'organization_name é obrigatório' };
+    }
+    if (!name || !name.trim()) {
+      return { bucket: {} as Bucket, error: 'name é obrigatório' };
+    }
+
+    const pool = getPool();
+    const trimmedOrg = organizationName.trim();
+    const trimmedName = name.trim();
+
+    // 1. Resolve organization_id
+    const orgResult = await pool.query(
+      `SELECT id FROM public.organizations WHERE "name" = $1`,
+      [trimmedOrg]
+    );
+    const orgRow = orgResult.rows[0];
+    if (!orgRow) {
+      return {
+        bucket: {} as Bucket,
+        error: `Organização não encontrada: "${trimmedOrg}"`,
+      };
+    }
+    const orgId = orgRow.id;
+
+    // 2. Busca a linha soft-deleted (para pegar o s3_bucket_name)
+    const bucketResult = await pool.query(
+      `SELECT id, organization_id, "name", description, s3_bucket_name,
+              created_at, updated_at, deleted_at
+         FROM public.buckets
+        WHERE organization_id = $1
+          AND "name" = $2
+          AND deleted_at IS NOT NULL
+        LIMIT 1`,
+      [orgId, trimmedName]
+    );
+    const bucketRow = bucketResult.rows[0] as Bucket | undefined;
+    if (!bucketRow) {
+      return {
+        bucket: {} as Bucket,
+        error: `Bucket deletado não encontrado: "${trimmedName}"`,
+      };
+    }
+
+    // 3. Verifica se o bucket ainda existe no S3
+    const s3 = getS3();
+    try {
+      await s3.send(new HeadBucketCommand({ Bucket: bucketRow.s3_bucket_name }));
+    } catch (err: any) {
+      const status = err?.$metadata?.httpStatusCode;
+      if (
+        status === 404 ||
+        err?.name === 'NotFound' ||
+        err?.Code === 'NotFound'
+      ) {
+        return {
+          bucket: bucketRow,
+          error: `Bucket existe no banco, mas não foi encontrado no S3 (${bucketRow.s3_bucket_name}). Não é possível restaurar.`,
+        };
+      }
+      return {
+        bucket: bucketRow,
+        error: `Falha ao verificar bucket no S3: ${err?.message || 'erro desconhecido'}`,
+      };
+    }
+
+    // 4. S3 OK → reativa no banco
+    let result;
+    try {
+      result = await pool.query(
+        `UPDATE public.buckets
+           SET deleted_at = NULL, updated_at = NOW()
+         WHERE id = $1
+           AND deleted_at IS NOT NULL
+         RETURNING id, organization_id, "name", description, s3_bucket_name,
+                   created_at, updated_at, deleted_at`,
+        [bucketRow.id]
+      );
+    } catch (err: any) {
+      return {
+        bucket: bucketRow,
+        error: `Falha ao restaurar bucket no banco: ${err.message}`,
+      };
+    }
+
+    if (result.rowCount === 0) {
+      return {
+        bucket: {} as Bucket,
+        error: `Bucket não pôde ser restaurado (estado mudou).`,
+      };
+    }
+
+    return { bucket: result.rows[0] as Bucket, error: undefined };
+  }
+
+  // -------------------------------------------------------------
+  // Upload interno (single + multipart)
+  // -------------------------------------------------------------
 
   private async uploadFileToS3(bucketName: string, key: string, file: File): Promise<void> {
     const fileSize = file.size;
@@ -281,20 +658,6 @@ export class DefaultBucketService implements BucketService {
       } catch { /* ignora */ }
       throw err;
     }
-  }
-
-  async listBucketsByOrganizationName(orgName: string): Promise<Bucket[]> {
-    const pool = getPool();
-    const trimmed = orgName.trim();
-    const result = await pool.query(
-      `SELECT id, organization_id, "name", description, s3_bucket_name, created_at, updated_at, deleted_at
-       FROM public.buckets
-       WHERE organization_id = (SELECT id FROM public.organizations WHERE "name" = $1)
-       AND deleted_at IS NULL
-       ORDER BY created_at DESC`,
-      [trimmed]
-    );
-    return result.rows as Bucket[];
   }
 }
 

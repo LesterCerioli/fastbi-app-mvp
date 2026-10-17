@@ -1,21 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import * as S from "./styles";
 import { useTranslations } from "@/lib/i18n/useTranslations";
 
-type Bucket = {
-  id: string;
-  organization_id: string;
-  name: string;
-  description?: string | null;
-  s3_bucket_name: string;
-  created_at: string;
-  updated_at: string;
-  deleted_at?: string | null;
-};
-
 type Status = { variant: "success" | "error"; message: string } | null;
+
+interface BucketFormProps {
+  /** Chamado após criar um bucket com sucesso (para o pai recarregar a lista). */
+  onCreated?: () => void;
+}
 
 async function fetchAuthToken(): Promise<string> {
   const res = await fetch("/api/auth/token", {
@@ -30,49 +24,19 @@ async function fetchAuthToken(): Promise<string> {
   return data.token as string;
 }
 
-export default function BucketForm() {
+function getOrganizationName(): string {
+  if (typeof window === "undefined") return "";
+  return (sessionStorage.getItem("organization_name") || "").trim();
+}
+
+export default function BucketForm({ onCreated }: BucketFormProps) {
   const { t } = useTranslations();
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [file, setFile] = useState<File | null>(null);
-
-  const [buckets, setBuckets] = useState<Bucket[]>([]);
   const [status, setStatus] = useState<Status>(null);
-
-  const getOrganizationName = (): string => {
-    if (typeof window === "undefined") return "";
-    return (sessionStorage.getItem("organization_name") || "").trim();
-  };
-
-  const loadBuckets = async () => {
-    const organizationName = getOrganizationName();
-    if (!organizationName) return;
-
-    try {
-      const token = await fetchAuthToken();
-      const res = await fetch(
-        `/api/buckets/list?organization_name=${encodeURIComponent(organizationName)}`,
-        {
-          method: "GET",
-          headers: {
-            accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) return;
-      setBuckets(Array.isArray(data.buckets) ? data.buckets : []);
-    } catch {
-      
-    }
-  };
-
-  useEffect(() => {
-    loadBuckets();
-    
-  }, []);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,6 +59,7 @@ export default function BucketForm() {
       formData.append("file", file);
     }
 
+    setLoading(true);
     try {
       const token = await fetchAuthToken();
 
@@ -123,12 +88,15 @@ export default function BucketForm() {
       setDescription("");
       setFile(null);
 
-      await loadBuckets();
+      // Avisa o pai para recarregar a lista
+      onCreated?.();
     } catch {
       setStatus({
         variant: "error",
         message: `${t("buckets.errorCreate")}: Failed to create bucket`,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -174,26 +142,13 @@ export default function BucketForm() {
 
       <S.Row>
         <S.CancelButton type="button">{t("buckets.buttonCancel")}</S.CancelButton>
-        <S.SubmitButton type="submit">{t("buckets.buttonCreate")}</S.SubmitButton>
+        <S.SubmitButton type="submit" disabled={loading}>
+          {loading ? "..." : t("buckets.buttonCreate")}
+        </S.SubmitButton>
       </S.Row>
 
       {status && (
-        <S.StatusTag $variant={status.variant}>
-          {status.message}
-        </S.StatusTag>
-      )}
-
-      {buckets.length > 0 && (
-        <S.Field>
-          <S.Label>{t("buckets.title")}</S.Label>
-          <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-            {buckets.map((b) => (
-              <li key={b.id} style={{ padding: "4px 0" }}>
-                {b.name}
-              </li>
-            ))}
-          </ul>
-        </S.Field>
+        <S.StatusTag $variant={status.variant}>{status.message}</S.StatusTag>
       )}
     </S.Form>
   );
