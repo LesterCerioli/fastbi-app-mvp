@@ -130,11 +130,7 @@ export default function BucketList({
   }
 
   if (state.buckets.length === 0 && !state.loading) {
-    return (
-      <S.Wrapper>
-        <S.Empty>{t("common.empty")}</S.Empty>
-      </S.Wrapper>
-    );
+    return null;
   }
 
   if (state.error) {
