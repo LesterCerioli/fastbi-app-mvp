@@ -6,11 +6,9 @@ import {
   type AttributeDefinition,
   type GlobalSecondaryIndex,
 } from "@aws-sdk/client-dynamodb";
-import { PAYPAL_ORDERS_TABLE } from "./paypalOrders";
-import { PAYPAL_CAPTURES_TABLE } from "./paypalCaptures";
 
 const client = new DynamoDBClient({
-  region: process.env.AWS_DEFAULT_REGION,
+  region: "us-east-1",
   endpoint: process.env.LOCALSTACK_ENDPOINT,
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
@@ -18,6 +16,8 @@ const client = new DynamoDBClient({
   },
 });
 
+const PAYPAL_ORDERS_TABLE = "FastBI_PayPal_orders";
+const PAYPAL_CAPTURES_TABLE = "FastBI_PayPal_captures";
 const PAYPAL_CUSTOMERS_TABLE = "FastBI_PayPal_customers";
 const PAYPAL_PAYMENT_METHODS_TABLE = "FastBI_PayPal_payment_methods";
 const PAYPAL_RECURRENCY_TABLE = "FastBI_PayPal_payments_recurrency_identifies";
@@ -156,9 +156,7 @@ async function main(): Promise<void> {
   console.log("FastBI_PayPal_* tables ensured on LocalStack");
 }
 
-if (require.main === module) {
-  main().catch((err) => {
-    console.error("Fatal error:", err.message);
-    process.exit(1);
-  });
-}
+main().catch((err) => {
+  console.error("Fatal error:", err.message);
+  process.exit(1);
+});

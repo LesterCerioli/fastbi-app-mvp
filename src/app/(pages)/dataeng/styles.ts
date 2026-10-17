@@ -77,3 +77,21 @@ export const CardsGrid = styled.div`
     gap: 16px;
   }
 `;
+export const BackLink = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #9db3b8;
+  font-size: 14px;
+  text-decoration: none;
+  margin-bottom: 16px;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #22c55e;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+`;
