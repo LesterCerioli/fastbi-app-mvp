@@ -57,7 +57,6 @@ export interface Bucket {
 export interface BucketService {
   getByOrganization(orgID: string, limit?: number, offset?: number): Promise<Bucket[]>;
   getByOrganizationName(orgName: string, limit?: number, offset?: number): Promise<Bucket[]>;
-  resolveOrganizationID(organizationName: string): Promise<{ id: string; error?: string }>;
   getByID(id: string): Promise<Bucket | null>;
   createBucket(
     name: string,
@@ -68,160 +67,64 @@ export interface BucketService {
   listBucketsByOrganizationName(orgName: string): Promise<Bucket[]>;
 }
 
-const S3_PART_SIZE = 5 * 1024 * 1024;
+const S3_PART_SIZE = 5 * 1024 * 1024; // 5 MiB
 
 export class DefaultBucketService implements BucketService {
-  private readonly baseUrl: string;
-  private readonly internalBaseUrl: string;
-
-  constructor() {
-    const baseUrl = process.env.EXTERNAL_GO_API_BASE_URL;
-    if (!baseUrl) {
-      throw new Error('Variável de ambiente obrigatória não configurada: EXTERNAL_GO_API_BASE_URL');
-    }
-    this.baseUrl = baseUrl.replace(/\/$/, '');
-
-    const internalBaseUrl =
-      process.env.NEXT_PUBLIC_APP_URL ||
-      process.env.APP_URL ||
-      'http://localhost:3000';
-    this.internalBaseUrl = internalBaseUrl.replace(/\/$/, '');
-  }
-
-  private async getAuthToken(): Promise<string> {
-    const url = `${this.internalBaseUrl}/api/auth/token`;
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        accept: 'application/json',
-      },
-      body: JSON.stringify({
-        client_id: process.env.CLIENT_ID_1,
-        secret: process.env.SECRET_1,
-      }),
-      cache: 'no-store',
-    });
-
-    if (!response.ok) {
-      let details = '';
-      try {
-        const data = await response.json();
-        details = data?.error || data?.details || '';
-      } catch { /* resposta não é JSON */ }
-      throw new Error(
-        `Falha ao obter token em /api/auth/token (${response.status}): ${details || response.statusText}`
-      );
-    }
-
-    const data = (await response.json()) as { token?: string };
-    if (!data.token) {
-      throw new Error('Resposta de /api/auth/token não contém "token"');
-    }
-    return data.token;
-  }
-
+  
   async getByOrganization(orgID: string, limit?: number, offset?: number): Promise<Bucket[]> {
-    const url = `${this.baseUrl}/buckets/organization/${orgID}`;
-    const token = await this.getAuthToken();
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      cache: 'no-store',
-    });
-    if (response.status !== 200) {
-      throw new Error('Falha ao obter buckets da API Go ' + response.status);
+    const pool = getPool();
+    const params: any[] = [orgID];
+    let sql = `
+      SELECT id, organization_id, "name", description, s3_bucket_name, created_at, updated_at, deleted_at
+      FROM public.buckets
+      WHERE organization_id = $1 AND deleted_at IS NULL
+      ORDER BY created_at DESC
+    `;
+    if (typeof limit === 'number') {
+      params.push(limit);
+      sql += ` LIMIT $${params.length}`;
     }
-    return (await response.json()) as Bucket[];
+    if (typeof offset === 'number') {
+      params.push(offset);
+      sql += ` OFFSET $${params.length}`;
+    }
+    const result = await pool.query(sql, params);
+    return result.rows as Bucket[];
   }
 
   async getByOrganizationName(orgName: string, limit?: number, offset?: number): Promise<Bucket[]> {
-    const url = `${this.baseUrl}/buckets/organization/name/${orgName}`;
-    const token = await this.getAuthToken();
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      cache: 'no-store',
-    });
-    if (response.status !== 200) {
-      throw new Error('Falha ao obter buckets da API Go ' + response.status);
+    const pool = getPool();
+    const trimmed = orgName.trim();
+    const params: any[] = [trimmed];
+    let sql = `
+      SELECT b.id, b.organization_id, b."name", b.description, b.s3_bucket_name, b.created_at, b.updated_at, b.deleted_at
+      FROM public.buckets b
+      INNER JOIN public.organizations o ON o.id = b.organization_id
+      WHERE o."name" = $1 AND b.deleted_at IS NULL
+      ORDER BY b.created_at DESC
+    `;
+    if (typeof limit === 'number') {
+      params.push(limit);
+      sql += ` LIMIT $${params.length}`;
     }
-    return (await response.json()) as Bucket[];
+    if (typeof offset === 'number') {
+      params.push(offset);
+      sql += ` OFFSET $${params.length}`;
+    }
+    const result = await pool.query(sql, params);
+    return result.rows as Bucket[];
   }
 
   async getByID(id: string): Promise<Bucket | null> {
-    const url = `${this.baseUrl}/buckets/${id}`;
-    const token = await this.getAuthToken();
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      cache: 'no-store',
-    });
-    if (response.status !== 200) {
-      return null;
-    }
-    return (await response.json()) as Bucket;
-  }
-
-  async resolveOrganizationID(organizationName: string): Promise<{ id: string; error?: string }> {
-    const url = `${this.baseUrl}/organizations/name/${organizationName}`;
-    const token = await this.getAuthToken();
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      cache: 'no-store',
-    });
-    if (response.status !== 200) {
-      let errorData: { error: string; details?: string } | null = null;
-      try { errorData = await response.json(); } catch { /* resposta não é JSON */ }
-      return { id: '', error: errorData?.details || errorData?.error || response.statusText };
-    }
-    return (await response.json()) as { id: string };
-  }
-
-  private async resolveOrganizationIDFromSession(): Promise<{ id: string; error?: string }> {
-    try {
-      const token = await this.getAuthToken();
-      const url = `${this.baseUrl}/organizations/me`;
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        cache: 'no-store',
-      });
-      if (response.status !== 200) {
-        let details = '';
-        try {
-          const data = await response.json();
-          details = data?.error || data?.details || '';
-        } catch { /* não é JSON */ }
-        return {
-          id: '',
-          error: `Organização não encontrada na sessão (HTTP ${response.status})${details ? ': ' + details : ''}`,
-        };
-      }
-      const data = await response.json();
-      return { id: data.id || data.organization_id || '' };
-    } catch (err: any) {
-      return {
-        id: '',
-        error: `Falha ao resolver organização da sessão: ${err?.message || err}`,
-      };
-    }
+    const pool = getPool();
+    const result = await pool.query(
+      `SELECT id, organization_id, "name", description, s3_bucket_name, created_at, updated_at, deleted_at
+       FROM public.buckets
+       WHERE id = $1 AND deleted_at IS NULL
+       LIMIT 1`,
+      [id]
+    );
+    return (result.rows[0] as Bucket) || null;
   }
 
   async createBucket(
@@ -230,44 +133,35 @@ export class DefaultBucketService implements BucketService {
     file?: File,
     organizationName?: string
   ): Promise<{ bucket: Bucket; error?: string }> {
-    let orgId = '';
-    const pool = getPool(); // lazy init
-
-    if (organizationName && organizationName.trim()) {
-      const trimmedName = organizationName.trim();
-
-      const orgResult = await pool.query(
-        `SELECT id FROM public.organizations WHERE "name" = $1`,
-        [trimmedName]
-      );
-      const orgRow = orgResult.rows[0];
-      if (!orgRow) {
-        return {
-          bucket: {} as Bucket,
-          error: `Organização não encontrada: "${trimmedName}"`,
-        };
-      }
-      orgId = orgRow.id;
-    } else {
-      const sessionResult = await this.resolveOrganizationIDFromSession();
-      if (sessionResult.error || !sessionResult.id) {
-        return {
-          bucket: {} as Bucket,
-          error: sessionResult.error || 'Organização não encontrada',
-        };
-      }
-      orgId = sessionResult.id;
+    if (!organizationName || !organizationName.trim()) {
+      return { bucket: {} as Bucket, error: 'organization_name é obrigatório' };
     }
 
-    const s3BucketName = `${name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Date.now()}`;
-    const s3 = getS3(); // lazy init
+    const trimmedName = organizationName.trim();
+    const pool = getPool();
 
+    
+    const orgResult = await pool.query(
+      `SELECT id FROM public.organizations WHERE "name" = $1`,
+      [trimmedName]
+    );
+    const orgRow = orgResult.rows[0];
+    if (!orgRow) {
+      return {
+        bucket: {} as Bucket,
+        error: `Organização não encontrada: "${trimmedName}"`,
+      };
+    }
+    const orgId = orgRow.id;
+    
+    const s3BucketName = `${name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Date.now()}`;
+    const s3 = getS3();
     try {
       await s3.send(new CreateBucketCommand({ Bucket: s3BucketName }));
     } catch (err: any) {
       return { bucket: {} as Bucket, error: `Falha ao criar bucket S3: ${err.message}` };
     }
-
+    
     const now = new Date().toISOString();
     let result;
     try {
@@ -290,7 +184,7 @@ export class DefaultBucketService implements BucketService {
       created_at: result.rows[0].created_at,
       updated_at: result.rows[0].updated_at,
     };
-
+    
     if (file) {
       try {
         const key = `${newBucket.id}/${file.name.replace(/[^a-zA-Z0-9._-]/g, '-')}`;
@@ -306,7 +200,7 @@ export class DefaultBucketService implements BucketService {
   private async uploadFileToS3(bucketName: string, key: string, file: File): Promise<void> {
     const fileSize = file.size;
     const contentType = file.type || 'application/octet-stream';
-    const s3 = getS3(); 
+    const s3 = getS3();
 
     const arrayBuffer = await file.arrayBuffer();
     const fileBytes = new Uint8Array(arrayBuffer);
@@ -390,13 +284,14 @@ export class DefaultBucketService implements BucketService {
   }
 
   async listBucketsByOrganizationName(orgName: string): Promise<Bucket[]> {
-    const pool = getPool(); // lazy init
+    const pool = getPool();
     const trimmed = orgName.trim();
     const result = await pool.query(
       `SELECT id, organization_id, "name", description, s3_bucket_name, created_at, updated_at, deleted_at
        FROM public.buckets
        WHERE organization_id = (SELECT id FROM public.organizations WHERE "name" = $1)
-       AND deleted_at IS NULL`,
+       AND deleted_at IS NULL
+       ORDER BY created_at DESC`,
       [trimmed]
     );
     return result.rows as Bucket[];
