@@ -881,6 +881,19 @@
     "fieldUploadFiles": "Upload Files",
     "buttonCreate": "Create Bucket",
     "buttonCancel": "Cancel",
-    "errorCreate": "Failed to create bucket"
+    "errorCreate": "Failed to create bucket",
+    "restore": {
+      "title": "Buckets Eliminados",
+      "subtitle": "Estos buckets fueron eliminados pero aún pueden restaurarse.",
+      "button": "Restaurar",
+      "restoring": "Restaurando...",
+      "noDescription": "Sin descripción",
+      "deletedAt": "Eliminado el: {date}",
+      "success": "Bucket restaurado: {name}",
+      "error": "Error al restaurar: {error}",
+      "loading": "Cargando...",
+      "retry": "Reintentar",
+      "loadError": "Error al cargar buckets eliminados"
+    }
   }
 }

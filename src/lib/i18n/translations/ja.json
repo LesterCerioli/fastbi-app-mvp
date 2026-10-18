@@ -867,7 +867,7 @@
     }
   },
   "backToDashboards": {
-    "label": "ダッシュボードに戻る"
+      "label": "ダッシュボードに戻る"
   },
 "buckets": {
     "title": "Buckets",
@@ -881,6 +881,27 @@
     "fieldUploadFiles": "ファイルのアップロード",
     "buttonCreate": "バケットを作成",
     "buttonCancel": "キャンセル",
-    "errorCreate": "バケットの作成に失敗"
+    "errorCreate": "バケットの作成に失敗",
+    "loadError": "バケットの読み込みに失敗しました",
+    "deleteButton": "削除",
+    "deleted": "バケットを削除しました: {name}",
+    "errorDelete": "削除に失敗しました: {error}",
+    "confirmDeleteTitle": "バケットを削除しますか？",
+    "confirmDeleteMessage": "バケット \"{name}\" を削除してもよろしいですか？この操作は元に戻せません。",
+    "confirmDeleteCancel": "キャンセル",
+    "confirmDeleteConfirm": "確認",
+    "restore": {
+      "title": "削除されたバケット",
+      "subtitle": "これらのバケットは削除されましたが、復元できます。",
+      "button": "復元",
+      "restoring": "復元中...",
+      "noDescription": "説明なし",
+      "deletedAt": "削除日時: {date}",
+      "success": "バケットを復元しました: {name}",
+      "error": "復元に失敗しました: {error}",
+      "loading": "読み込み中...",
+      "retry": "再試行",
+      "loadError": "削除されたバケットの読み込みに失敗しました"
+    }
   }
 }

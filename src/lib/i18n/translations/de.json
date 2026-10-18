@@ -881,6 +881,27 @@
     "fieldUploadFiles": "Dateien hochladen",
     "buttonCreate": "Bucket erstellen",
     "buttonCancel": "Abbrechen",
-    "errorCreate": "Bucket konnte nicht erstellt werden"
+    "errorCreate": "Bucket konnte nicht erstellt werden",
+    "loadError": "Buckets konnten nicht geladen werden",
+    "deleteButton": "Löschen",
+    "deleted": "Bucket gelöscht: {name}",
+    "errorDelete": "Löschen fehlgeschlagen: {error}",
+    "confirmDeleteTitle": "Bucket löschen?",
+    "confirmDeleteMessage": "Sind Sie sicher, dass Sie den Bucket \"{name}\" löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "confirmDeleteCancel": "Abbrechen",
+    "confirmDeleteConfirm": "Bestätigen",
+    "restore": {
+      "title": "Gelöschte Buckets",
+      "subtitle": "Diese Buckets wurden gelöscht, können aber wiederhergestellt werden.",
+      "button": "Wiederherstellen",
+      "restoring": "Wird wiederhergestellt...",
+      "noDescription": "Keine Beschreibung",
+      "deletedAt": "Gelöscht am: {date}",
+      "success": "Bucket wiederhergestellt: {name}",
+      "error": "Wiederherstellung fehlgeschlagen: {error}",
+      "loading": "Laden...",
+      "retry": "Erneut versuchen",
+      "loadError": "Gelöschte Buckets konnten nicht geladen werden"
+    }
   }
 }

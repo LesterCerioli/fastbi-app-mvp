@@ -881,6 +881,27 @@
     "fieldUploadFiles": "上传文件",
     "buttonCreate": "创建存储桶",
     "buttonCancel": "取消",
-    "errorCreate": "创建存储桶失败"
+    "errorCreate": "创建存储桶失败",
+    "loadError": "加载存储桶失败",
+    "deleteButton": "删除",
+    "deleted": "存储桶已删除: {name}",
+    "errorDelete": "删除失败: {error}",
+    "confirmDeleteTitle": "删除存储桶？",
+    "confirmDeleteMessage": "您确定要删除存储桶 \"{name}\" 吗？此操作无法撤销。",
+    "confirmDeleteCancel": "取消",
+    "confirmDeleteConfirm": "确认",
+    "restore": {
+      "title": "已删除的存储桶",
+      "subtitle": "这些存储桶已被删除，但仍可恢复。",
+      "button": "恢复",
+      "restoring": "恢复中...",
+      "noDescription": "无描述",
+      "deletedAt": "删除于: {date}",
+      "success": "存储桶已恢复: {name}",
+      "error": "恢复失败: {error}",
+      "loading": "加载中...",
+      "retry": "重试",
+      "loadError": "加载已删除的存储桶失败"
+    }
   }
 }

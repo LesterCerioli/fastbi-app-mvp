@@ -1059,6 +1059,19 @@
     "fieldUploadFiles": "Upload Files",
     "buttonCreate": "Create Bucket",
     "buttonCancel": "Cancel",
-    "errorCreate": "Failed to create bucket"
+    "errorCreate": "Failed to create bucket",
+    "restore": {
+      "title": "Deleted Buckets",
+      "subtitle": "These buckets were deleted but can still be restored.",
+      "button": "Restore",
+      "restoring": "Restoring...",
+      "noDescription": "No description",
+      "deletedAt": "Deleted at: {date}",
+      "success": "Bucket restored: {name}",
+      "error": "Failed to restore: {error}",
+      "loading": "Loading...",
+      "retry": "Retry",
+      "loadError": "Failed to fetch deleted buckets"
+    }
   }
 }
