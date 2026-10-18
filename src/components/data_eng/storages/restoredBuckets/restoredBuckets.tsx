@@ -50,6 +50,16 @@ function getOrganizationNameFromStorage(): string {
   return (sessionStorage.getItem("organization_name") || "").trim();
 }
 
+
+function interpolate(
+  template: string,
+  values: Record<string, string>
+): string {
+  return template.replace(/\{(\w+)\}/g, (_, key) =>
+    values[key] !== undefined ? values[key] : `{${key}}`
+  );
+}
+
 export default function RestoredBuckets({
   organizationName,
   refreshKey,
@@ -68,7 +78,7 @@ export default function RestoredBuckets({
 
   useEffect(() => {
     fetchDeleted();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [orgName, refreshKey]);
 
   const fetchDeleted = async () => {
@@ -91,7 +101,9 @@ export default function RestoredBuckets({
         }
       );
 
-      if (!res.ok) throw new Error("Failed to fetch deleted buckets");
+      if (!res.ok) {
+        throw new Error(t("buckets.restore.loadError"));
+      }
 
       const data = await res.json();
       setState({ buckets: data.buckets || [], loading: false, error: null });
@@ -99,7 +111,8 @@ export default function RestoredBuckets({
       setState((prev) => ({
         buckets: prev.buckets,
         loading: false,
-        error: err instanceof Error ? err.message : "Erro desconhecido",
+        error:
+          err instanceof Error ? err.message : t("buckets.restore.loadError"),
       }));
     }
   };
@@ -126,12 +139,14 @@ export default function RestoredBuckets({
       if (!res.ok) {
         setStatus({
           variant: "error",
-          message: `Failed to restore: ${data.error || "Unknown error"}`,
+          message: interpolate(t("buckets.restore.error"), {
+            error: data.error || "Unknown error",
+          }),
         });
         return;
       }
 
-      // Remove da lista local de deletados
+      
       setState((prev) => ({
         ...prev,
         buckets: prev.buckets.filter((b) => b.id !== bucket.id),
@@ -139,17 +154,19 @@ export default function RestoredBuckets({
 
       setStatus({
         variant: "success",
-        message: `Bucket restored: ${bucket.name}`,
+        message: interpolate(t("buckets.restore.success"), {
+          name: bucket.name,
+        }),
       });
 
-      // Avisa o pai (para recarregar a lista principal de buckets)
+      
       onRestored?.();
     } catch (err) {
       setStatus({
         variant: "error",
-        message: `Failed to restore: ${
-          err instanceof Error ? err.message : "Unknown error"
-        }`,
+        message: interpolate(t("buckets.restore.error"), {
+          error: err instanceof Error ? err.message : "Unknown error",
+        }),
       });
     } finally {
       setRestoringName(null);
@@ -168,11 +185,13 @@ export default function RestoredBuckets({
           <S.RestoredInfo>
             <S.RestoredName>{bucket.name}</S.RestoredName>
             <S.RestoredDesc>
-              {bucket.description || "No description"}
+              {bucket.description || t("buckets.restore.noDescription")}
             </S.RestoredDesc>
             {bucket.deleted_at && (
               <S.RestoredDate>
-                Deleted at: {new Date(bucket.deleted_at).toLocaleString()}
+                {interpolate(t("buckets.restore.deletedAt"), {
+                  date: new Date(bucket.deleted_at).toLocaleString(),
+                })}
               </S.RestoredDate>
             )}
           </S.RestoredInfo>
@@ -181,7 +200,9 @@ export default function RestoredBuckets({
             onClick={() => handleRestore(bucket)}
             disabled={isRestoring}
           >
-            {isRestoring ? "..." : "Restore"}
+            {isRestoring
+              ? t("buckets.restore.restoring")
+              : t("buckets.restore.button")}
           </S.RestoreButton>
         </S.RestoredHeader>
       </S.RestoredCard>
@@ -191,8 +212,8 @@ export default function RestoredBuckets({
   if (state.loading) {
     return (
       <S.Wrapper>
-        <S.SectionTitle>Restored Buckets</S.SectionTitle>
-        <S.Loading>{t("common.loading") || "Loading..."}</S.Loading>
+        <S.SectionTitle>{t("buckets.restore.title")}</S.SectionTitle>
+        <S.Loading>{t("buckets.restore.loading")}</S.Loading>
       </S.Wrapper>
     );
   }
@@ -200,31 +221,29 @@ export default function RestoredBuckets({
   if (state.error) {
     return (
       <S.Wrapper>
-        <S.SectionTitle>Restored Buckets</S.SectionTitle>
+        <S.SectionTitle>{t("buckets.restore.title")}</S.SectionTitle>
         <S.Loading>
           {state.error}{" "}
           <button
             onClick={fetchDeleted}
             style={{ marginLeft: 8, color: "#34d399" }}
           >
-            {t("common.retry") || "Retry"}
+            {t("buckets.restore.retry")}
           </button>
         </S.Loading>
       </S.Wrapper>
     );
   }
 
-  // Se não há buckets deletados, não renderiza a seção inteira
+  
   if (state.buckets.length === 0) {
     return null;
   }
 
   return (
     <S.Wrapper>
-      <S.SectionTitle>Deleted Buckets</S.SectionTitle>
-      <S.SectionSubtitle>
-        These buckets were deleted but can still be restored.
-      </S.SectionSubtitle>
+      <S.SectionTitle>{t("buckets.restore.title")}</S.SectionTitle>
+      <S.SectionSubtitle>{t("buckets.restore.subtitle")}</S.SectionSubtitle>
 
       {status && (
         <S.StatusBanner $variant={status.variant}>

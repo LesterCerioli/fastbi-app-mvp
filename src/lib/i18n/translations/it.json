@@ -866,7 +866,7 @@
       "value": "Valore"
     }
   },
-  "backToDashboards": {
+  "b  ackToDashboards": {
     "label": "Torna ai Dashboard"
   },
 "buckets": {
@@ -881,6 +881,27 @@
     "fieldUploadFiles": "Carica File",
     "buttonCreate": "Crea Bucket",
     "buttonCancel": "Annulla",
-    "errorCreate": "Impossibile creare il bucket"
+    "errorCreate": "Impossibile creare il bucket",
+    "loadError": "Impossibile caricare i bucket",
+    "deleteButton": "Elimina",
+    "deleted": "Bucket eliminato: {name}",
+    "errorDelete": "Eliminazione fallita: {error}",
+    "confirmDeleteTitle": "Eliminare il bucket?",
+    "confirmDeleteMessage": "Sei sicuro di voler eliminare il bucket \"{name}\"? Questa azione non può essere annullata.",
+    "confirmDeleteCancel": "Annulla",
+    "confirmDeleteConfirm": "Conferma",
+    "restore": {
+      "title": "Bucket Eliminati",
+      "subtitle": "Questi bucket sono stati eliminati ma possono ancora essere ripristinati.",
+      "button": "Ripristina",
+      "restoring": "Ripristino...",
+      "noDescription": "Nessuna descrizione",
+      "deletedAt": "Eliminato il: {date}",
+      "success": "Bucket ripristinato: {name}",
+      "error": "Ripristino fallito: {error}",
+      "loading": "Caricamento...",
+      "retry": "Riprova",
+      "loadError": "Impossibile caricare i bucket eliminati"
+    }
   }
 }
