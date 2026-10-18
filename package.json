@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 9096",
+    "dev": "next dev -p 9094",
     "build": "next build --webpack",
-    "start": "next start -p 9092",
+    "start": "next start -p 9094",
     "lint": "eslint",
     "test": "jest --forceExit"
   },
