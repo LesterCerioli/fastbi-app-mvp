@@ -168,15 +168,4 @@ The project uses [Jest](https://jestjs.io) with `ts-jest` for TypeScript support
 #### Card number: 4032037269250094
 #### Expire date: 04/31
 
-2222222222222222222222222222222222222222
-ddddddddddddddddddddddddddjjjjjjjjjjjjjjjjjjjjjjjjj
-kkkkkkkkkkkkkkkkkkkkkkkkkk
-fhfhhfhhfhkgllllh
-fffffffffffffffffffffffffffff 
-gggggggggggggggggggggggggggggggggggggg
-CCCCCCCCCCCCCCCCC
-iikikkkkkkkkkkkkkkkkk
-ggggggggggggggggggggggggg
-FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-fffffffffffffffffffffffffffffffff
+
